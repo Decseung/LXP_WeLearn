@@ -10,6 +10,7 @@ import MyLectures from '../pages/mypage/(user)/my-lectures/MyLectures.jsx';
 import CreateLecture from '../pages/mypage/(instructor)/create-lecture/CreateLecture.jsx';
 import InstructorLectures from '../pages/mypage/(instructor)/instructor-lectures/InstructorLectures.jsx';
 import EditLecture from '../pages/mypage/(instructor)/edit-lecture/EditLecture.jsx';
+import ErrorPage from '../pages/Error/ErrorPage.jsx';
 
 export const router = createBrowserRouter([
   // 인증(비보호) 라우트
@@ -49,11 +50,11 @@ export const router = createBrowserRouter([
     ),
     children: [
       // 사용자용
-      { path: '(user)/my-lectures', element: <MyLectures /> },
+      { path: 'my-lectures', element: <MyLectures /> },
 
       // 강사용(권한 제한)
       {
-        path: '(instructor)/instructor-lectures',
+        path: 'instructor-lectures',
         element: (
           <RequireRole allow={['instructor']}>
             <InstructorLectures />
@@ -61,15 +62,16 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: '(instructor)/create-lecture',
+        path: 'create-lecture',
         element: (
           <RequireRole allow={['instructor']}>
             <CreateLecture />
           </RequireRole>
         ),
       },
+      { path: 'edit-lecture', element: <EditLecture /> },
       {
-        path: '(instructor)/edit-lecture/:id',
+        path: 'edit-lecture/:id?',
         element: (
           <RequireRole allow={['instructor']}>
             <EditLecture />
@@ -80,6 +82,6 @@ export const router = createBrowserRouter([
   },
 
   // 에러/기타
-  { path: '*', element: <Error /> },
+  { path: '*', element: <ErrorPage /> },
   // { path: '*', element: <Navigate to="/" replace /> },
 ]);

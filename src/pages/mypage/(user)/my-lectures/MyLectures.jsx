@@ -113,7 +113,7 @@ const MyLectures = () => {
                           <span className="font-medium">35%</span>
                         </div>
                         <div className="h-2 w-full rounded-full bg-gray-200">
-                          <div className="h-2 rounded-full bg-gray-900" style="width: 35%"></div>
+                          <div className="h-2 rounded-full bg-gray-900"></div>
                         </div>
                       </div>
 
@@ -168,7 +168,7 @@ const MyLectures = () => {
                           <span className="font-medium">62%</span>
                         </div>
                         <div className="h-2 w-full rounded-full bg-gray-200">
-                          <div className="h-2 rounded-full bg-gray-900" style="width: 62%"></div>
+                          <div className="h-2 rounded-full bg-gray-900"></div>
                         </div>
                       </div>
 
@@ -222,7 +222,7 @@ const MyLectures = () => {
                           <span className="font-medium">15%</span>
                         </div>
                         <div className="h-2 w-full rounded-full bg-gray-200">
-                          <div className="h-2 rounded-full bg-gray-900" style="width: 15%"></div>
+                          <div className="h-2 rounded-full bg-gray-900"></div>
                         </div>
                       </div>
 
