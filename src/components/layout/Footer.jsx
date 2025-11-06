@@ -3,12 +3,10 @@ import { Link } from 'react-router-dom';
 
 function Footer() {
   return (
-    <footer className="flex justify-between border-t border-gray-300 bg-white px-3 py-2 text-xs text-gray-500">
-      <div>© 2025 LXP. All rights reserved.</div>
-      <nav className="flex gap-3">
-        <Link>이용약관</Link>
-        <Link>개인정보처리방침</Link>
-      </nav>
+    <footer className="footer border-t border-gray-200 bg-white py-8">
+      <div className="footer__container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <p className="text-center text-sm text-gray-500">© 2025 LXP. All rights reserved.</p>
+      </div>
     </footer>
   );
 }
