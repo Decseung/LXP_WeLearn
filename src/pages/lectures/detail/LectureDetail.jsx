@@ -39,7 +39,7 @@ const LectureDetail = () => {
   if (loading) {
     return (
       <main className="main flex h-screen items-center justify-center text-gray-500">
-        데이터를 불러오는 중입니다...
+        데이터를 불러오는 중입니다..
       </main>
     );
   }
@@ -66,7 +66,7 @@ const LectureDetail = () => {
       <LectureContent lectureItem={lectureItem} />
 
       {/* 커리큘럼 소개 */}
-      <LectureCurriculum lectureItem={lectureItem} />
+      <LectureCurriculum curriculum={lectureItem.curriculum} />
     </main>
   );
 };

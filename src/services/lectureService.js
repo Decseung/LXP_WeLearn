@@ -19,7 +19,7 @@ export const getLectureItem = async (lectureId) => {
       return null;
     }
 
-    // Firestore 문서는 여러 개일 수 있으니 첫 번째만 반환
+    // Firestore 문서 첫 번째만 반환
     const docSnap = querySnapshot.docs[0];
     return { id: docSnap.id, ...docSnap.data() };
   } catch (error) {

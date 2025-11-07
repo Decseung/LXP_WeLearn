@@ -1,18 +1,27 @@
 import React from 'react';
 import CATEGORIES from '../../../../constants/categories.js';
 
-// 카테고리 이름을 안전하게 반환하는 헬퍼 추가
+/**
+ *   getCategoryName(categoryValue)
+ * - categoryValue가 숫자(ID)든 문자열(KEY)이든
+ *   CATEGORIES 배열에서 일치하는 항목의 name을 찾아 반환
+ * - 일치 항목이 없거나 null/undefined일 경우 기본값 '기타' 반환
+ */
+
 const getCategoryName = (categoryValue) => {
   if (categoryValue === undefined || categoryValue === null) return '기타';
+
+  // 문자열 / 숫자 형태 모두 대비 ('2' 또는 2)
   const str = String(categoryValue).toLowerCase();
   const num = Number(categoryValue);
 
+  // id 또는 key 중 일치하는 카테고리 탐색하기
   const match = CATEGORIES.find((c) => c.id === num || c.key.toLowerCase() === str);
   return match ? match.name : '기타';
 };
 
 function LectureHero({ lectureItem = {} }) {
-  // const navigate = useNavigate();
+  // 부모 컴포넌트에서 전달된 강의 데이터 구조 분해하기
 
   const {
     category,
@@ -26,9 +35,17 @@ function LectureHero({ lectureItem = {} }) {
     thumbnailUrl = '',
   } = lectureItem;
 
-  // 커리큘럼 총 강의 수 (lessons/lectures 키 모두 허용)
+  /**
+   *  getTotalLectureCount()
+   * - 커리큘럼 전체의 강의 수를 계산하는 함수.
+   * - 섹션별로 lessons[] 또는 lectures[] 배열 모두
+   * - 각 섹션의 배열 길이를 합산하여 총 강의 수 반환하기
+   */
+
   const getTotalLectureCount = () => {
     if (!Array.isArray(curriculum)) return 0;
+
+    // reduce() 함수로 각 섹션을 순회하면서 더하기
     return curriculum.reduce((total, section) => {
       const lessonsCount = Array.isArray(section?.lessons) ? section.lessons.length : 0;
       const lecturesCount = Array.isArray(section?.lectures) ? section.lectures.length : 0;
@@ -36,13 +53,22 @@ function LectureHero({ lectureItem = {} }) {
     }, 0);
   };
 
+  /**
+   *   safeStudentCount
+   * - studentCount 값은 숫자, 천 단위 콤마(,) 적용.
+   * - NaN 또는 비정상 값일 경우 '0'으로 표시
+   */
+
   const safeStudentCount = Number.isFinite(Number(studentCount))
     ? Number(studentCount).toLocaleString()
     : '0';
 
+  /**
+   *  thumbSrc
+   * - 썸네일 이미지 경로가 존재하지 않을 경우, 기본 이미지 URL 사용.
+   */
   const thumbSrc =
-    thumbnailUrl ||
-    'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=1600&auto=format&fit=crop';
+    thumbnailUrl || 'https://dr.savee-cdn.com/things/6/6/0d3d5da690b611c98f76a2.webp';
 
   return (
     <section className="lecture-hero border-b border-gray-200 bg-white py-8">
