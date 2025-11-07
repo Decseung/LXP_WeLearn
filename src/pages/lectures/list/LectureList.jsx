@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import LectureCard from '../../../components/ui/LectureCard';
-// import { getLectures } from '../../../services/lecture/getLecturesService';
-import { lecture_list } from '../../../types/init';
+import { getLectures } from '../../../services/lecture/getLecturesService';
+// import { lecture_list } from '../../../types/init';
 
 const LectureList = () => {
   const [lecturedDatas, setLectureDatas] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
   console.log(lecturedDatas);
   useEffect(() => {
-    // const fetchLecture = async () => {
-    //   setIsLoading(true);
-    //   const lectureData = await getLectures();
-    //   setCardData(lectureData);
-    //   setIsLoading(false);
-    // };
-    // fetchLecture();
-    setLectureDatas(lecture_list);
+    const fetchLecture = async () => {
+      setIsLoading(true);
+      const lectureData = await getLectures();
+      setLectureDatas(lectureData);
+      setIsLoading(false);
+    };
+    fetchLecture();
+    // setLectureDatas(lecture_list);
   }, []);
   return (
     lecturedDatas.length && (
@@ -85,13 +86,13 @@ const LectureList = () => {
 
             {/* <!-- Grid Container --> */}
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-              {/* {isLoading ? (
-              <div>로딩중 ...</div>
-            ) : (
-            )} */}
-              {lecturedDatas.map((lecture) => {
-                return <LectureCard key={lecture.lectureId} lecture={lecture} />;
-              })}
+              {isLoading ? (
+                <div>로딩중 ...</div>
+              ) : (
+                lecturedDatas.map((lecture) => {
+                  return <LectureCard key={lecture.lectureId} lecture={lecture} />;
+                })
+              )}
             </div>
 
             {/* <!-- ============================================ --> */}

@@ -1,7 +1,6 @@
 import React from 'react';
 
 function LectureCard({ lecture }) {
-  console.log(lecture);
   return (
     <div className="lecture-card cursor-pointer overflow-hidden rounded-lg bg-white shadow-md transition-shadow hover:shadow-xl">
       <div className="lecture-card__thumbnail relative aspect-video bg-gray-200">
