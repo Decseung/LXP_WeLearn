@@ -10,7 +10,7 @@ const LectureDetail = () => {
   // 상태 관리
   const [lectureItem, setLectureItem] = useState(null);
 
-  // 강의 ID 가져오기
+  // 강의 :ID 가져오기
   const { lectureId } = useParams();
 
   useEffect(() => {
