@@ -1,21 +1,25 @@
 import React from 'react';
+import CATEGORIES from '../../constants/categories';
 
 function LectureCard({ lecture }) {
+  const category = CATEGORIES.find((e) => e.id === lecture.category);
+  const categoryName = category ? category.name : '';
+
   return (
     <div className="lecture-card cursor-pointer overflow-hidden rounded-lg bg-white shadow-md transition-shadow hover:shadow-xl">
       <div className="lecture-card__thumbnail relative aspect-video bg-gray-200">
         <img
-          // src={lecture.thumbnailUrl}
+          src={lecture.thumbnailUrl}
           alt="React 완전 정복"
           className="absolute inset-0 h-full w-full object-cover"
         />
         <span className="absolute top-3 left-3 rounded-full bg-gray-900 px-3 py-1 text-xs font-medium text-white">
-          {lecture.category}
+          {categoryName}
         </span>
       </div>
 
       <div className="lecture-card__content space-y-3 p-4">
-        <h3 className="lecture-card__title line-clamp-2 text-lg font-bold text-gray-900">
+        <h3 className="lecture-card__title line-clamp-2 max-h-16 min-h-16 text-lg font-bold text-gray-900">
           {lecture.title}
         </h3>
 
