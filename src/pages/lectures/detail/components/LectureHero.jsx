@@ -1,7 +1,7 @@
 import React from 'react';
 import CATEGORIES from '../../../../constants/categories.js';
 
-// [CHANGED] 카테고리 이름을 안전하게 반환하는 헬퍼 추가
+// 카테고리 이름을 안전하게 반환하는 헬퍼 추가
 const getCategoryName = (categoryValue) => {
   if (categoryValue === undefined || categoryValue === null) return '기타';
   const str = String(categoryValue).toLowerCase();
@@ -10,7 +10,6 @@ const getCategoryName = (categoryValue) => {
   const match = CATEGORIES.find((c) => c.id === num || c.key.toLowerCase() === str);
   return match ? match.name : '기타';
 };
-// [CHANGED] 끝
 
 function LectureHero({ lectureItem = {} }) {
   // const navigate = useNavigate();
@@ -53,9 +52,7 @@ function LectureHero({ lectureItem = {} }) {
           <div className="lecture-info lg:col-span-2">
             {/* Category Badge */}
             <span className="mb-4 inline-block rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-900">
-              {/* [CHANGED] getCategory → getCategoryName로 변경 */}
               {getCategoryName(category)}
-              {/* [CHANGED] 끝 */}
             </span>
 
             {/* Title */}
