@@ -13,9 +13,8 @@ function SortOption({ sortOption, setSortOption }) {
       onChange={handleChange}
     >
       <option value="latest">최신순</option>
-      <option value="popular">인기순</option>
-      <option value="rating">평점순</option>
       <option value="students">수강생순</option>
+      <option value="rating">별점순</option>
     </select>
   );
 }

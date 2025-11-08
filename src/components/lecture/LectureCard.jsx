@@ -5,8 +5,8 @@ function LectureCard({ lecture }) {
   const category = CATEGORIES.find((e) => e.id === lecture.category);
 
   return (
-    <div className="lecture-card cursor-pointer overflow-hidden rounded-lg bg-white shadow-md transition-shadow hover:shadow-xl">
-      <div className="lecture-card__thumbnail relative aspect-video bg-gray-200">
+    <div className="cursor-pointer overflow-hidden rounded-lg bg-white shadow-md transition-shadow hover:shadow-xl">
+      <div className="relative aspect-video bg-gray-200">
         <img
           src={lecture.thumbnailUrl}
           alt="React 완전 정복"
@@ -17,8 +17,8 @@ function LectureCard({ lecture }) {
         </span>
       </div>
 
-      <div className="lecture-card__content space-y-3 p-4">
-        <h3 className="lecture-card__title line-clamp-2 max-h-16 min-h-16 text-lg font-bold text-gray-900">
+      <div className="space-y-3 p-4">
+        <h3 className="line-clamp-2 max-h-16 min-h-16 text-lg font-bold text-gray-900">
           {lecture.title}
         </h3>
 
