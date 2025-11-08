@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 function SortOption({ sortOption, setSortOption }) {
+  // props로 받아온 useState({sortOption, setSortOption}) 조절
   const handleChange = (e) => {
-    setSortOption({
-      ...sortOption,
-      sort: e.target.value,
-    });
+    setSortOption((prev) => ({ ...prev, sort: e.target.value }));
   };
 
   return (
@@ -18,7 +16,7 @@ function SortOption({ sortOption, setSortOption }) {
         <option value="latest">최신순</option>
         <option value="popular">인기순</option>
         <option value="rating">평점순</option>
-        <option value="student">수강생순</option>
+        <option value="students">수강생순</option>
       </select>
     </div>
   );

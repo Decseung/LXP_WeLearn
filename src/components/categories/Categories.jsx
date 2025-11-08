@@ -12,22 +12,16 @@ function categories() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
-    const newParams = new URLSearchParams(searchParams); // 기존 쿼리 복사
+    const newParams = new URLSearchParams(searchParams);
 
-    if (sortOptions.category) {
-      newParams.set('category', sortOptions.category);
-    } else {
-      newParams.delete('category');
-    }
+    if (sortOptions.category) newParams.set('category', sortOptions.category);
+    else newParams.delete('category');
 
-    if (sortOptions.sort) {
-      newParams.set('sort', sortOptions.sort);
-    } else {
-      newParams.delete('sort');
-    }
+    if (sortOptions.sort) newParams.set('sort', sortOptions.sort);
+    else newParams.delete('sort');
 
-    setSearchParams(newParams);
-  }, [sortOptions, setSearchParams]);
+    setSearchParams(newParams, { replace: true });
+  }, [sortOptions]);
 
   return (
     <section className="filter-section border-b border-gray-200 bg-white py-4">
