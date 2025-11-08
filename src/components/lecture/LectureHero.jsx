@@ -1,5 +1,4 @@
-import React from 'react';
-import CATEGORIES from '../../../../constants/categories.js';
+import { getCategoryName, getTotalLectureCount } from '../../utils/lectureUtils.js';
 
 /**
  *   getCategoryName(categoryValue)
@@ -7,18 +6,6 @@ import CATEGORIES from '../../../../constants/categories.js';
  *   CATEGORIES 배열에서 일치하는 항목의 name을 찾아 반환
  * - 일치 항목이 없거나 null/undefined일 경우 기본값 '기타' 반환
  */
-
-const getCategoryName = (categoryValue) => {
-  if (categoryValue === undefined || categoryValue === null) return '기타';
-
-  // 문자열 / 숫자 형태 모두 대비 ('2' 또는 2)
-  const str = String(categoryValue).toLowerCase();
-  const num = Number(categoryValue);
-
-  // id 또는 key 중 일치하는 카테고리 탐색하기
-  const match = CATEGORIES.find((c) => c.id === num || c.key.toLowerCase() === str);
-  return match ? match.name : '기타';
-};
 
 function LectureHero({ lectureItem = {} }) {
   // 부모 컴포넌트에서 전달된 강의 데이터 구조 분해하기
@@ -36,26 +23,8 @@ function LectureHero({ lectureItem = {} }) {
   } = lectureItem;
 
   /**
-   *  getTotalLectureCount()
-   * - 커리큘럼 전체의 강의 수를 계산하는 함수.
-   * - 섹션별로 lessons[] 또는 lectures[] 배열 모두
-   * - 각 섹션의 배열 길이를 합산하여 총 강의 수 반환하기
-   */
-
-  const getTotalLectureCount = () => {
-    if (!Array.isArray(curriculum)) return 0;
-
-    // reduce() 함수로 각 섹션을 순회하면서 더하기
-    return curriculum.reduce((total, section) => {
-      const lessonsCount = Array.isArray(section?.lessons) ? section.lessons.length : 0;
-      const lecturesCount = Array.isArray(section?.lectures) ? section.lectures.length : 0;
-      return total + (lessonsCount || lecturesCount);
-    }, 0);
-  };
-
-  /**
    *   safeStudentCount
-   * - studentCount 값은 숫자, 천 단위 콤마(,) 적용.
+   * - studentCount 값은 숫자, 천 단위 콤마(,) 적용
    * - NaN 또는 비정상 값일 경우 '0'으로 표시
    */
 
@@ -137,7 +106,7 @@ function LectureHero({ lectureItem = {} }) {
                     d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"
                   />
                 </svg>
-                <span>{getTotalLectureCount()} 개 강의</span>
+                <span>{getTotalLectureCount(curriculum)} 개 강의</span>
               </div>
             </div>
 

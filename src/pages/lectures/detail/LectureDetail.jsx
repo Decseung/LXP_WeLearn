@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import LectureHero from './components/LectureHero.jsx';
-import LectureTabs from './components/LectureTabs.jsx';
-import LectureContent from './components/LectureContent.jsx';
-import LectureCurriculum from './components/LectureCurriculum.jsx';
+import LectureHero from '../../../components/lecture/LectureHero.jsx';
+import LectureTabs from '../../../components/lecture/LectureTabs.jsx';
+import LectureContent from '../../../components/lecture/LectureContent.jsx';
+import LectureCurriculum from '../../../components/lecture/LectureCurriculum.jsx';
 import { getLectureItem } from '../../../services/lectureService.js';
 
 const LectureDetail = () => {
