@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../store/auth/logout.js';
+import SkeletonButton from '../ui/SkeletonButton.jsx';
 
 function Header() {
   const navigate = useNavigate();
@@ -39,7 +40,12 @@ function Header() {
           {/* <!-- Navigation & Auth Section --> */}
           <div className="flex flex-shrink-0 items-center space-x-4">
             <div className="hidden items-center space-x-3 md:flex">
-              {initializing ? null : user ? (
+              {initializing ? (
+                <>
+                  <SkeletonButton className="h-5 w-16 rounded" />
+                  <SkeletonButton className="h-9 w-20 rounded-lg" />
+                </>
+              ) : user ? (
                 <>
                   <button
                     onClick={() => handleNavi('/mypage')}
