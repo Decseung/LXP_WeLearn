@@ -20,9 +20,11 @@ import {
  * @param {string} props.lectureId - 수강 신청할 강의 고유 ID
  * @param {string} props.firestoreDocId - Firestore 문서 ID
  * @param {string} props.instructorId - 강의를 등록한 강사의 userId
+ * @param {Function} props.onEnrollSuccess - 수강 신청 성공 시 호출 함수
+ *
  */
 
-function EnrollButton({ className, lectureId, firestoreDocId, instructorId }) {
+function EnrollButton({ className, lectureId, firestoreDocId, instructorId, onEnrollSuccess }) {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, initializing } = useAuthSelector();
@@ -113,7 +115,12 @@ function EnrollButton({ className, lectureId, firestoreDocId, instructorId }) {
         studentCount: increment(1),
       });
       console.log('수강 인원 추가 완료');
+
+      // 수강 신청 성공 시 상태 업데이트
       setIsEnrolled(true);
+      if (onEnrollSuccess) {
+        onEnrollSuccess(); // 부모 컴포넌트에 알려주기
+      }
       alert('수강 신청이 완료되었습니다.');
     } catch (error) {
       console.log('수강 신청 중 오류:', error);
