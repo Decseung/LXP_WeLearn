@@ -12,8 +12,17 @@ export function RequireAuth({ children }) {
 export function RequireUnAuth({ children }) {
   const { initializing, user } = useSelector((s) => s.auth);
   const loc = useLocation();
+
   if (initializing) return null; // 또는 스피너
-  return !user ? children : <Navigate to="/" replace state={{ from: loc }} />;
+
+  // 로그인 후 조건별 페이지로 이동
+  if (user) {
+    // loc.state?.from 확인 -> 있으면 리다이렉트, 없으면 /lectures 로 보내기
+    const redirectTo = loc.state?.from || '/';
+    return <Navigate to={redirectTo} replace />;
+  }
+  return children;
+  //return !user ? children : <Navigate to="/" replace state={{ from: loc }} />;
 }
 
 export function RequireRole({ children, allow = [], adminIsSuper = true }) {

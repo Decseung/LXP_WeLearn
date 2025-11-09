@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { getCategoryName, getTotalLectureCount } from '../../utils/lectureUtils.js';
+import EnrollButton from './EnrollButton.jsx';
 
 /**
  *   getCategoryName(categoryValue)
@@ -11,10 +13,13 @@ function LectureHero({ lectureItem = {} }) {
   // 부모 컴포넌트에서 전달된 강의 데이터 구조 분해하기
 
   const {
+    id,
     category,
+    lectureId = '',
     title = '',
     description = '',
     userName = '',
+    userId = '',
     rating = 0,
     reviewCount = 0,
     studentCount = 0,
@@ -22,14 +27,16 @@ function LectureHero({ lectureItem = {} }) {
     thumbnailUrl = '',
   } = lectureItem;
 
-  /**
-   *   safeStudentCount
-   * - studentCount 값은 숫자, 천 단위 콤마(,) 적용
-   * - NaN 또는 비정상 값일 경우 '0'으로 표시
-   */
+  //  수강 인원 수 상태 관리
+  const [currentStudentCount, setCurrentStudentCount] = useState(studentCount);
 
-  const safeStudentCount = Number.isFinite(Number(studentCount))
-    ? Number(studentCount).toLocaleString()
+  // 수강 신청 성공 시 수강 인원 수 증가 업데이트
+  const handleEnrollSuccess = () => {
+    setCurrentStudentCount((prev) => prev + 1);
+  };
+  // 천단위 콤마(,) 넣기
+  const safeStudentCount = Number.isFinite(Number(currentStudentCount))
+    ? Number(currentStudentCount).toLocaleString()
     : '0';
 
   /**
@@ -117,15 +124,12 @@ function LectureHero({ lectureItem = {} }) {
             </div>
 
             {/* CTA Button */}
-            <div>
-              <button
-                type="button"
-                className="w-full rounded-lg bg-gray-900 px-8 py-3 text-base font-medium text-white transition-colors hover:bg-gray-800 focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 focus:outline-none"
-                aria-label="수강 신청"
-              >
-                수강신청
-              </button>
-            </div>
+            <EnrollButton
+              lectureId={lectureId}
+              firestoreDocId={id}
+              instructorId={userId}
+              onEnrollSuccess={handleEnrollSuccess}
+            />
           </div>
 
           {/* Right: Thumbnail (3/5) */}
