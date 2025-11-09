@@ -7,26 +7,16 @@ function EnrollButton({ className, lectureId }) {
   const location = useLocation();
   const { user, initializing } = useAuthSelector();
 
-  // console.log(' EnrollButton 렌더링됨');
-  // console.log('lectureId:', lectureId);
-  // console.log('user:', user);
-  // console.log('initializing:', initializing);
-
   const handleClick = () => {
-    // console.log('버튼 클릭됨');
     // 중복 동작 방지
     if (initializing) return;
 
     // 1) 비로그인 사용자가 클릭했을 때 -> 로그인 페이지로 이동
     // 로그인 후 리다이렉트할 경로 전달
     if (!user) {
-      // console.log('로그인 페이지로 이동');
-      // console.log('현재 경로', location.pathname);
-      // console.log('전달할 state', { from: location.pathname });
-
       navigate('/login', {
         state: { from: location.pathname }, // 예: '/lectures/lec001'
-        //replace: false, // 히스토리에 추가
+        replace: false, // 히스토리에 추가
       });
       return;
     }

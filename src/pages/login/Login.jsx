@@ -9,19 +9,12 @@ const Login = () => {
   const location = useLocation();
   const { user, initializing } = useAuthSelector();
 
-  console.log('Login 컴포넌트 렌더링');
-  console.log('location:', location);
-  console.log('location.state:', location.state);
-  console.log('location.state?.from:', location.state?.from);
-
   const from = location.state?.from || '/';
-  console.log('최종 프롬 값:', from);
 
   // 로그인 상태이거나 로그인 직후 전역 User가 세팅되면 원래 페이지로 복귀
   useEffect(() => {
     if (initializing) return;
     if (user) {
-      console.log('로그인 성공 이동할 경로는?', from);
       navigate(from, { replace: true });
     }
   }, [user, initializing, from, navigate]);

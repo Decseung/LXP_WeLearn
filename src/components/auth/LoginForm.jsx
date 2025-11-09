@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Input from '../common/form/Input.jsx';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../../store/auth/login.js';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { clearError } from '../../store/auth/authSlice.js';
 import InputPassword from '../common/form/InputPassword.jsx';
 import GlobalLoading from '../loading/GlobalLoading.jsx';
@@ -10,6 +10,7 @@ import ErrorMessage from '../ui/ErrorMessage.jsx';
 
 const LoginForm = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -27,9 +28,18 @@ const LoginForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const result = await dispatch(login(formData));
+
     if (result.meta.requestStatus === 'fulfilled') {
-      navigate('/');
+      console.log('로그인 성공했음');
+
+      //location.state?.from이 있는지 확인하고 보내기, 없으면 '/' 로 보내기
+      const redirectTo = location.state?.from || '/';
+      console.log('리다이렉트 경로 어디임:', redirectTo);
+      navigate(redirectTo, { replace: true });
+
+      //  navigate('/');
     }
   };
 
