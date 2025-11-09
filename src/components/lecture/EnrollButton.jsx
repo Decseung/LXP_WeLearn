@@ -121,7 +121,7 @@ function EnrollButton({ className, lectureId, firestoreDocId, instructorId, onEn
       if (onEnrollSuccess) {
         onEnrollSuccess(); // 부모 컴포넌트에 알려주기
       }
-      alert('수강 신청이 완료되었습니다.');
+      // alert('수강 신청이 완료되었습니다.');
     } catch (error) {
       console.log('수강 신청 중 오류:', error);
       alert('수강 신청에 실패했습니다. 다시 시도해주세요.');
