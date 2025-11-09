@@ -18,6 +18,7 @@ function LectureHero({ lectureItem = {} }) {
     title = '',
     description = '',
     userName = '',
+    userId = '',
     rating = 0,
     reviewCount = 0,
     studentCount = 0,
@@ -120,7 +121,7 @@ function LectureHero({ lectureItem = {} }) {
             </div>
 
             {/* CTA Button */}
-            <EnrollButton lectureId={lectureId} firestoreDocId={id} />
+            <EnrollButton lectureId={lectureId} firestoreDocId={id} instructorId={userId} />
           </div>
 
           {/* Right: Thumbnail (3/5) */}
