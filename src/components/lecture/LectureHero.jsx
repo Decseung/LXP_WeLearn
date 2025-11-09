@@ -12,6 +12,7 @@ function LectureHero({ lectureItem = {} }) {
   // 부모 컴포넌트에서 전달된 강의 데이터 구조 분해하기
 
   const {
+    id,
     category,
     lectureId = '',
     title = '',
@@ -119,7 +120,7 @@ function LectureHero({ lectureItem = {} }) {
             </div>
 
             {/* CTA Button */}
-            <EnrollButton lectureId={lectureId} />
+            <EnrollButton lectureId={lectureId} firestoreDocId={id} />
           </div>
 
           {/* Right: Thumbnail (3/5) */}
