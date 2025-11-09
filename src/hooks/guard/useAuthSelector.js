@@ -8,8 +8,8 @@ import { useSelector } from 'react-redux';
  *   initializing: boolean
  * }}
  *
- * @param Redux.auth.user {object|null} 인증된 사용자 정보
- * @param Redux.auth.initializing {boolean} 전역 인증 초기 확인 상태
+ * @param {object|null} 인증된 사용자 정보 auth.user
+ * @param {boolean} 전역 인증 초기 확인 상태 auth.initializing
  */
 
 export function useAuthSelector() {
