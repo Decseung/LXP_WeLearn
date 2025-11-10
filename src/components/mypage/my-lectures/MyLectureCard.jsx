@@ -31,7 +31,7 @@ const MyLectureCard = (props) => {
         {/* 썸네일 */}
         <div className="lecture-item__thumbnail aspect-video flex-shrink-0 bg-gray-200 sm:aspect-auto sm:w-48">
           <img
-            src={thumbnailUrl || 'https://via.placeholder.com/300x169'}
+            src={thumbnailUrl || 'https://dr.savee-cdn.com/things/6/6/0d3d5da690b611c98f76a2.webp'}
             alt={title}
             className="h-full w-full object-cover"
           />
@@ -68,7 +68,7 @@ const MyLectureCard = (props) => {
           </div>
 
           {/* 버튼 */}
-          <div className="mt-4 flex items-center justify-between">
+          <div className="mt-4 flex items-center justify-end">
             <button className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-gray-800">
               학습하기
             </button>

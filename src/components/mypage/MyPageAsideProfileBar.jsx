@@ -1,9 +1,10 @@
 import React from 'react';
 import { User } from 'lucide-react';
+import { toast } from 'react-toastify';
 
-const MyPageAsideProfileBar = () => {
+const MyPageAsideProfileBar = ({ children }) => {
   return (
-    <aside className="sidebar lg:col-span-1">
+    <aside className="lg:col-span-1">
       <div className="rounded-lg bg-white p-6 shadow-md">
         {/* <!-- Profile --> */}
         <div className="profile mb-6 border-b border-gray-200 pb-6 text-center">
@@ -17,20 +18,32 @@ const MyPageAsideProfileBar = () => {
         </div>
 
         {/* <!-- Menu --> */}
-        <nav className="sidebar-menu space-y-1" aria-label="마이페이지 메뉴">
-          <a
+        <nav
+          className="sidebar-menu space-y-1 border-b border-gray-200"
+          aria-label="마이페이지 메뉴"
+        >
+          <button
             href="/mypage"
-            className="block rounded-lg bg-gray-900 px-4 py-3 text-sm font-medium text-white"
+            className="block w-full rounded-lg bg-gray-900 px-4 py-3 text-left text-sm font-medium text-white"
           >
             수강 중인 강의
-          </a>
-          <a
+          </button>
+          <button
             href="/mypage/registered"
-            className="block rounded-lg px-4 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+            className="block w-full rounded-lg px-4 py-3 text-left text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
           >
             내가 등록한 강의
-          </a>
+          </button>
+          <button
+            className="block w-full rounded-lg px-4 py-3 text-left text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+            onClick={() => {
+              toast.info('현재 개발 중 입니다.');
+            }}
+          >
+            즐겨찾기
+          </button>
         </nav>
+        {children}
       </div>
     </aside>
   );

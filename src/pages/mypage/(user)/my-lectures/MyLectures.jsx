@@ -26,16 +26,17 @@ const MyLectures = () => {
 
       <section className="size-full max-w-7xl grow px-4 sm:px-6 lg:px-8">
         <div className="grid h-full grid-cols-1 gap-8 lg:grid-cols-4">
-          <MyPageAsideProfileBar />
+          <MyPageAsideProfileBar>
+            <Categories direction="column" />
+          </MyPageAsideProfileBar>
 
           <div className="content-area lg:col-span-3">
             <section className="in-progress-lectures">
               <div className="mb-6 flex items-center justify-between">
                 <h2 className="text-2xl font-bold text-gray-900">수강 중인 강의</h2>
+                <div>총 {total}개의 강의</div>
               </div>
-              <Categories />
 
-              <div>총 {total}개의 강의</div>
               {/* <!-- Lecture List --> */}
               <section className="space-y-4">
                 {items.length !== 0 ? (
