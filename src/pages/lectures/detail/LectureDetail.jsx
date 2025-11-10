@@ -4,7 +4,7 @@ import LectureHero from '../../../components/lecture/LectureHero.jsx';
 import LectureTabs from '../../../components/lecture/LectureTabs.jsx';
 import LectureContent from '../../../components/lecture/LectureContent.jsx';
 import LectureCurriculum from '../../../components/lecture/LectureCurriculum.jsx';
-import { getLectureItem } from '../../../services/lectureService.js';
+import { getLectureItem } from '../../../services/lecture/getLecturesService.js';
 
 const LectureDetail = () => {
   const { lectureId } = useParams();
