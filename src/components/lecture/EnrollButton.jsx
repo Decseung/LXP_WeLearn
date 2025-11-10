@@ -52,8 +52,6 @@ function EnrollButton({ className, lectureId, firestoreDocId, instructorId, onEn
         const querySnapshot = await getDocs(q);
 
         setIsEnrolled(!querySnapshot.empty);
-      } catch (error) {
-        console.log('수강 신청 확인 중 오류:', error);
       } finally {
         setCheckEnrollment(false);
       }
@@ -77,7 +75,7 @@ function EnrollButton({ className, lectureId, firestoreDocId, instructorId, onEn
 
     // 추가: lectureId 또는 firestoreDocId가 없는 경우 처리
     if (!lectureId || !firestoreDocId) {
-      console.error('강의 정보가 없습니다:', { lectureId, firestoreDocId });
+      // console.error('강의 정보가 없습니다:', { lectureId, firestoreDocId });
       toast.error('강의 정보를 불러올 수 없습니다. 다시 시도해주세요.', { toastId: 'error' });
       return;
     }
@@ -117,7 +115,7 @@ function EnrollButton({ className, lectureId, firestoreDocId, instructorId, onEn
       await updateDoc(lectureDocRef, {
         studentCount: increment(1),
       });
-      console.log('수강 인원 추가 완료');
+      // console.log('수강 인원 추가 완료');
 
       // 수강 신청 성공 시 상태 업데이트
       setIsEnrolled(true);
@@ -125,8 +123,7 @@ function EnrollButton({ className, lectureId, firestoreDocId, instructorId, onEn
         onEnrollSuccess();
       }
     } catch (error) {
-      console.error('수강 신청 중 오류:', error);
-      toast.error('수강 신청에 실패했습니다. 다시 시도해주세요.', { toastId: 'error' });
+      toast.error('수강 신청에 실패했습니다. 다시 시도해주세요.', { toastId: error });
     }
   };
 
