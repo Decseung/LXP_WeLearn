@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { clearError } from '../../store/auth/authSlice.js';
 import { signup } from '../../store/auth/signup.js';
 import Input from '../common/form/Input.jsx';
+import InputPassword from '../common/form/InputPassword.jsx';
+import ErrorMessage from '../ui/ErrorMessage.jsx';
 
 const SignupForm = () => {
   const [formData, setFormData] = useState({
@@ -93,11 +95,10 @@ const SignupForm = () => {
         required
       />
 
-      <Input
+      <InputPassword
         label="비밀번호"
         id="password"
         name="password"
-        type="password"
         value={formData.password}
         onChange={handleChange}
         aria-required="true"
@@ -105,11 +106,10 @@ const SignupForm = () => {
         required
       />
 
-      <Input
+      <InputPassword
         label="비밀번호 확인"
         id="passwordConfirm"
         name="passwordConfirm"
-        type="password"
         value={formData.passwordConfirm}
         onChange={handleChange}
         aria-required="true"
@@ -118,11 +118,7 @@ const SignupForm = () => {
       />
 
       {/* 에러 메시지 */}
-      {mergedError && (
-        <p className="text-sm text-rose-600" role="alert" aria-live="polite">
-          {mergedError}
-        </p>
-      )}
+      {mergedError && <ErrorMessage message={mergedError} />}
 
       {/* 제출 버튼 */}
       <button
