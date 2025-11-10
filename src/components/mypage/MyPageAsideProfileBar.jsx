@@ -1,0 +1,39 @@
+import React from 'react';
+import { User } from 'lucide-react';
+
+const MyPageAsideProfileBar = () => {
+  return (
+    <aside className="sidebar lg:col-span-1">
+      <div className="rounded-lg bg-white p-6 shadow-md">
+        {/* <!-- Profile --> */}
+        <div className="profile mb-6 border-b border-gray-200 pb-6 text-center">
+          <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gray-200">
+            <span className="text-2xl font-bold text-gray-600">
+              <User className="size-14" />
+            </span>
+          </div>
+          <h2 className="mb-1 text-lg font-bold text-gray-900">홍길동</h2>
+          <p className="text-sm text-gray-500">student@lxp.com</p>
+        </div>
+
+        {/* <!-- Menu --> */}
+        <nav className="sidebar-menu space-y-1" aria-label="마이페이지 메뉴">
+          <a
+            href="/mypage"
+            className="block rounded-lg bg-gray-900 px-4 py-3 text-sm font-medium text-white"
+          >
+            수강 중인 강의
+          </a>
+          <a
+            href="/mypage/registered"
+            className="block rounded-lg px-4 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+          >
+            내가 등록한 강의
+          </a>
+        </nav>
+      </div>
+    </aside>
+  );
+};
+
+export default MyPageAsideProfileBar;

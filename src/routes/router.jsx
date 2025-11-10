@@ -53,7 +53,7 @@ export const router = createBrowserRouter([
       </RequireAuth>
     ),
     children: [
-      // 사용자용
+      { index: true, element: <Navigate to="my-lectures" replace /> },
       { path: 'my-lectures', element: <MyLectures /> },
 
       // 강사용(권한 제한)
