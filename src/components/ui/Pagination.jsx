@@ -1,9 +1,9 @@
 import React from 'react';
+import { PAGE_RANGE } from '../../constants/paginationConstants';
 
 function Pagination({ currentPage, totalPages, onPageChange }) {
-  const pageRange = 5;
-  const startPage = Math.floor((currentPage - 1) / pageRange) * pageRange + 1;
-  const endPage = Math.min(startPage + pageRange - 1, totalPages);
+  const startPage = Math.floor((currentPage - 1) / PAGE_RANGE) * PAGE_RANGE + 1;
+  const endPage = Math.min(startPage + PAGE_RANGE - 1, totalPages);
 
   const pages = [];
   for (let i = startPage; i <= endPage; i++) {

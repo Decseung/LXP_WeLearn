@@ -5,8 +5,7 @@ import Pagination from '../../../components/ui/Pagination';
 import { useSearchParams } from 'react-router-dom';
 import { getLectures } from '../../../services/lecture/getLecturesService';
 import CATEGORIES from '../../../constants/categories';
-
-const itemsPerPage = 8; // 페이지당 강의 수
+import { ITEMS_PER_PAGE } from '../../../constants/paginationConstants';
 
 const LectureList = () => {
   const [lectureDatas, setLectureDatas] = useState([]);
@@ -31,7 +30,7 @@ const LectureList = () => {
     const { lectures, total, lastDoc } = await getLectures({
       category,
       sort,
-      limitCount: itemsPerPage,
+      limitCount: ITEMS_PER_PAGE,
       startAfterDoc: pageInfo[pageNum - 1] || null,
     });
 
@@ -59,7 +58,7 @@ const LectureList = () => {
     fetchLecturePage(currentPage);
   }, [currentPage]);
 
-  const totalPages = Math.ceil(totalCount / itemsPerPage);
+  const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
 
   return (
     <>
@@ -77,7 +76,7 @@ const LectureList = () => {
           {/* 총 갯수 */}
           <div className="mb-6">
             <p className="text-sm text-gray-600">
-              총{' '}
+              <span className="mr-1">총</span>
               <span className="font-medium text-gray-900">
                 {category === 'all' ? totalCount : lectureDatas.length}
               </span>
