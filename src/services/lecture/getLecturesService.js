@@ -2,11 +2,12 @@ import { db } from '../../lib/firebase/config';
 import { collection, getCountFromServer, getDocs } from 'firebase/firestore';
 import { LECTURELIST_COLLECTION_NAME } from '../../lib/firebase/table/ddl';
 import { buildLectureQuery } from '../../utils/filtering';
+import { ITEMS_PER_PAGE } from '../../constants/paginationConstants';
 
 export const getLectures = async ({
   category = 'all',
   sort = 'latest',
-  limitCount = 8,
+  limitCount = ITEMS_PER_PAGE,
   startAfterDoc = null,
 }) => {
   try {
