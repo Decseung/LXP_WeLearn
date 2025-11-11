@@ -16,8 +16,11 @@ function CreateLectureForm() {
     thumbnailUrl: '',
     userName: '',
     content: '',
-    curriculumm: [
-      { chapterTitle: '', lessons: [{ lessonId: '', lessonMediaUrl: '', lessonTitle: '' }] },
+    curriculums: [
+      {
+        chapterTitle: '',
+        lessons: [{ lessonId: '', lessonMediaUrl: '', lessonTitle: '', runingTime: '' }],
+      },
     ],
   });
 
@@ -34,9 +37,18 @@ function CreateLectureForm() {
       [e.target.id]: e.target.value,
     });
   };
-  useEffect(() => {
-    console.log(formData);
-  }, [formData]);
+
+  // ✅ 챕터 추가
+  const addChapter = () => {
+    setFormData((prev) => ({
+      ...prev,
+      curriculums: [
+        ...prev.curriculums,
+        { chapterTitle: '', lessons: [{ lessonId: '', lessonMediaUrl: '', lessonTitle: '' }] },
+      ],
+    }));
+  };
+
   return (
     <div
       id="main"
@@ -118,7 +130,17 @@ function CreateLectureForm() {
           <h2 id="curi-title" className="mb-4 text-xl font-semibold text-gray-900">
             커리큘럼 구성
           </h2>
-          <CreateCurriculum curriculumm={formData.curriculumm} setFormData={setFormData} />
+          <CreateCurriculum curriculums={formData.curriculums} setFormData={setFormData} />
+          <div className="mt-4 flex justify-end">
+            <button
+              type="button"
+              id="addSectionBtn"
+              onClick={addChapter}
+              className="rounded-lg bg-black px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
+            >
+              + 챕터 추가
+            </button>
+          </div>
         </section>
 
         {/* <!-- 하단 스티키 액션 바 --> */}
