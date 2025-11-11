@@ -18,10 +18,12 @@ export async function getLectureInfitService({
     const dataQuery = buildLectureQuery(baseRef, category, sort, startAfterDoc, limitCount);
     const querySnapshot = await getDocs(dataQuery);
 
-    const lectures = querySnapshot.docs.map((doc) => ({
-      lectureId: doc.id,
-      ...doc.data(),
-    }));
+    const lectures = querySnapshot.docs.map((doc) => {
+      return {
+        ...doc.data(),
+        lectureId: doc.id,
+      };
+    });
 
     // 다음 커서(없으면 null)
     const lastDoc = querySnapshot.docs[querySnapshot.docs.length - 1] ?? null;
