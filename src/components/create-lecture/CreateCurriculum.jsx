@@ -87,7 +87,7 @@ function CreateCurriculum({ curriculums, setFormData }) {
                     className="w-13 px-3 py-1 pt-6 text-sm font-medium text-red-600 hover:text-red-700"
                     aria-label="섹션 삭제"
                   >
-                    <X size={24} color="#ff0000" />
+                    <X size={24} color="#1a1a1a" />
                   </button>
                 </div>
                 <div className="space-y-3 p-4">
@@ -129,7 +129,7 @@ function CreateCurriculum({ curriculums, setFormData }) {
                             className="px-3 py-1 pt-6 text-sm font-medium text-red-600 hover:text-red-700"
                             aria-label="레슨 삭제"
                           >
-                            <X size={24} color="#ff0000" />
+                            <X size={24} color="#1a1a1a" />
                           </button>
                         </li>
                       );
