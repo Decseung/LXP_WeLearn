@@ -1,9 +1,9 @@
 import { buildUsers } from './dummy/users.js';
-import { collection, doc, writeBatch, getFirestore } from 'firebase/firestore';
+import { collection, doc, writeBatch, getFirestore, Timestamp } from 'firebase/firestore';
 import { createRandomLecture } from './dummy/lectures.js';
 import {
   ENROLLMENTS_COLLECTION_NAME,
-  LECTURELIST_COLLECTION_NAME,
+  LECTURES_COLLECTION_NAME,
   USERS_COLLECTION_NAME,
 } from '../lib/firebase/table/ddl.js';
 import { randomNumber } from './utils/randomNumber.js';
@@ -14,6 +14,7 @@ import chalk from 'chalk';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
+import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -32,40 +33,60 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
+export const auth = getAuth(app);
+const DEFAULT_PW = '12341234';
 
 async function init(count = 50) {
   console.log('초기화 진행 중...');
   const users = buildUsers(count);
   const userColRef = collection(db, USERS_COLLECTION_NAME);
 
-  console.log('유저 생성 50명...');
+  console.log(`유저 가입 ${count}명...`);
   try {
     let batch = writeBatch(db);
     let ops = 0;
 
     let usersInfo = [];
     for (let i = 0; i < users.length; i++) {
-      const docRef = doc(userColRef); // 여기서 Firestore가 랜덤 문서 ID 생성 (userId 대용)
+      const user = users[i];
 
-      // 여기가 파이어베이스 아이디에요~~ 다들 이거 주의 하세요.
-      const userId = docRef.id; // 아직 안 넣었지만 ID는 이미 존재한다고 함....
+      // 1) Auth 먼저 생성 (이미 있으면 로그인해서 uid만 확보)
+      let cred;
+      try {
+        cred = await createUserWithEmailAndPassword(auth, user.email, DEFAULT_PW);
+      } catch (e) {
+        console.error('Auth 생성 실패:', user.email, e);
+        continue; // 이 사용자 스킵
+      }
 
-      const payload = { ...users[i], userId };
+      const { uid, metadata } = cred.user;
+      const lastLoginAt = metadata?.lastSignInTime
+        ? Timestamp.fromDate(new Date(metadata.lastSignInTime))
+        : null;
+
+      // 2) Firestore users 문서 생성 (문서ID = uid 로 고정!)
+      const docRef = doc(userColRef, uid);
+
+      const payload = {
+        ...user, // { userName, email, role, userCreatedAt: Date | Timestamp }
+        userId: uid, // 식별자(=Auth uid)
+      };
 
       usersInfo.push(payload);
+      console.log(`[${chalk.bold.blue(user.userName)}]님이 가입 하셨습니다.`);
 
-      console.log(`[${chalk.bold.blue(users[i].userName)}]님이 가입 하셨습니다.`);
-      batch.set(docRef, payload);
+      batch.set(docRef, payload, { merge: true });
       ops++;
-      // 안전하게 400건 단위로 커밋(한 배치 최대 500 제한 여유)gg
+
       if (ops % 400 === 0) {
         await batch.commit();
         batch = writeBatch(db);
       }
     }
+
     console.log(`[${chalk.bold.yellow(`${count} 전원 회원 가입 완료`)}]`);
 
-    const lecturesColRef = collection(db, LECTURELIST_COLLECTION_NAME);
+    const lecturesColRef = collection(db, LECTURES_COLLECTION_NAME);
     let lecturesInfo = [];
 
     console.log(`강의 제작 시작`);
@@ -81,7 +102,6 @@ async function init(count = 50) {
 
           const payload = { ...lecture, lectureId, userId };
           lecturesInfo.push(payload);
-          console.log(payload);
 
           console.log(
             `[${chalk.bold.green(usersInfo[i].userName)}]님이 ${lecture.title} 강의 제작`,
@@ -107,7 +127,7 @@ async function init(count = 50) {
 
     for (let i = 0; i < lecturesInfo.length; i++) {
       const lectureId = lecturesInfo[i].lectureId;
-      const randomCount = randomNumber(5, 20);
+      const randomCount = randomNumber(0, 12);
       // 유저는 중복이 되면 안됌
       const selectedUsers = shuffle(lecturesInfo).slice(0, randomCount);
 
@@ -141,9 +161,9 @@ async function init(count = 50) {
 
     console.log(`
 시드 완료
- -> usersCount - ${count}건
- -> lecturesCount - ${lecturesInfo.length}건
- -> enrollmentsCount - ${enrollmentsInfo.length}건
+ -> 생성 된 usersCount - ${count}건
+ -> 생성 된 lecturesCount - ${lecturesInfo.length}건
+ -> 생성 된 enrollmentsCount - ${enrollmentsInfo.length}건
    `);
   } catch (error) {
     console.error(error);
@@ -156,6 +176,6 @@ init(30)
     process.exit(0); // 성공 시 정상 종료
   })
   .catch((error) => {
-    console.error(chalk.red('❌ 오류 발생:'), error);
+    console.error(chalk.red('오류 발생:'), error);
     process.exit(1); //
   });
