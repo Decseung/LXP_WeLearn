@@ -10,10 +10,15 @@ import { randomNumber } from './utils/randomNumber.js';
 import { shuffle } from './utils/shuffle.js';
 import { createRandomEnrollment } from './dummy/enrollments.js';
 import { initializeApp } from 'firebase/app';
-import dotenv from 'dotenv';
 import chalk from 'chalk';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
 
-dotenv.config({ path: '../../.env' });
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 const firebaseConfig = {
   apiKey: process.env.VITE_FIREBASE_API_KEY,
@@ -145,12 +150,12 @@ async function init(count = 50) {
   }
 }
 
-init()
+init(30)
   .then(() => {
-    console.log(chalk.bold.green('🎉 시드 데이터 생성 완료'));
-    process.exit(0); // ✅ 성공 시 정상 종료
+    console.log(chalk.bold.green('시드 데이터 생성 완료'));
+    process.exit(0); // 성공 시 정상 종료
   })
   .catch((error) => {
     console.error(chalk.red('❌ 오류 발생:'), error);
-    process.exit(1); // ❌ 실패 시 에러 코드로 종료
+    process.exit(1); //
   });

@@ -1,6 +1,10 @@
 // 랜덤 문자열 & 날짜 생성 유틸
 import { randDate } from '../utils/randomDate.js';
 import { Timestamp } from 'firebase/firestore';
+import { randomNumber } from '../utils/randomNumber.js';
+import { title } from './lecture-title-content-desc/title.js';
+import { description } from './lecture-title-content-desc/description.js';
+import { content } from './lecture-title-content-desc/content.js';
 
 function randomText(len) {
   const chars = '가나다라마바사아자차카타파하ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
@@ -29,15 +33,14 @@ export function createRandomLecture(userId, userName) {
   const end = new Date('2025-11-11T23:59:59Z');
 
   return {
-    title: `강의 ${randomText(5)}`,
-    description: randomText(20),
-    content: randomText(100),
-    thumbnailUrl: `/src/assets/images/${randomText(5)}.png`,
+    title: title[randomNumber(0, title.length - 1)],
+    description: description[randomNumber(0, description.length - 1)],
+    content: content[randomNumber(0, content.length - 1)],
+    thumbnailUrl: `/src/assets/images/lxp-image-0${randomNumber(0, 9)}.png`,
     userId,
     userName,
-    category: Math.floor(Math.random() * 10) + 1,
+    category: Math.floor(Math.random() * 7) + 1,
     level: randomLevel(),
-    studentCount: Math.floor(Math.random() * 1000),
     lectureCreatedAt: randDate(start, end),
     curriculum,
   };
