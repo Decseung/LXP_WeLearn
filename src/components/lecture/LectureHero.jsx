@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getCategoryName, getTotalLectureCount } from '../../utils/lectureUtils.js';
 import EnrollButton from './EnrollButton.jsx';
 import { Users, Star, Film } from 'lucide-react';
-
+import { getEnrollmentCountByLecture } from '../../services/lecture/getEnrollmentCountByLecture.js';
+import { getReviewCountByLecture } from '../../services/lecture/getReviewCountByLecture.js';
+import { getRatingByLecture } from '../../services/lecture/getRatingCountByLecture.js';
 /**
  *   getCategoryName(categoryValue)
  * - categoryValue가 숫자(ID)든 문자열(KEY)이든
@@ -21,24 +23,41 @@ function LectureHero({ lectureItem = {} }) {
     description = '',
     userName = '',
     userId = '',
-    rating = 0,
-    reviewCount = 0,
-    studentCount = 0,
     curriculum = [],
     thumbnailUrl = '',
   } = lectureItem;
 
-  //  수강 인원 수 상태 관리
-  const [currentStudentCount, setCurrentStudentCount] = useState(studentCount);
+  //  상태 관리 (수강인원수, 리뷰개수, 별점)
+  const [currentStudentCount, setCurrentStudentCount] = useState(0);
+  const [reviewCount, setReviewCount] = useState(0);
+  const [avgRating, setAvgRating] = useState(0);
+
+  useEffect(() => {
+    const fetchLectureStats = async () => {
+      if (!lectureId) return;
+      try {
+        // 수강인원 수
+        const studentCount = await getEnrollmentCountByLecture(lectureId);
+        setCurrentStudentCount(studentCount);
+
+        // Review count
+        const reviews = await getReviewCountByLecture(lectureId);
+        setReviewCount(reviews);
+
+        // averageRating
+        const rating = await getRatingByLecture(lectureId);
+        setAvgRating(rating);
+      } catch (error) {
+        console.log('수강인원수,별점,리뷰 개수 불러오기 실패:', error);
+      }
+    };
+    fetchLectureStats();
+  }, []);
 
   // 수강 신청 성공 시 수강 인원 수 증가 업데이트
   const handleEnrollSuccess = () => {
     setCurrentStudentCount((prev) => prev + 1);
   };
-  // 천단위 콤마(,) 넣기
-  const safeStudentCount = Number.isFinite(Number(currentStudentCount))
-    ? Number(currentStudentCount).toLocaleString()
-    : '0';
 
   /**
    *  thumbSrc
@@ -71,14 +90,14 @@ function LectureHero({ lectureItem = {} }) {
               {/* Rating */}
               <div className="flex items-center space-x-1">
                 <Star size={16} />
-                <span className="font-medium text-gray-900">{Number(rating) || 0}</span>
+                <span className="font-medium text-gray-900">{avgRating.toFixed(1)}</span>
                 <span>({Number(reviewCount) || 0})</span>
               </div>
 
               {/* Student Count */}
               <div className="flex items-center space-x-1">
                 <Users size={16} />
-                <span>{safeStudentCount}명 수강</span>
+                <span>{currentStudentCount}명 수강</span>
               </div>
 
               {/* Total lectures */}
