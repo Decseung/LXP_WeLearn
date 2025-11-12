@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { CirclePlus } from 'lucide-react';
 
-function CreateThumbnail({ formData, thumbnailUrl, setFormData }) {
+function CreateThumbnail({ formData, setFormData }) {
   const [preview, setPreview] = useState(null);
   const [isDragOver, setIsDragOver] = useState(false);
 
   const handleFile = (file) => {
-    // ✅ 미리보기용 URL
+    // 미리보기용 URL
     const objectUrl = URL.createObjectURL(file);
     setPreview(objectUrl);
 
-    // ✅ Base64 변환 준비
+    // Base64 변환 준비
     const reader = new FileReader();
     reader.onloadend = () => {
       const base64String = reader.result;
@@ -43,7 +43,7 @@ function CreateThumbnail({ formData, thumbnailUrl, setFormData }) {
           setIsDragOver(true);
         }}
         onDragLeave={() => setIsDragOver(false)}
-        className={`group mt-4 flex aspect-video min-h-[200px] w-full cursor-pointer flex-col items-center justify-center rounded-lg px-8 py-6 text-gray-400 shadow-sm transition-all duration-200 ${isDragOver ? 'bg-gray-200 text-[#1a1a1a] shadow-md' : 'bg-gray-100 hover:text-[#1a1a1a] hover:shadow-md'} `}
+        className={`group mt-4 flex aspect-video min-h-[200px] w-full cursor-pointer flex-col items-center justify-center rounded-lg text-gray-400 shadow-sm transition-all duration-200 ${isDragOver ? 'bg-gray-200 text-[#1a1a1a] shadow-md' : 'bg-gray-100 hover:text-[#1a1a1a] hover:shadow-md'} `}
       >
         {preview ? (
           <img
@@ -54,7 +54,6 @@ function CreateThumbnail({ formData, thumbnailUrl, setFormData }) {
         ) : (
           <div className="flex flex-col items-center justify-center" aria-hidden="true">
             <CirclePlus size={48} strokeWidth={1} />
-            <p className="pt-3 text-sm text-gray-500 group-hover:text-[#1a1a1a]">권장 16:9</p>
             <p className="text-sm text-gray-500 group-hover:text-[#1a1a1a]">JPG/JPEG/PNG/WEBP</p>
             {isDragOver && <p className="mt-2 text-sm font-medium text-[#1a1a1a]">놓아서 업로드</p>}
           </div>
@@ -67,6 +66,8 @@ function CreateThumbnail({ formData, thumbnailUrl, setFormData }) {
           accept=".jpg,.jpeg,.png,.webp"
           className="hidden"
           onChange={handleFileChange}
+          required
+          aria-required="true"
         />
       </label>
     </aside>

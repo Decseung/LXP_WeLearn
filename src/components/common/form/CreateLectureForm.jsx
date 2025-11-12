@@ -15,7 +15,7 @@ import useLectureForm from '../../../hooks/lectures/useLectureForm';
 function CreateLectureForm() {
   const { user } = useSelector((s) => s.auth);
   const userId = user?.uid || null;
-  const userName = user?.userName || null;
+  const userName = user?.name || null;
 
   const initialFormData = {
     title: '',
