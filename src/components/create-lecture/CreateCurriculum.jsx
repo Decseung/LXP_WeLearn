@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import Input from '../common/form/Input';
 import { X, Minus } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 function CreateCurriculum({ curriculums, setFormData, addLesson, deleteChapter, deleteLesson }) {
   const disabled = 'cursor-not-allowed text-gray-400';
@@ -57,7 +58,13 @@ function CreateCurriculum({ curriculums, setFormData, addLesson, deleteChapter, 
                     type="button"
                     aria-label="챕터 삭제"
                     disabled={curriculums.length <= 1}
-                    onClick={() => deleteChapter(chapterIndex)}
+                    onClick={() => {
+                      if (curriculums.length <= 1) {
+                        toast.error('최소 1개의 챕터는 필요합니다.');
+                        return;
+                      }
+                      deleteChapter(chapterIndex);
+                    }}
                     className={`flex items-center justify-center rounded-md px-3 py-1 pt-8 text-sm font-medium transition-all duration-200 ${
                       curriculums.length <= 1 ? disabled : abled
                     }`}
@@ -92,18 +99,23 @@ function CreateCurriculum({ curriculums, setFormData, addLesson, deleteChapter, 
                           <button
                             type="button"
                             className={`flex items-center justify-center rounded-md px-3 py-1 pt-8 text-sm font-medium transition-all duration-200 ${
-                              curriculums[chapterIndex].lessons.length < 1 ? disabled : abled
+                              curriculums[chapterIndex].lessons.length <= 1 ? disabled : abled
                             }`}
-                            disabled={curriculums[chapterIndex].lessons.length < 1}
                             aria-label="레슨 삭제"
                             onClick={() => {
+                              if (curriculums[chapterIndex].lessons.length <= 1) {
+                                toast.error('최소 1개의 레슨은 필요합니다.');
+                                return;
+                              }
                               deleteLesson(chapterIndex, lessonIndex);
                             }}
                           >
                             <Minus
                               size={24}
                               color={
-                                curriculums[chapterIndex].lessons.length < 1 ? '#1a1a1a' : '#9ca3af'
+                                curriculums[chapterIndex].lessons.length <= 1
+                                  ? '#9ca3af'
+                                  : '#1a1a1a'
                               }
                             />
                           </button>

@@ -57,13 +57,15 @@ const useLectureForm = (initialFormData) => {
 
   // 레슨 삭제
   const deleteLesson = (chapterIndex, lessonIndex) => {
-    if (formData.curriculums[chapterIndex].lessons.length > 1) {
-      setFormData((prev) => ({
+    setFormData((prev) => {
+      const currLessons = prev.curriculums[chapterIndex].lessons;
+      if (currLessons.length <= 1) return prev; // 최소 1개 유지
+
+      return {
         ...prev,
         curriculums: removeLessonFromChapter(prev.curriculums, chapterIndex, lessonIndex),
-      }));
-    }
-    return;
+      };
+    });
   };
   return { formData, setFormData, addLesson, deleteChapter, deleteLesson, addChapter };
 };
