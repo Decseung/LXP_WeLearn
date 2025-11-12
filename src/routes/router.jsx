@@ -11,6 +11,7 @@ import InstructorLectures from '../pages/mypage/(instructor)/instructor-lectures
 import EditLecture from '../pages/mypage/(instructor)/edit-lecture/EditLecture.jsx';
 import Error404 from '../pages/Error/404/Error404.jsx';
 import Error403 from '../pages/Error/403/Error403.jsx';
+import MypageLayout from '../components/layout/MypageLayout.jsx';
 
 export const router = createBrowserRouter([
   // 인증(비보호) 라우트
@@ -53,17 +54,23 @@ export const router = createBrowserRouter([
       </RequireAuth>
     ),
     children: [
-      { index: true, element: <Navigate to="my-lectures" replace /> },
-      { path: 'my-lectures', element: <MyEnrolledLectures /> },
-
-      // 강사용(권한 제한)
+      // 마이페이지 레이아웃에 적용 되는 애들
       {
-        path: 'instructor-lectures',
-        element: (
-          <RequireRole allow={['INSTRUCTOR']}>
-            <InstructorLectures />
-          </RequireRole>
-        ),
+        element: <MypageLayout />,
+        children: [
+          { index: true, element: <Navigate to="my-lectures" replace /> },
+          { path: 'my-lectures', element: <MyEnrolledLectures /> },
+
+          // 강사용(권한 제한)
+          {
+            path: 'instructor-lectures',
+            element: (
+              <RequireRole allow={['INSTRUCTOR']}>
+                <InstructorLectures />
+              </RequireRole>
+            ),
+          },
+        ],
       },
       {
         path: 'create-lecture',

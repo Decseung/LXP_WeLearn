@@ -35,40 +35,27 @@ const MyEnrolledLectures = () => {
     fetcher: fetchLectures,
     enabled: !!user?.uid,
   });
-  console.log(error);
-
   return (
     <>
-      <PageSectionHeader title="마이페이지" subTitle="내 학습 현황과 정보를 관리하세요" />
-
-      <section className="size-full max-w-7xl grow px-4 sm:px-6 lg:px-8">
-        <div className="grid h-full grid-cols-1 gap-8 lg:grid-cols-4">
-          <MyPageAsideProfileBar>
-            {/*<nav className="mt-5 rounded-lg bg-white p-6 shadow-md">*/}
-            {/*  <ColumnCategories />*/}
-            {/*</nav>*/}
-          </MyPageAsideProfileBar>
-
-          <div className="content-area lg:col-span-3">
-            <section className="in-progress-lectures">
-              <div className="mb-6 flex items-center justify-between">
-                <h2 className="text-2xl font-bold text-gray-900">수강 중인 강의</h2>
-                <p>총 {total}개의 강의</p>
-              </div>
-
-              {/* <!-- Lecture List --> */}
-              <div className="space-y-4">
-                {items.length !== 0 ? (
-                  items.map((item) => <EnrolledCard key={item.enrollmentId} {...item} />)
-                ) : (
-                  <NothingMyLectures />
-                )}
-                {error && <p>데이터 불러오는데 에러 발생</p>}
-              </div>
-            </section>
+      <div className="content-area lg:col-span-3">
+        <section className="in-progress-lectures">
+          <div className="mb-6 flex items-center justify-between">
+            <h2 className="text-2xl font-bold text-gray-900">수강 중인 강의</h2>
+            <p>총 {total}개의 강의</p>
           </div>
-        </div>
-      </section>
+
+          {/* <!-- Lecture List --> */}
+          <div className="space-y-4">
+            {items.length !== 0 ? (
+              items.map((item) => <EnrolledCard key={item.enrollmentId} {...item} />)
+            ) : (
+              <NothingMyLectures />
+            )}
+            {error && <p>데이터 불러오는데 에러 발생</p>}
+          </div>
+        </section>
+      </div>
+
       {hasMore ? (
         <div ref={sentinelRef} className="h-10" />
       ) : (
