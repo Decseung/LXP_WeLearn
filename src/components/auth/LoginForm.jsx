@@ -50,7 +50,7 @@ const LoginForm = () => {
           value={formData.email}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           aria-required="true"
-          placeholder="example@lxp.com"
+          placeholder="example@welearn.com"
           required
         />
 
@@ -65,16 +65,16 @@ const LoginForm = () => {
           required
         />
 
-        {/* <!-- Remember Me Checkbox --> */}
-        <div className="flex items-center">
-          <input
-            type="checkbox"
-            id="remember-me"
-            name="remember-me"
-            className="h-4 w-4 rounded border-gray-300 text-gray-900 focus:ring-2 focus:ring-gray-900"
-          />
-          <label className="ml-2 text-sm text-gray-700">로그인 상태 유지</label>
-        </div>
+        {/*/!* <!-- Remember Me Checkbox --> *!/*/}
+        {/*<div className="flex items-center">*/}
+        {/*  <input*/}
+        {/*    type="checkbox"*/}
+        {/*    id="remember-me"*/}
+        {/*    name="remember-me"*/}
+        {/*    className="h-4 w-4 rounded border-gray-300 text-gray-900 focus:ring-2 focus:ring-gray-900"*/}
+        {/*  />*/}
+        {/*  <label className="ml-2 text-sm text-gray-700">로그인 상태 유지</label>*/}
+        {/*</div>*/}
 
         {/* <!-- Submit Button --> */}
         <button
