@@ -186,8 +186,6 @@ function EnrollButton({ className, lectureId, firestoreDocId, instructorId, onEn
       >
         {checkEnrollment ? '확인 중' : '수강 신청'}
       </button>
-
-      <input type="text" placeholder="" />
     </div>
   );
 }
