@@ -35,10 +35,13 @@ function Header() {
               className="flex items-center space-x-2"
               aria-label="홈으로 이동"
             >
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-900">
+              {/* <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-900">
                 <span className="text-lg font-bold text-white">L</span>
+              </div> */}
+              {/* <span className="hidden text-xl font-bold text-gray-900 sm:block">LXP</span> */}
+              <div className="w-36">
+                <img src="/src/assets/logo/logo_welearn.svg" alt="welearn" />
               </div>
-              <span className="hidden text-xl font-bold text-gray-900 sm:block">LXP</span>
             </button>
           </div>
 
