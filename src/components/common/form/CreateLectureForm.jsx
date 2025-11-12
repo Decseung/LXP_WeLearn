@@ -32,7 +32,6 @@ function CreateLectureForm() {
   });
   const navigate = useNavigate();
 
-  console.log(formData);
   const level = [
     { key: '입문', value: 'begginer', name: '입문' },
     { key: '초급', value: 'low', name: '초급' },
