@@ -32,6 +32,7 @@ function CreateLectureForm() {
   });
   const navigate = useNavigate();
 
+  console.log(formData);
   const level = [
     { key: '입문', value: 'begginer', name: '입문' },
     { key: '초급', value: 'low', name: '초급' },
@@ -40,10 +41,11 @@ function CreateLectureForm() {
   ];
 
   const handleLectureData = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.id]: e.target.value,
-    });
+    const { id, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [id]: id === 'category' ? Number(value) : value,
+    }));
   };
 
   // ✅ 챕터 추가
