@@ -177,7 +177,7 @@ function EnrollButton({ className, lectureId, firestoreDocId, instructorId, onEn
         onClick={handleClick}
         aria-busy={initializing}
         className={[
-          'w-full rounded-lg bg-[#EA4848] px-8 py-3 text-base font-medium text-white transition-colors hover:bg-gray-800 focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 focus:outline-none',
+          'w-full rounded-lg bg-gray-900 px-8 py-3 text-base font-medium text-white transition-colors hover:bg-gray-800 focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 focus:outline-none',
           className,
         ]
           .filter(Boolean)

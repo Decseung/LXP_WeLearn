@@ -2,19 +2,9 @@ import { useEffect, useState } from 'react';
 import { getCategoryName, getTotalLectureCount } from '../../utils/lectureUtils.js';
 import EnrollButton from './EnrollButton.jsx';
 import { Users, Star, Film } from 'lucide-react';
-import { getEnrollmentCountByLecture } from '../../services/lecture/getEnrollmentCountByLecture.js';
-import { getReviewCountByLecture } from '../../services/lecture/getReviewCountByLecture.js';
-import { getRatingByLecture } from '../../services/lecture/getRatingCountByLecture.js';
-/**
- *   getCategoryName(categoryValue)
- * - categoryValue가 숫자(ID)든 문자열(KEY)이든
- *   CATEGORIES 배열에서 일치하는 항목의 name을 찾아 반환
- * - 일치 항목이 없거나 null/undefined일 경우 기본값 '기타' 반환
- */
+import { getLectureStatsByLecture } from '../../services/lecture/getLectureStatsByLecture.js';
 
 function LectureHero({ lectureItem = {} }) {
-  // 부모 컴포넌트에서 전달된 강의 데이터 구조 분해하기
-
   const {
     id,
     category,
@@ -27,47 +17,43 @@ function LectureHero({ lectureItem = {} }) {
     thumbnailUrl = '',
   } = lectureItem;
 
-  //  상태 관리 (수강인원수, 리뷰개수, 별점)
-  const [currentStudentCount, setCurrentStudentCount] = useState(0);
-  const [reviewCount, setReviewCount] = useState(0);
-  const [avgRating, setAvgRating] = useState(0);
+  // 3개 state를 1개 객체로 통합하기
+  const [stats, setStats] = useState({
+    enrollmentCount: 0,
+    reviewCount: 0,
+    avgRating: 0,
+  });
 
   useEffect(() => {
     const fetchLectureStats = async () => {
-      if (!lectureId) return;
+      if (!lectureId) {
+        return;
+      }
       try {
-        // 수강인원 수
-        const studentCount = await getEnrollmentCountByLecture(lectureId);
-        setCurrentStudentCount(studentCount);
-
-        // Review count
-        const reviews = await getReviewCountByLecture(lectureId);
-        setReviewCount(reviews);
-
-        // averageRating
-        const rating = await getRatingByLecture(lectureId);
-        setAvgRating(rating);
+        // 단 한 번의 호출로 모든 메타데이터 가져오기
+        const data = await getLectureStatsByLecture(lectureId);
+        setStats(data);
       } catch (error) {
-        console.log('수강인원수,별점,리뷰 개수 불러오기 실패:', error);
+        console.error('강의 메타데이터 불러오기 실패:', error);
       }
     };
+
     fetchLectureStats();
-  }, []);
+  }, [lectureId]);
 
   // 수강 신청 성공 시 수강 인원 수 증가 업데이트
   const handleEnrollSuccess = () => {
-    setCurrentStudentCount((prev) => prev + 1);
+    setStats((prev) => ({
+      ...prev,
+      enrollmentCount: prev.enrollmentCount + 1,
+    }));
   };
 
-  /**
-   *  thumbSrc
-   * - 썸네일 이미지 경로가 존재하지 않을 경우, 기본 이미지 URL 사용.
-   */
   const thumbSrc =
     thumbnailUrl || 'https://dr.savee-cdn.com/things/6/6/0d3d5da690b611c98f76a2.webp';
 
   return (
-    <section className="lecture-hero bg-trasparent border-gray-200 py-8">
+    <section className="lecture-hero border-gray-200 bg-transparent py-8">
       <div className="lecture-hero__container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
           {/* Left: Lecture Info (2/5) */}
@@ -90,14 +76,14 @@ function LectureHero({ lectureItem = {} }) {
               {/* Rating */}
               <div className="flex items-center space-x-1">
                 <Star size={16} />
-                <span className="font-medium text-gray-900">{avgRating.toFixed(1)}</span>
-                <span>({Number(reviewCount) || 0})</span>
+                <span className="font-medium text-gray-900">{stats.avgRating.toFixed(1)}</span>
+                <span>({stats.reviewCount})</span>
               </div>
 
               {/* Student Count */}
               <div className="flex items-center space-x-1">
                 <Users size={16} />
-                <span>{currentStudentCount}명 수강</span>
+                <span>{stats.enrollmentCount}명 수강</span>
               </div>
 
               {/* Total lectures */}
