@@ -12,7 +12,7 @@ function LectureCard({ lecture }) {
 
   return (
     <div
-      className="cursor-pointer overflow-hidden rounded-lg bg-white shadow-md transition-shadow hover:shadow-xl"
+      className="min-h-[330px] cursor-pointer overflow-hidden rounded-lg bg-white shadow-md transition-shadow hover:shadow-xl"
       onClick={handleMoveToDetail}
     >
       <div className="relative aspect-video bg-gray-200">
@@ -26,7 +26,7 @@ function LectureCard({ lecture }) {
         </span>
       </div>
 
-      <div className="space-y-3 p-4">
+      <div className="flex h-full min-h-[170px] flex-col justify-between space-y-3 p-4">
         <h3 className="line-clamp-2 max-h-16 min-h-16 text-lg font-bold text-gray-900">
           {lecture.title}
         </h3>
