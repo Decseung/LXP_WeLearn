@@ -5,35 +5,12 @@ import LectureTabs from '../../../components/lecture/LectureTabs.jsx';
 import LectureContent from '../../../components/lecture/LectureContent.jsx';
 import LectureCurriculum from '../../../components/lecture/LectureCurriculum.jsx';
 import { getLectureItemService } from '../../../services/lecture/getLectureItemService.js';
+import useFetchLectureItem from '../../../hooks/lectures/useFetchLecture.js';
 
 const LectureDetail = () => {
   const { lectureId } = useParams();
 
-  const [lectureItem, setLectureItem] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    let isMounted = true;
-
-    const fetchLecture = async () => {
-      setLoading(true);
-      try {
-        // lectureId 기준으로 조회
-        const item = await getLectureItemService(lectureId);
-        if (isMounted) {
-          setLectureItem(item ?? null);
-        }
-      } finally {
-        if (isMounted) setLoading(false);
-      }
-    };
-
-    if (lectureId) fetchLecture();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [lectureId]);
+  const { loading, lectureItem } = useFetchLectureItem(lectureId);
 
   // 로딩 상태
   if (loading) {

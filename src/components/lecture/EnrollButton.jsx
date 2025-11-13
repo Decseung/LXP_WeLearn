@@ -129,7 +129,7 @@ function EnrollButton({ className, lectureId, firestoreDocId, instructorId, onEn
 
   // 수정하기 버튼 클릭 핸들러
   const handleClickEdit = () => {
-    navigate(`/edit-lecture/${lectureId}`);
+    navigate(`/mypage/edit-lecture/${lectureId}`);
   };
 
   // 자신이 등록한 강의인 경우 - 수정하기 버튼 제공

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { CirclePlus } from 'lucide-react';
 
 function CreateThumbnail({ formData, setFormData }) {
-  const [preview, setPreview] = useState(null);
+  const [preview, setPreview] = useState(formData.thumbnailUrl ? formData.thumbnailUrl : null);
   const [isDragOver, setIsDragOver] = useState(false);
 
   const handleFile = (file) => {
@@ -47,7 +47,7 @@ function CreateThumbnail({ formData, setFormData }) {
       >
         {preview ? (
           <img
-            src={preview}
+            src={preview || formData.thumbnailUrl || null}
             alt="썸네일 미리보기"
             className="h-full w-full rounded-lg object-cover"
           />
