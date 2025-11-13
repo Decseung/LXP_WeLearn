@@ -13,7 +13,6 @@ const EditLecture = () => {
   const navigate = useNavigate();
 
   const userId = user?.uid || null;
-  const userName = user?.name || null;
 
   const { loading, lectureItem } = useFetchLectureItem(lectureId);
 
@@ -34,7 +33,7 @@ const EditLecture = () => {
         category: lectureItem.category ?? null,
         thumbnailUrl: lectureItem.thumbnailUrl ?? '',
         content: lectureItem.content ?? '',
-        curriculums:
+        curriculum:
           lectureItem.curriculum?.map((item) => ({
             chapterTitle: item.chapterTitle ?? '',
             lessons:

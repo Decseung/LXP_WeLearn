@@ -7,7 +7,7 @@ export const editLectureService = async ({ lectureId, formData }) => {
     if (!lectureId) throw new Error('lectureId is required');
 
     // 🔥 lessonId 없는 항목은 새로 생성
-    const changedCurriculums = formData.curriculums.map((chapter) => ({
+    const changedCurriculums = formData.curriculum.map((chapter) => ({
       ...chapter,
       lessons: chapter.lessons.map((lesson, index) => ({
         ...lesson,
