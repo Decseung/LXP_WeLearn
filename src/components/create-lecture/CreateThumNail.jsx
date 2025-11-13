@@ -42,8 +42,7 @@ function CreateThumbnail({ formData, setFormData }) {
           e.preventDefault();
           setIsDragOver(true);
         }}
-        // onDrag={() => {setIsDragOver(true)}}
-        DragLeave={() => setIsDragOver(false)}
+        onDragLeave={() => setIsDragOver(false)}
         className={`group mt-4 flex aspect-video min-h-[200px] w-full cursor-pointer flex-col items-center justify-center rounded-lg text-gray-400 shadow-sm transition-all duration-200 ${isDragOver ? 'bg-gray-200 text-[#1a1a1a] shadow-md' : 'bg-gray-100 hover:text-[#1a1a1a] hover:shadow-md'} `}
       >
         {preview ? (
