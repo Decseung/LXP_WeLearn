@@ -15,7 +15,7 @@ const MyPageAsideProfileBar = ({ children }) => {
       <div className="rounded-lg bg-white p-6 shadow-md">
         {/* Profile */}
         <div className="profile mb-6 border-b border-gray-200 pb-6 text-center">
-          <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-b from-[#EA4848] to-[#ee9393]">
+          <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gray-300">
             <User className="size-14 text-white/80" />
           </div>
 
