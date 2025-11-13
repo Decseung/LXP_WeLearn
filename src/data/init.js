@@ -36,7 +36,7 @@ export const db = getFirestore(app);
 export const auth = getAuth(app);
 const DEFAULT_PW = '12341234';
 
-async function init(count = 50) {
+async function init(count = 30) {
   console.log('초기화 진행 중...');
   const users = buildUsers(count);
   const userColRef = collection(db, USERS_COLLECTION_NAME);
@@ -128,7 +128,7 @@ async function init(count = 50) {
     for (let i = 0; i < lecturesInfo.length; i++) {
       const lectureId = lecturesInfo[i].lectureId;
       const instructorId = lecturesInfo[i].userId;
-      const pick = Math.min(randomNumber(0, 20), usersInfo.length);
+      const pick = Math.min(randomNumber(0, 10), usersInfo.length);
 
       // ① 수강 후보: 전체 유저에서 '해당 강의의 강사' 제외
       const candidates = shuffle(usersInfo)

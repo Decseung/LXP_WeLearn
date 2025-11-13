@@ -26,7 +26,7 @@ function LectureCard({ lecture }) {
           className="absolute inset-0 h-full w-full object-cover"
         />
         <span className="absolute top-3 left-3 rounded-full bg-gray-900 px-3 py-1 text-xs font-medium text-white">
-          {category.name}
+          {category ? category.name : '백엔드'}
         </span>
       </div>
 
