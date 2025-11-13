@@ -81,7 +81,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: 'edit-lecture/:id?',
+        path: 'edit-lecture/:lectureId?',
         element: (
           <RequireRole allow={['INSTRUCTOR']}>
             <EditLecture />
