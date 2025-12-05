@@ -34,7 +34,7 @@ export const shortFormItems: ShortFormItem[] = [
   },
 ]
 
-export const playlists: PlaylistItem[] = [
+export const playlistGroup: PlaylistItem[] = [
   { id: '1', thumbnail: '', title: '어자의 플레이리스트', videoCount: 5 },
   { id: '2', thumbnail: '', title: '개발 가발 플레이리스트', videoCount: 5 },
   { id: '3', thumbnail: '', title: '디자인 플레이리스트', videoCount: 5 },
