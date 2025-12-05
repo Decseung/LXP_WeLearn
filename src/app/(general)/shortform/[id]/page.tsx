@@ -2,7 +2,7 @@
 
 import React from 'react'
 
-const ShortformDetailPage: React.FC = () => {
+export default function ShortformDetailPage() {
   return (
     // 모바일: 전체 화면(h-dvh), 검정 배경
     // PC(md 이상): 기존처럼 relative 컨테이너
@@ -117,5 +117,3 @@ const ShortformDetailPage: React.FC = () => {
     </div>
   )
 }
-
-export default ShortformDetailPage

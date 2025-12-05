@@ -1,6 +1,7 @@
 'use client'
 
 import SignupForm from '@/features/auth/components/SignupForm'
+import Link from 'next/link'
 
 export default function SignupPage() {
   return (
@@ -19,9 +20,9 @@ export default function SignupPage() {
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-500">
               이미 계정이 있으신가요?{' '}
-              <a href="/login" className="font-medium text-gray-900 hover:underline">
+              <Link href="/signin" className="font-medium text-gray-900 hover:underline">
                 로그인
-              </a>
+              </Link>
             </p>
           </div>
         </div>
