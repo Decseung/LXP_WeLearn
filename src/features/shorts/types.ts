@@ -9,7 +9,12 @@ export interface ShortsCategory {
   name: string
 }
 
-export interface ShortsActionItem {
-  label: string
-  count?: number
+export interface ShortsDetail {
+  shortsId: number
+  title: string
+  description: string
+  videoUrl: string
+  thumbnailUrl: string
+  uploader: ShortsUploader
+  category: ShortsCategory
 }
