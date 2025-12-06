@@ -55,5 +55,3 @@ const ShortformDetailPage: React.FC<ShortDetailPageProps> = async ({ params }) =
     </div>
   )
 }
-
-export default ShortformDetailPage
