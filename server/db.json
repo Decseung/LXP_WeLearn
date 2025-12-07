@@ -15,6 +15,22 @@
       "name": "asdfsdf",
       "nickname": "sdfd",
       "createdAt": "2025-12-05T10:36:19.997Z"
+    },
+    {
+      "id": 1765106246807,
+      "email": "text@example.com",
+      "password": "12341234",
+      "name": "홍길동",
+      "nickname": "홍길동",
+      "createdAt": "2025-12-07T11:17:26.807Z"
+    },
+    {
+      "id": 1765106313463,
+      "email": "test@test.com",
+      "password": "12341234",
+      "name": "홍길동",
+      "nickname": "홍길동",
+      "createdAt": "2025-12-07T11:18:33.463Z"
     }
   ],
   "posts": []
