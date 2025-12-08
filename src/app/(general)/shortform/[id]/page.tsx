@@ -1,4 +1,3 @@
-import React from 'react'
 import { notFound } from 'next/navigation'
 import { getShortsList } from '@/services/getShortsListService'
 import ShortsContainer from '@/features/shorts/components/ShortsContainer'
@@ -7,7 +6,7 @@ interface ShortDetailPageProps {
   params: Promise<{ id: string }>
 }
 
-const ShortformDetailPage = async ({ params }: ShortDetailPageProps) => {
+export default async function ShortformDetailPage({ params }: ShortDetailPageProps) {
   const { id } = await params
   const data = await getShortsList(id)
 
@@ -26,5 +25,3 @@ const ShortformDetailPage = async ({ params }: ShortDetailPageProps) => {
     </div>
   )
 }
-
-export default ShortformDetailPage

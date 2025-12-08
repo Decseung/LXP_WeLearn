@@ -7,7 +7,7 @@ interface ShortsCreateInfoProps {
   description: string
 }
 
-function ShortsCreateInfo({ uploader, title, description }: ShortsCreateInfoProps) {
+export default function ShortsCreateInfo({ uploader, title, description }: ShortsCreateInfoProps) {
   return (
     <div className="w-full from-black/80 to-transparent px-4 py-8 text-white">
       <div className="flex items-center gap-3">
@@ -31,5 +31,3 @@ function ShortsCreateInfo({ uploader, title, description }: ShortsCreateInfoProp
     </div>
   )
 }
-
-export default ShortsCreateInfo

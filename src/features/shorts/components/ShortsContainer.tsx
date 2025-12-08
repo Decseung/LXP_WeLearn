@@ -18,25 +18,22 @@ interface ShortsContainerProps {
 // 슬라이드 이동 방향 타입 정의
 type SlideDirection = 'up' | 'down' | null
 
-function ShortsContainer({ shortsList, initialIndex }: ShortsContainerProps) {
+export default function ShortsContainer({ shortsList, initialIndex }: ShortsContainerProps) {
   const isEmpty = shortsList.length === 0
 
   // 넘어가는 인덱스를 방지하기 위한 안전한 초기 인덱스 계산
-function getSafeInitialIndex(
-  initialIndex: number,
-  shortsLength: number,
-  isEmpty: boolean,
-): number {
-  if (isEmpty || shortsLength === 0) return 0
-  if (initialIndex < 0) return 0
-  if (initialIndex >= shortsLength) return shortsLength - 1
-  return initialIndex
-}
-const safeInitialIndex = getSafeInitialIndex(
-  initialIndex,
-  shortsList.length,
-  isEmpty,
-)
+  function getSafeInitialIndex(
+    initialIndex: number,
+    shortsLength: number,
+    isEmpty: boolean,
+  ): number {
+    if (isEmpty || shortsLength === 0) return 0
+    if (initialIndex < 0) return 0
+    if (initialIndex >= shortsLength) return shortsLength - 1
+    return initialIndex
+  }
+
+  const safeInitialIndex = getSafeInitialIndex(initialIndex, shortsList.length, isEmpty)
 
   const [currentIndex, setCurrentIndex] = useState(safeInitialIndex) // 현재 노출 중인 숏폼 인덱스
   const [slideDirection, setSlideDirection] = useState<SlideDirection>(null) // 슬라이드 방향 상태
@@ -180,5 +177,3 @@ const safeInitialIndex = getSafeInitialIndex(
     </div>
   )
 }
-
-export default ShortsContainer

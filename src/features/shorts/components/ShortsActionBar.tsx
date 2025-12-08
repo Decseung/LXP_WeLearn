@@ -1,6 +1,6 @@
 import { ClosedCaption, Heart, ListPlus, MessageSquareText, Send } from 'lucide-react'
 
-function ShortsActionBar() {
+export default function ShortsActionBar() {
   return (
     <aside className="absolute right-5 bottom-20 flex flex-col items-center gap-6">
       {/* 좋아요 */}
@@ -55,5 +55,3 @@ function ShortsActionBar() {
     </aside>
   )
 }
-
-export default ShortsActionBar

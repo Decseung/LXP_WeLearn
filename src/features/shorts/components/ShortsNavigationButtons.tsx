@@ -7,7 +7,7 @@ interface ShortsNavigationButtonsProps {
   hasNext: boolean
 }
 
-function ShortsNavigationButtons({
+export default function ShortsNavigationButtons({
   onPrev,
   onNext,
   hasPrev,
@@ -41,5 +41,3 @@ function ShortsNavigationButtons({
     </div>
   )
 }
-
-export default ShortsNavigationButtons

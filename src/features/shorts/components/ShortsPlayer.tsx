@@ -7,7 +7,7 @@ interface ShortsPlayerProps {
   thumbnailUrl?: string
 }
 
-function ShortsPlayer({ videoUrl, thumbnailUrl }: ShortsPlayerProps) {
+export default function ShortsPlayer({ videoUrl, thumbnailUrl }: ShortsPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
 
   useEffect(() => {
@@ -35,5 +35,3 @@ function ShortsPlayer({ videoUrl, thumbnailUrl }: ShortsPlayerProps) {
     />
   )
 }
-
-export default ShortsPlayer

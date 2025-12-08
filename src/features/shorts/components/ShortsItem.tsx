@@ -7,7 +7,7 @@ interface ShortsItemProps {
   shorts: ShortsDetail
 }
 
-function ShortsItem({ shorts }: ShortsItemProps) {
+export default function ShortsItem({ shorts }: ShortsItemProps) {
   return (
     <div className="relative h-full w-full">
       {/* 영상 플레이어  */}
@@ -34,5 +34,3 @@ function ShortsItem({ shorts }: ShortsItemProps) {
     </div>
   )
 }
-
-export default ShortsItem
