@@ -3,6 +3,7 @@ import './globals.css'
 import React from 'react'
 import Footer from '@/components/layout/Footer'
 import { Header } from '@/components/layout/Header'
+import ToastProvider from '@/lib/toast/ToastProvider'
 import { suit } from '@/app/font/suit/font'
 
 export const metadata: Metadata = {
@@ -23,6 +24,7 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
+        <ToastProvider />
       </body>
     </html>
   )
