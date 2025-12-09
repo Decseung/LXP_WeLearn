@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import React from 'react'
 import Footer from '@/components/layout/Footer'
 import { Header } from '@/components/layout/Header'
+import ToastProvider from '@/lib/toast/ToastProvider'
 
 export const metadata: Metadata = {
   title: '35FUND',
@@ -23,6 +23,7 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
+        <ToastProvider />
       </body>
     </html>
   )
