@@ -11,10 +11,10 @@ export default function ShortFormCarousel() {
       </h2>
 
       <PageNation items={shortFormItems}>
-        <div className="flex items-center justify-between gap-4 overflow-hidden">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
           {shortFormItems.map((item: ShortFormItem) => (
-            <div key={item.id} className="group w-72 flex-shrink-0 cursor-pointer">
-              <div className="relative mb-3 aspect-[9/16] overflow-hidden rounded-2xl bg-gradient-to-br from-gray-300 to-gray-400 transition-all group-hover:opacity-80">
+            <div key={item.id} className="group flex-shrink-0 cursor-pointer">
+              <div className="relative mb-3 aspect-[9/16] w-full overflow-hidden rounded-2xl bg-gradient-to-br from-gray-300 to-gray-400 transition duration-300 group-hover:opacity-80">
                 {item.thumbnail ? (
                   <img
                     src={item.thumbnail}
@@ -24,7 +24,7 @@ export default function ShortFormCarousel() {
                 ) : (
                   <div className="h-full w-full" />
                 )}
-                <div className="absolute right-0 bottom-0 left-0 bg-gradient-to-t from-black/70 to-transparent p-3">
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3">
                   <p className="mb-1 line-clamp-2 text-xs font-medium text-white">{item.title}</p>
                   <p className="text-xs text-gray-300">
                     조회수 {item.viewCount} • {item.duration}
