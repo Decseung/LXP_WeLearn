@@ -61,14 +61,6 @@ export const SigninAction = async (
       path: '/',
     })
 
-    cookieStore.set('refreshToken', response.refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 60 * 60 * 24 * 30,
-    })
-
     return {
       success: true,
       user: response.user,
