@@ -4,7 +4,7 @@ type FetchOptions = {
   revalidate?: number // Next ISR (ex: 10 = 10초 후 자동 재검증)
 }
 
-const baseUrl = 'http://localhost:4000'
+const baseUrl = process.env.NEXT_PUBLIC_API_URL
 
 async function fetchWithAuth(
   url: string,
