@@ -4,7 +4,7 @@ type FetchOptions = {
   revalidate?: number // Next ISR (ex: 10 = 10초 후 자동 재검증)
 }
 
-const baseUrl = 'http://localhost:4000'
+const baseUrl = process.env.NEXT_PUBLIC_API_URL
 
 async function fetchWithAuth(
   url: string,
@@ -54,6 +54,10 @@ export default function api() {
       cache: options?.cache, // 브라우저/서버 캐시
       next: options?.revalidate ? { revalidate: options.revalidate } : undefined,
     })
+    if (!res.ok) {
+      const errorData = await res.json()
+      throw new Error(errorData?.message || '알수없는 요류')
+    }
 
     return res.json()
   }
@@ -67,6 +71,10 @@ export default function api() {
       next: options?.revalidate ? { revalidate: options.revalidate } : undefined,
       body: JSON.stringify(data || {}),
     })
+    if (!res.ok) {
+      const errorData = await res.json()
+      throw new Error(errorData?.message || '알수없는 요류')
+    }
 
     return res.json()
   }
@@ -80,6 +88,10 @@ export default function api() {
       next: options?.revalidate ? { revalidate: options.revalidate } : undefined,
       body: JSON.stringify(data || {}),
     })
+    if (!res.ok) {
+      const errorData = await res.json()
+      throw new Error(errorData?.message || '알수없는 요류')
+    }
 
     return res.json()
   }
@@ -91,6 +103,10 @@ export default function api() {
       cache: options?.cache ?? 'no-store',
       next: options?.revalidate ? { revalidate: options.revalidate } : undefined,
     })
+    if (!res.ok) {
+      const errorData = await res.json()
+      throw new Error(errorData?.message || '알수없는 요류')
+    }
 
     return res.json()
   }

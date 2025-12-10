@@ -24,9 +24,9 @@ export const SignupAction = async (
 
   const payload = { email, password, name, nickname, profileUrl }
 
-  let data
+  let response
   try {
-    data = await authApi.signup(payload)
+    response = await authApi.signup(payload)
   } catch (error) {
     return {
       success: false,
@@ -48,36 +48,28 @@ export const SigninAction = async (
 
   const payload = { email, password }
 
-  let data
+  let response
 
   try {
-    data = await authApi.signin(payload)
+    response = await authApi.signin(payload)
+
+    const cookieStore = await cookies()
+
+    cookieStore.set('accessToken', response.accessToken, {
+      httpOnly: true,
+      maxAge: 60 * 60,
+      path: '/',
+    })
+
+    return {
+      success: true,
+      user: response.user,
+    }
   } catch (error) {
     return {
       success: false,
       message: error instanceof Error ? error.message : '알수없는 오류 발생',
     }
-  }
-
-  const cookieStore = await cookies()
-
-  cookieStore.set('accessToken', data.accessToken, {
-    httpOnly: true,
-    maxAge: 60 * 60,
-    path: '/',
-  })
-
-  cookieStore.set('refreshToken', data.refreshToken, {
-    httpOnly: true,
-    secure: true,
-    sameSite: 'lax',
-    path: '/',
-    maxAge: 60 * 60 * 24 * 30,
-  })
-
-  return {
-    success: true,
-    user: data.user,
   }
 }
 
@@ -93,6 +85,7 @@ export const LogoutAction = async (prevState: ActionState) => {
 
   const cookieStore = await cookies()
   cookieStore.delete('accessToken')
+  cookieStore.delete('refreshToken')
 
   return { success: true }
 }

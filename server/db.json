@@ -20,7 +20,7 @@
       "id": 2,
       "title": "Figma 오토 레이아웃 기초",
       "description": "레이아웃 자동화 기능을 1분 만에 이해해보자.",
-      "videoUrl": "https://docs.material-tailwind.com/demo.mp4",
+      "videoUrl": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
       "thumbnailUrl": "https://fastly.picsum.photos/id/552/200/300.jpg?hmac=HBKexbcKXzLeMJE1CAFxCKQC44xRoXBc5nugDowR4oc",
       "uploader": {
         "userId": 6,
@@ -163,36 +163,36 @@
   ],
   "users": [
     {
-      "id": 1765265087106,
-      "email": "test01@test.com",
-      "password": "12341234",
-      "name": "승일",
-      "nickname": "수니",
-      "createdAt": "2025-12-09T07:24:47.106Z"
-    },
-    {
-      "id": 1765268721446,
+      "id": 1765333681311,
       "email": "test10@test.com",
       "password": "12341234",
-      "name": "승일",
-      "nickname": "12341234",
-      "createdAt": "2025-12-09T08:25:21.446Z"
+      "name": "길동이",
+      "nickname": "길동이",
+      "createdAt": "2025-12-10T02:28:01.311Z"
     },
     {
-      "id": 1765269036847,
-      "email": "test20@test.com",
+      "id": 1765336564544,
+      "email": "test03@test.com",
       "password": "12341234",
-      "name": "김말순",
-      "nickname": "테스터",
-      "createdAt": "2025-12-09T08:30:36.847Z"
+      "name": "승일",
+      "nickname": "승일",
+      "createdAt": "2025-12-10T03:16:04.544Z"
     },
     {
-      "id": 1765272684213,
-      "email": "qweqwe@gmail.com",
-      "password": "zxcv1234",
-      "name": "정호준",
-      "nickname": "정몽실",
-      "createdAt": "2025-12-09T09:31:24.213Z"
+      "id": 1765337132452,
+      "email": "test100@test.com",
+      "password": "12341234",
+      "name": "승일",
+      "nickname": "말괄량이",
+      "createdAt": "2025-12-10T03:25:32.452Z"
+    },
+    {
+      "id": 1765337594641,
+      "email": "test1004@test.com",
+      "password": "12341234",
+      "name": "승일",
+      "nickname": "승일",
+      "createdAt": "2025-12-10T03:33:14.641Z"
     }
   ]
 }
