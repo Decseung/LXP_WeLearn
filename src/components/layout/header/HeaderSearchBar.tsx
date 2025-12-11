@@ -105,6 +105,7 @@ export const HeaderSearchBar = () => {
                       rightButton={closeButton}
                       autoFocus
                       aria-label="검색"
+                      onClick={handleComingSoon}
                     />
                   </div>
                 </div>
