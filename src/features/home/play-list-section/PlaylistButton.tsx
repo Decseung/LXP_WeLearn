@@ -8,7 +8,7 @@ export default function PlaylistButton({ children }: { children: React.ReactNode
     <button
       className="group cursor-pointer"
       onClick={() =>
-        toast.info('현재 개발 진행 중 입니다.', {
+        toast.info('현재 서비스 준비 중 입니다.', {
           toastId: 'playlist-development-toast',
         })
       }
