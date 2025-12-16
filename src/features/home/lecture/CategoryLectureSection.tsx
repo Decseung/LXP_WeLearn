@@ -23,7 +23,7 @@ export default function CategoryLectureSection({ lectures }: { lectures: Lecture
   return (
     <section className="mb-12">
       <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-2xl font-extrabold text-gray-900 uppercase">Categories</h2>
+        <h2 className="text-xl font-extrabold text-gray-900 uppercase">Categories</h2>
         <Link
           href="/"
           className="text-sm font-medium text-gray-500 transition-colors hover:text-gray-900"
