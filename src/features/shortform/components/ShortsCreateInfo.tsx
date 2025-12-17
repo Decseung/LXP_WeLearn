@@ -21,7 +21,7 @@ export default function ShortsCreateInfo({ uploader, title, description }: Short
             />
           ) : (
             <>
-              <div className="h-10 w-10 rounded-full bg-gray-300">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-400">
                 <User strokeWidth={1.5} color="white" />
               </div>
             </>
