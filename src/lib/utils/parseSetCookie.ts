@@ -28,7 +28,6 @@ export function parseSetCookie(cookieHeader: string): ParsedSetCookie[] {
     }
   })
 
-  // ⭐ 여기서 타입을 "확정"시킨다
   return parsed.filter((c): c is ParsedSetCookie => c !== null)
 }
 
