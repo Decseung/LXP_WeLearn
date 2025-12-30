@@ -1,6 +1,6 @@
 'use client'
 
-import { ShortsFormLeftSection, ShortsPreviewRight } from '@/features/register/compontents'
+import { ShortsFormLeftSection, ShortsPreviewRight } from '@/features/register/components'
 import { useState } from 'react'
 
 export default function ShortsCreatePage() {
