@@ -1,6 +1,6 @@
 'use client'
 
-import ShortsFormTitle from './ShortsFormTitle'
+import ShortsFormTitle from './ShortsFormInputs'
 import ShortsFormCategory from './ShortsFormCategory'
 import ShortsFormKeywords from './ShortsFormKeywords'
 import ShortsFormThumbnail from './ShortsFormThumbnail'

@@ -2,7 +2,7 @@
 
 import { Input } from '@/components/ui/Input'
 
-interface ShortsFormTitleProps {
+interface ShortsFormInputsProps {
   title: string
   setTitle: (value: string) => void
   description: string
@@ -11,14 +11,14 @@ interface ShortsFormTitleProps {
   setIsPublic: (value: boolean) => void
 }
 
-export default function ShortsFormTitle({
+export default function ShortsFormInputs({
   title,
   setTitle,
   description,
   setDescription,
   isPublic,
   setIsPublic,
-}: ShortsFormTitleProps) {
+}: ShortsFormInputsProps) {
   return (
     <>
       {/* 숏츠 제목 */}
@@ -29,7 +29,8 @@ export default function ShortsFormTitle({
           name="shorts-title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="제목을 입력하세요"
+          placeholder="제목을 입력하세요."
+          className="border-gray-300 bg-white text-sm focus:ring-black focus:outline-none"
         />
       </div>
 
@@ -41,7 +42,7 @@ export default function ShortsFormTitle({
           onChange={(e) => setDescription(e.target.value)}
           placeholder="내용을 입력하세요."
           rows={4}
-          className="w-full resize-none rounded-lg border border-gray-300 px-4 py-3 transition-all focus:ring-2 focus:ring-black focus:outline-none"
+          className="w-full resize-none rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm transition-all focus:ring-2 focus:ring-black focus:outline-none"
         />
       </div>
 
@@ -49,17 +50,6 @@ export default function ShortsFormTitle({
       <div>
         <label className="mb-2 block text-sm font-medium text-gray-700">공개 여부</label>
         <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={() => setIsPublic(false)}
-            className={`flex-1 rounded-lg py-2 font-medium transition-all ${
-              !isPublic
-                ? 'border-2 border-black bg-white text-black'
-                : 'border-2 border-transparent bg-gray-200 text-gray-600'
-            }`}
-          >
-            비공개
-          </button>
           <button
             type="button"
             onClick={() => setIsPublic(true)}
@@ -70,6 +60,18 @@ export default function ShortsFormTitle({
             }`}
           >
             공개
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setIsPublic(false)}
+            className={`flex-1 rounded-lg py-2 font-medium transition-all ${
+              !isPublic
+                ? 'border-2 border-gray-500 bg-gray-500 text-sm text-white'
+                : 'border-2 border-transparent bg-gray-200 text-sm text-gray-600'
+            }`}
+          >
+            비공개
           </button>
         </div>
       </div>

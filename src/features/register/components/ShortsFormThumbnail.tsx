@@ -2,6 +2,7 @@
 
 import { useRef } from 'react'
 import { Button } from '@/components/ui/Button'
+import { X } from 'lucide-react'
 
 interface ShortsFormThumbnailProps {
   thumbnail: string | null
@@ -38,9 +39,9 @@ export default function ShortsFormThumbnail({ thumbnail, setThumbnail }: ShortsF
       />
       <Button
         type="button"
-        variant="secondary"
+        variant="outline"
         onClick={() => thumbnailInputRef.current?.click()}
-        className="w-full"
+        className="mb-10 w-full"
       >
         썸네일 업로드
       </Button>
@@ -56,7 +57,7 @@ export default function ShortsFormThumbnail({ thumbnail, setThumbnail }: ShortsF
             onClick={handleRemoveThumbnail}
             className="absolute -top-2 -right-2 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-white transition-colors hover:bg-red-600"
           >
-            ✕
+            <X className="h-4 w-4" />
           </button>
         </div>
       )}

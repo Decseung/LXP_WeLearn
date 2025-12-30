@@ -1,6 +1,7 @@
 'use client'
 
-import { ShortsFormLeftSection, ShortsPreviewRight } from '@/features/register/components'
+import { ShortsFormLeftSection } from '@/features/register/components'
+import ShortsVideoPreview from '@/features/register/components/ShortsVideoPreview'
 import { useState } from 'react'
 
 export default function ShortsCreatePage() {
@@ -48,8 +49,7 @@ export default function ShortsCreatePage() {
 
           {/* 오른쪽 - 미리보기 및 업로드 */}
           <div className="w-full lg:w-96">
-            <ShortsPreviewRight
-              thumbnail={thumbnail}
+            <ShortsVideoPreview
               videoFile={videoFile}
               setVideoFile={setVideoFile}
               isDragging={isDragging}

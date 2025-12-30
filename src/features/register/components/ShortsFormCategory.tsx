@@ -15,7 +15,7 @@ export default function ShortsFormCategory({ category, setCategory }: ShortsForm
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          className="w-full cursor-pointer appearance-none rounded-lg border border-gray-300 bg-white px-4 py-3 transition-all focus:ring-2 focus:ring-black focus:outline-none"
+          className="w-full cursor-pointer appearance-none rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm transition-all focus:ring-2 focus:ring-black focus:outline-none"
         >
           <option value="">카테고리를 선택하세요.</option>
           <option value="frontend">프론트엔드</option>

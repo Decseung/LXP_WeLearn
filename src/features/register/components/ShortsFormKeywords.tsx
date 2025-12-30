@@ -60,7 +60,8 @@ export default function ShortsFormKeywords({
           value={tagInput}
           onChange={(e) => setTagInput(e.target.value)}
           onKeyPress={handleKeyPress}
-          placeholder="태그를 입력하세요."
+          placeholder="키워드를 입력하세요."
+          className="bg-white focus:ring-black focus:outline-none"
         />
       </div>
     </div>
