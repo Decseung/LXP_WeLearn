@@ -32,7 +32,7 @@ export default function ShortsVideoPreview({
   } = useVideoUpload({ onChange })
 
   return (
-    <div className="space-y-6">
+    <div className="mb-8 space-y-6">
       {/* 비디오 드래그 & 미리보기 영역 */}
       <div
         className={`flex aspect-[9/16] items-center justify-center rounded-2xl border-2 border-dashed bg-white transition-all ${
@@ -90,16 +90,6 @@ export default function ShortsVideoPreview({
           </div>
         )}
       </div>
-
-      {/* 등록 버튼 */}
-      <Button type="button" variant="accent" onClick={onSubmit} className="text-md w-full py-6">
-        등록하기
-      </Button>
-
-      {/* 취소 버튼 */}
-      <Button type="button" variant="secondary" onClick={onCancel} className="text-md w-full py-6">
-        취소
-      </Button>
     </div>
   )
 }

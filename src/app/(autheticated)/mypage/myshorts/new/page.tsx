@@ -9,6 +9,7 @@ import {
   ShortsFormData,
   VideoPreviewData,
 } from '@/types/shortsRegister'
+import ShortsFormActions from '@/features/register/components/ShortsFormActions'
 
 export default function ShortsCreatePage() {
   // 폼 데이터 상태 (객체로 그룹화)
@@ -63,6 +64,12 @@ export default function ShortsCreatePage() {
               onChange={handleVideoChange}
               onSubmit={handleSubmit}
               onCancel={handleCancel}
+            />
+
+            <ShortsFormActions
+              onSubmit={handleSubmit}
+              onCancel={handleCancel}
+              submitLabel="등록하기"
             />
           </div>
         </div>
