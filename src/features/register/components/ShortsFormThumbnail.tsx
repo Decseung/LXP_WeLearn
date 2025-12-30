@@ -3,29 +3,16 @@
 import { useRef } from 'react'
 import { Button } from '@/components/ui/Button'
 import { X } from 'lucide-react'
+import useThumbnail from '@/hook/useThumbnail'
 
 interface ShortsFormThumbnailProps {
-  thumbnail: string | null
-  setThumbnail: (value: string | null) => void
+  value: string | null
+  onChange: (value: string | null) => void
 }
 
-export default function ShortsFormThumbnail({ thumbnail, setThumbnail }: ShortsFormThumbnailProps) {
+export default function ShortsFormThumbnail({ value, onChange }: ShortsFormThumbnailProps) {
   const thumbnailInputRef = useRef<HTMLInputElement>(null)
-
-  const handleThumbnailUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file && file.type.startsWith('image/')) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setThumbnail(reader.result as string)
-      }
-      reader.readAsDataURL(file)
-    }
-  }
-
-  const handleRemoveThumbnail = () => {
-    setThumbnail(null)
-  }
+  const { handleThumbnailUpload, handleRemoveThumbnail } = useThumbnail({ onChange })
 
   return (
     <div>
@@ -47,10 +34,10 @@ export default function ShortsFormThumbnail({ thumbnail, setThumbnail }: ShortsF
       </Button>
 
       {/* 썸네일 미리보기 */}
-      {thumbnail && (
+      {value && (
         <div className="relative mt-3 inline-block">
           <div className="h-44 w-32 overflow-hidden rounded-lg bg-gray-200">
-            <img src={thumbnail} alt="썸네일 미리보기" className="h-full w-full object-cover" />
+            <img src={value} alt="썸네일 미리보기" className="h-full w-full object-cover" />
           </div>
           <button
             type="button"
