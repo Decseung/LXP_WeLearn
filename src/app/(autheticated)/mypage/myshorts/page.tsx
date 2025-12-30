@@ -1,6 +1,6 @@
 export default function MyShortsPage() {
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8">
+    <div className="h-full w-full px-4 py-8">
       {/* ==================== Main Layout (모바일: 세로, PC: 가로) ==================== */}
       <div className="flex flex-col gap-8 lg:flex-row">
         {/* ==================== Left Section - Fixed Preview (모바일에서 먼저 노출) ==================== */}
