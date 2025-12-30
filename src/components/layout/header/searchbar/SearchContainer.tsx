@@ -1,11 +1,14 @@
 'use client'
 
 import { useState } from 'react'
-import SearchDesktop from './SearchDesktop'
-import SearchMobileTrigger from './SearchMobileTrigger'
-import SearchMobileMotion from './SearchMobileMotion'
+import {
+  SearchDesktop,
+  SearchMobileTrigger,
+  SearchMobileMotion,
+} from '@/components/layout/header/searchbar'
 
-export default function HeaderSearchContainer() {
+export default function HeaderSearchBar() {
+  // 모바일용 검색 아이콘 동적 상태 관리
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false)
 
   return (
