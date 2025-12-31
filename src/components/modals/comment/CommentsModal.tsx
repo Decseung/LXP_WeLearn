@@ -21,7 +21,7 @@ export default function CommentModal() {
     <AnimatePresence mode="wait">
       {isOpen && (
         <motion.aside
-          className="fixed top-29.5 right-30 z-50 flex items-center justify-center"
+          className="fixed top-32 right-32 z-50 flex items-center justify-center"
           initial={{ x: '130%' }}
           animate={{ x: '0%' }}
           exit={{ x: '130%' }}

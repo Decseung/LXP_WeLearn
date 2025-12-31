@@ -34,7 +34,7 @@ export default function Comment() {
           </div>
         </div>
         {/* 더보기 버튼 */}
-        <button className="hover:bg-gray-00 rounded-full p-1 text-gray-400 transition-colors">
+        <button className="rounded-full p-1 text-gray-400 transition-colors hover:bg-gray-100">
           <Ellipsis size={18} />
         </button>
       </div>

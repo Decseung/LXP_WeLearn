@@ -3,11 +3,9 @@ import { Header } from '@/components/layout/header/Header'
 export default function FullscreenLayout({
   children,
   comments,
-  params,
 }: {
   children: React.ReactNode
   comments: React.ReactNode
-  params: { id: string }
 }) {
   return (
     <>
