@@ -28,7 +28,7 @@ export default function ShortsItem({ shorts }: ShortsItemProps) {
 
         {/* 액션 버튼 - 하단 우측 정렬 */}
         <div className="pointer-events-auto mr-2 self-end">
-          <ShortsActionBar />
+          <ShortsActionBar id={shorts.shortsId} />
         </div>
       </div>
     </div>

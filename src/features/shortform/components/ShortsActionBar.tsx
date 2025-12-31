@@ -3,8 +3,15 @@
 import { ClosedCaption, Heart, ListPlus, MessageSquareText, Send } from 'lucide-react'
 import { toast } from 'react-toastify'
 import ShortsLikeButton from './ShortsLikeButton'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
-export default function ShortsActionBar() {
+interface ShortsActionBarProps {
+  id: number
+}
+
+export default function ShortsActionBar({ id }: ShortsActionBarProps) {
+  const router = useRouter()
   const handleComingSoon = (feature: string) => {
     toast.info(`${feature} 서비스 준비 중입니다.`, {
       toastId: `shorts-${feature}-toast`,
@@ -17,11 +24,14 @@ export default function ShortsActionBar() {
       <ShortsLikeButton initialLikeCount={127} />
 
       {/* 댓글 */}
+
       <button
         aria-label="댓글 보기"
         className="flex cursor-pointer flex-col items-center text-white hover:text-gray-300"
         type="button"
-        onClick={() => handleComingSoon('댓글')}
+        onClick={() => {
+          ;(router.push(`?comments=true`), { scroll: false })
+        }}
       >
         <MessageSquareText strokeWidth={1.5} />
         <span className="mt-1 text-xs">57</span>
