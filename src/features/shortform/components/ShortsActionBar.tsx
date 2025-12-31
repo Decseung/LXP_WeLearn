@@ -3,8 +3,7 @@
 import { ClosedCaption, Heart, ListPlus, MessageSquareText, Send } from 'lucide-react'
 import { toast } from 'react-toastify'
 import ShortsLikeButton from './ShortsLikeButton'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 
 interface ShortsActionBarProps {
   id: number
@@ -12,10 +11,21 @@ interface ShortsActionBarProps {
 
 export default function ShortsActionBar({ id }: ShortsActionBarProps) {
   const router = useRouter()
+  const pathname = usePathname()
+  const isOpen = pathname.endsWith('/comments')
+
   const handleComingSoon = (feature: string) => {
     toast.info(`${feature} 서비스 준비 중입니다.`, {
       toastId: `shorts-${feature}-toast`,
     })
+  }
+
+  const handleComment = () => {
+    if (isOpen) {
+      router.push(`/shorts/${id}`, { scroll: false })
+    } else {
+      router.push(`/shorts/${id}/comments`, { scroll: false })
+    }
   }
 
   return (
@@ -29,9 +39,7 @@ export default function ShortsActionBar({ id }: ShortsActionBarProps) {
         aria-label="댓글 보기"
         className="flex cursor-pointer flex-col items-center text-white hover:text-gray-300"
         type="button"
-        onClick={() => {
-          ;(router.push(`?comments=true`), { scroll: false })
-        }}
+        onClick={handleComment}
       >
         <MessageSquareText strokeWidth={1.5} />
         <span className="mt-1 text-xs">57</span>

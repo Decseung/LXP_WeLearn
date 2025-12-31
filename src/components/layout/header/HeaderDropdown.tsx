@@ -57,7 +57,7 @@ export default function HeaderDropdown({ user }: UserDropdownProps) {
           </div>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent align="end" className="pb- flex flex-col gap-2 px-6 pt-5 pb-3">
+        <DropdownMenuContent align="end" className="flex flex-col gap-2 px-6 pt-5 pb-3">
           {user?.profileUrl && (
             <div
               className="cursor-pointer rounded-full border-gray-100 transition-colors hover:border-gray-600"
