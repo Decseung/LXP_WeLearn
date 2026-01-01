@@ -1,8 +1,7 @@
 'use client'
 
 import { AnimatePresence, motion } from 'framer-motion'
-import { X, Plus } from 'lucide-react'
-import { usePathname } from 'next/navigation'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import PlaylistModalHeader from './PlaylistModalHeader'
 import Playlist from './Playlist'
@@ -13,6 +12,10 @@ export default function PlaylistModal() {
   const [activeTab, setActiveTab] = useState('save') // 'save' or 'create'
 
   const pathname = usePathname()
+
+  const params = useParams()
+
+  const id = params.id as string
 
   const isOpen = pathname.endsWith('/playlist')
 
@@ -49,7 +52,7 @@ export default function PlaylistModal() {
             {/* 저장 리스트 모달 */}
             {activeTab === 'save' && (
               <>
-                <PlaylistModalHeader />
+                <PlaylistModalHeader id={id} />
                 {/* 플레이리스트 목록 */}
                 <Playlist list={existingPlaylists} />
 
@@ -59,7 +62,9 @@ export default function PlaylistModal() {
             )}
 
             {/* 플레이리스트 생성 모달 */}
-            {activeTab === 'create' && <CreatePlaylistForm handleActiveTab={handleActiveTab} />}
+            {activeTab === 'create' && (
+              <CreatePlaylistForm handleActiveTab={handleActiveTab} id={id} />
+            )}
           </div>
         </motion.aside>
       )}

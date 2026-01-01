@@ -1,12 +1,11 @@
 import { Bookmark, Copy, X } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
+interface PlaylistModalHeaderProps {
+  id: string
+}
 
-export default function PlaylistModalHeader() {
+export default function PlaylistModalHeader({ id }: PlaylistModalHeaderProps) {
   const router = useRouter()
-
-  const params = useParams()
-
-  const id = params.id as string
 
   const handleClose = () => {
     router.replace(`/shorts/${id}`, { scroll: false })

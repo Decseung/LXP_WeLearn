@@ -6,13 +6,14 @@ import CreatePlaylistFormSubmitBtn from './CreatePlaylistFormSubmitBtn'
 
 interface CratePlaylistFormProps {
   handleActiveTab: () => void
+  id: string
 }
-export default function CratePlaylistForm({ handleActiveTab }: CratePlaylistFormProps) {
+export default function CratePlaylistForm({ handleActiveTab, id }: CratePlaylistFormProps) {
   const [playlistTitle, setPlaylistTitle] = useState('')
 
   return (
     <>
-      <CreatePlaylistFormHeader />
+      <CreatePlaylistFormHeader id={id} />
       <div className="space-y-6 px-6 py-6">
         <CreatePlaylistFormInput
           playlistTitle={playlistTitle}
