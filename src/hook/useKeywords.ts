@@ -89,8 +89,12 @@ export default function useKeywords({ keywords, keywordInput, onChange }: UseKey
   }
 
   // 포커스 해제 시 목록 닫기
-  const handleBlur = () => {
-    setTimeout(() => setIsOpen(false), 150)
+  const handleBlur = (e: React.FocusEvent<HTMLElement>) => {
+    // relatedTarget가 현재 컨테이너 내부에 있다면(예: 추천 목록 클릭) 닫지 않음
+    if (e.relatedTarget && e.currentTarget.contains(e.relatedTarget as Node)) {
+      return
+    }
+    setIsOpen(false)
   }
 
   // 포커스 시 목록 열기
