@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
 import {
@@ -7,25 +7,46 @@ import {
   INITIAL_SHORTS_FORM_DATA,
   INITIAL_VIDEO_PREVIEW_DATA,
 } from '@/types/shortsRegister'
+import { shortsFormValidation } from '@/utils/shortsFormValidation'
+import { createUploadPayload, uploadShorts } from '@/services/shortsform.service'
 
-export default function useRegisterForm() {
+// 수정 페이지에서 기존 데이터를 초기값으로 사용
+interface UseRegisterFormParams {
+  initialFormData?: Partial<ShortsFormData>
+  initialVideoData?: Partial<VideoPreviewData>
+}
+
+export default function useRegisterForm(params: UseRegisterFormParams = {}) {
   const router = useRouter()
+  const { initialFormData, initialVideoData } = params
 
-  // 폼 데이터 상태
-  const [formData, setFormData] = useState<ShortsFormData>(INITIAL_SHORTS_FORM_DATA)
+  // 초기값 병합 함수
+  const buildInitialForm = () => ({
+    ...INITIAL_SHORTS_FORM_DATA,
+    ...initialFormData,
+  })
+  const buildInitialVideo = () => ({
+    ...INITIAL_VIDEO_PREVIEW_DATA,
+    ...initialVideoData,
+  })
 
-  // 비디오 프리뷰 상태
-  const [videoData, setVideoData] = useState<VideoPreviewData>(INITIAL_VIDEO_PREVIEW_DATA)
-
-  // 로딩 상태
+  // 상태 관리 ( 폼 데이터, 비디오 데이터, 제출 상태 )
+  const [formData, setFormData] = useState<ShortsFormData>(buildInitialForm)
+  const [videoData, setVideoData] = useState<VideoPreviewData>(buildInitialVideo)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // 폼 데이터 변경 핸들러
+  // 초기값이 변경될 때 상태 재설정 (값이 변경되면 폼 상태를 다시 초기화)
+  useEffect(() => {
+    setFormData(buildInitialForm())
+    setVideoData(buildInitialVideo())
+  }, [initialFormData, initialVideoData])
+
+  // 폼 필드 변경 핸들러
   const handleFormChange = <K extends keyof ShortsFormData>(field: K, value: ShortsFormData[K]) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
-  // 비디오 데이터 변경 핸들러
+  // 비디오 필드 변경 핸들러
   const handleVideoChange = <K extends keyof VideoPreviewData>(
     field: K,
     value: VideoPreviewData[K],
@@ -33,46 +54,25 @@ export default function useRegisterForm() {
     setVideoData((prev) => ({ ...prev, [field]: value }))
   }
 
-  // 유효성 검사
-  const validateForm = (): boolean => {
-    if (!formData.title.trim()) {
-      toast.error('제목을 입력해주세요.')
-      return false
-    }
-    if (formData.categoryId === null) {
-      toast.error('카테고리를 선택해주세요.')
-      return false
-    }
-    if (!videoData.videoFile) {
-      toast.error('영상을 업로드해주세요.')
-      return false
-    }
-    return true
-  }
-
-  // 숏츠 등록
+  // 숏츠 등록 처리
   const handleRegister = async () => {
-    if (!validateForm()) return
+    // 중복 클릭 방지
+    if (isSubmitting) return
+
+    // 유효성 검사 (실패 시 토스트 메시지)
+    const validation = shortsFormValidation(formData, videoData)
+    if (!validation.isValid) {
+      toast.error(validation.message)
+      return
+    }
 
     setIsSubmitting(true)
 
     try {
-      // TODO: API 연동 시 실제 업로드 로직으로 교체
-      const payload = {
-        title: formData.title,
-        description: formData.description,
-        isPublic: formData.isPublic,
-        categoryId: formData.categoryId,
-        keywords: formData.keywords,
-        thumbnail: formData.thumbnail,
-        videoFile: videoData.videoFile?.name,
-        durationSec: videoData.durationSec,
-      }
-
-      console.log('📤 등록 요청 데이터:', payload)
-
-      // TODO: API 호출
-      // await uploadShorts(payload)
+      // 업로드 페이로드 생성
+      const payload = createUploadPayload(formData, videoData)
+      //등록 API 호출
+      await uploadShorts(payload)
 
       toast.success('등록이 완료되었습니다.')
       router.push('/mypage/myshorts')
@@ -84,15 +84,13 @@ export default function useRegisterForm() {
     }
   }
 
-  // 등록 취소
-  const handleCancel = () => {
-    router.back()
-  }
+  // 등록 취소 처리
+  const handleCancel = () => router.back()
 
-  // 폼 초기화
+  // 폼 및 비디오 데이터 초기화
   const resetForm = () => {
-    setFormData(INITIAL_SHORTS_FORM_DATA)
-    setVideoData(INITIAL_VIDEO_PREVIEW_DATA)
+    setFormData(buildInitialForm())
+    setVideoData(buildInitialVideo())
   }
 
   return {

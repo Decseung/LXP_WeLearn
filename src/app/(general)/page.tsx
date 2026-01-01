@@ -3,7 +3,7 @@ import ShortFormCarousel from '@/features/home/ShortFormCarousel/ShortFormCarous
 import PlaylistSection from '@/features/home/play-list-section/PlaylistSection'
 import CategoryLectureSection from '@/features/home/lecture/CategoryLectureSection'
 import { lectures, playlistGroup } from '@/dummy/data'
-import { getShortPopular } from '@/services/getShortPopular'
+import { getShortPopular } from '@/services/shorts/getShortPopular'
 
 export default async function Page() {
   const popularShorts = await getShortPopular()

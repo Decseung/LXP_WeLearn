@@ -32,7 +32,7 @@ export default function ShortsFormCategory({ value, onChange }: ShortsFormCatego
           id="category"
           value={selectValue}
           onChange={handleChange}
-          className="w-full cursor-pointer appearance-none rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm transition-all focus:ring-2 focus:ring-black focus:outline-none"
+          className="w-full cursor-pointer appearance-none rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-gray-400 transition-all focus:ring-2 focus:ring-black focus:outline-none"
         >
           <option value="">카테고리를 선택하세요.</option>
           {categories.map((category) => (
