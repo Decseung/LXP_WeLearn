@@ -39,7 +39,7 @@ export default function useRegisterForm() {
       toast.error('제목을 입력해주세요.')
       return false
     }
-    if (!formData.categoryId) {
+    if (formData.categoryId === null) {
       toast.error('카테고리를 선택해주세요.')
       return false
     }
