@@ -4,7 +4,7 @@ import { toast } from 'react-toastify'
 
 interface UseThumbnailParams {
   onChange: (value: string | null) => void
-  inputRef?: RefObject<HTMLInputElement>
+  inputRef?: RefObject<HTMLInputElement | null>
 }
 
 export default function useThumbnailUpload({ onChange, inputRef }: UseThumbnailParams) {
