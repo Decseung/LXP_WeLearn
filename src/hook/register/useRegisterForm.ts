@@ -60,9 +60,9 @@ export default function useRegisterForm(params: UseRegisterFormParams = {}) {
     if (isSubmitting) return
 
     // 유효성 검사 (실패 시 토스트 메시지)
-    const validation = shortsFormValidation(formData, videoData, false)
+    const validation = shortsFormValidation(formData, videoData, true)
     if (!validation.isValid) {
-      toast.error(validation.message)
+      // toast.error(validation.message)
       return
     }
 

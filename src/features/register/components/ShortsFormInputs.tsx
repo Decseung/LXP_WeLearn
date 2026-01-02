@@ -62,7 +62,7 @@ export default function ShortsFormInputs({ formData, onChange }: ShortsFormInput
             className={`flex-1 rounded-lg py-2 text-sm font-medium transition-all ${
               !isPublic
                 ? 'border-2 border-gray-900 bg-gray-800 text-white'
-                : 'b border-2 border-gray-200 bg-white text-gray-600'
+                : 'border-2 border-gray-200 bg-white text-gray-600'
             }`}
           >
             비공개

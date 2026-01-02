@@ -1,4 +1,3 @@
-// src/utils/media/extractVideoDuration.ts
 /**
  * 비디오 파일에서 duration(초)을 추출한다.
  * - <video> + onloadedmetadata 기반

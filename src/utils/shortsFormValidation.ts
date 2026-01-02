@@ -40,7 +40,10 @@ export function shortsFormValidation(
   const description = formData.description?.trim() ?? ''
   if (!description) return fail('description', '설명을 입력해주세요.')
 
-  if (formData.categoryId == null) return fail('categoryId', '카테고리를 선택해주세요.')
+  if (description.length > 500) return fail('description', '설명은 500자 이내로 입력해주세요.')
+
+  if (formData.categoryId === null || formData.categoryId === undefined)
+    return fail('categoryId', '카테고리를 선택해주세요.')
 
   if (!videoData.videoFile) return fail('videoFile', '영상을 업로드해주세요.')
 

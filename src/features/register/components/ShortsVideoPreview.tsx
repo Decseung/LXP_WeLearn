@@ -42,9 +42,12 @@ export default function ShortsVideoPreview({
     <div className="space-y-4">
       {/* 미리보기 전환 탭 */}
 
-      <div className="flex gap-2">
+      <div className="flex gap-2" role="tablist" aria-label="미리보기 전환 탭">
         <button
           type="button"
+          id="video-tab"
+          role="tabMenu"
+          aria-selected={isVideoTab}
           onClick={switchToVideo}
           className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
             isVideoTab ? 'bg-black text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -55,6 +58,9 @@ export default function ShortsVideoPreview({
         </button>
         <button
           type="button"
+          id="thumbnail-tab"
+          role="tabMenu"
+          aria-selected={isThumbnailTab}
           onClick={switchToThumbnail}
           className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
             isThumbnailTab ? 'bg-black text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
