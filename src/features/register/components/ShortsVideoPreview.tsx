@@ -1,17 +1,25 @@
 'use client'
 
 import { useRef } from 'react'
-import { CirclePlus, X } from 'lucide-react'
-import { Button } from '@/components/ui/Button'
+import { ImageIcon, VideoIcon } from 'lucide-react'
 import { VideoPreviewData, VideoPreviewChangeHandler } from '@/types/shortsRegister'
-import useVideoUpload from '@/hook/useVideoUpload'
+import useVideoUpload from '@/hook/register/useVideoUpload'
+import usePreviewTab from '@/hook/register/usePreviewTab'
+import ShortsFormPreviewTab from './ShortsFormPreviewTab'
 
 interface ShortsVideoPreviewProps {
   videoData: VideoPreviewData
   onChange: VideoPreviewChangeHandler
+  thumbnail?: string | null
+  onThumbnailRemove: () => void
 }
 
-export default function ShortsVideoPreview({ videoData, onChange }: ShortsVideoPreviewProps) {
+export default function ShortsVideoPreview({
+  videoData,
+  onChange,
+  thumbnail,
+  onThumbnailRemove,
+}: ShortsVideoPreviewProps) {
   const { videoFile, isDragging } = videoData
   const videoInputRef = useRef<HTMLInputElement>(null)
 
@@ -24,62 +32,64 @@ export default function ShortsVideoPreview({ videoData, onChange }: ShortsVideoP
     handleVideoUpload,
   } = useVideoUpload({ onChange, inputRef: videoInputRef })
 
+  const { isVideoTab, isThumbnailTab, switchToVideo, switchToThumbnail, handleRemove } =
+    usePreviewTab({
+      onVideoRemove: handleRemoveVideo,
+      onThumbnailRemove,
+    })
+
   return (
-    <div
-      className={`flex aspect-[9/16] items-center justify-center rounded-2xl border-2 border-dashed bg-white transition-all ${
-        isDragging ? 'border-black bg-gray-50' : 'border-gray-300'
-      }`}
-      onDragEnter={handleDragEnter}
-      onDragOver={handleDragOver}
-      onDragLeave={handleDragLeave}
-      onDrop={handleDrop}
-    >
-      {videoFile ? (
-        // 비디오가 있을 경우 미리보기 렌더
-        <div className="relative h-full w-full">
-          <video className="h-full w-full rounded-2xl object-cover" controls>
-            <source src={URL.createObjectURL(videoFile)} type={videoFile.type} />
-          </video>
+    <div className="space-y-4">
+      {/* 미리보기 전환 탭 */}
 
-          {/* 비디오 제거 버튼 */}
-          <button
-            type="button"
-            onClick={handleRemoveVideo}
-            className="absolute top-3 right-3 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/70"
-          >
-            <X className="h-4 w-4" />
-          </button>
-        </div>
-      ) : (
-        // 비디오가 없을 경우 업로드 안내 UI
-        <div className="text-center">
-          <div className="mb-4 flex items-center justify-center">
-            <CirclePlus strokeWidth={0.5} size={102} color="#aaa" />
-          </div>
+      <div className="flex gap-2" role="tablist" aria-label="미리보기 전환 탭">
+        <button
+          type="button"
+          id="video-tab"
+          role="tabMenu"
+          aria-selected={isVideoTab}
+          onClick={switchToVideo}
+          className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+            isVideoTab ? 'bg-black text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          }`}
+        >
+          <VideoIcon className="h-4 w-4" />
+          동영상
+        </button>
+        <button
+          type="button"
+          id="thumbnail-tab"
+          role="tabMenu"
+          aria-selected={isThumbnailTab}
+          onClick={switchToThumbnail}
+          className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+            isThumbnailTab ? 'bg-black text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          }`}
+        >
+          <ImageIcon className="h-4 w-4" />
+          썸네일
+        </button>
+      </div>
 
-          <p className="text-sm leading-6 text-gray-500">
-            동영상 파일을 드래그하거나 <br /> 클릭하여 업로드 하세요.
-          </p>
-
-          {/* 숨겨진 파일 input (커스텀버튼으로 파일 업로드 트리거용) - 파일선택 버튼 클릭 후 onChange 실행 */}
-          <input
-            ref={videoInputRef}
-            type="file"
-            accept="video/*"
-            onChange={handleVideoUpload}
-            className="hidden"
-          />
-
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => videoInputRef.current?.click()}
-            className="mt-4"
-          >
-            파일 선택
-          </Button>
-        </div>
-      )}
+      {/* 미리보기 영역 */}
+      <div
+        className={`flex aspect-[9/16] items-center justify-center rounded-2xl border-2 border-dashed bg-white transition-all ${
+          isDragging ? 'border-black bg-gray-50' : 'border-gray-300'
+        }`}
+        onDragEnter={isVideoTab ? handleDragEnter : undefined}
+        onDragOver={isVideoTab ? handleDragOver : undefined}
+        onDragLeave={isVideoTab ? handleDragLeave : undefined}
+        onDrop={isVideoTab ? handleDrop : undefined}
+      >
+        <ShortsFormPreviewTab
+          type={isVideoTab ? 'video' : 'thumbnail'}
+          videoFile={videoFile}
+          videoInputRef={videoInputRef}
+          onVideoUpload={handleVideoUpload}
+          thumbnail={thumbnail}
+          onRemove={handleRemove}
+        />
+      </div>
     </div>
   )
 }

@@ -3,7 +3,7 @@
 import { ShortsFormLeftSection } from '@/features/register/components'
 import ShortsVideoPreview from '@/features/register/components/ShortsVideoPreview'
 import ShortsFormSubmitButtons from '@/features/register/components/ShortsFormSubmitButtons'
-import useRegisterForm from '@/hook/useRegisterForm'
+import useRegisterForm from '@/hook/register/useRegisterForm'
 
 export default function ShortsFormContainer() {
   const {
@@ -25,7 +25,12 @@ export default function ShortsFormContainer() {
 
       {/* 오른쪽 - 미리보기 및 업로드 */}
       <div className="w-full space-y-6 lg:w-96">
-        <ShortsVideoPreview videoData={videoData} onChange={handleVideoChange} />
+        <ShortsVideoPreview
+          videoData={videoData}
+          onChange={handleVideoChange}
+          thumbnail={formData.thumbnail}
+          onThumbnailRemove={() => handleFormChange('thumbnail', null)}
+        />
 
         <ShortsFormSubmitButtons
           onRegister={handleRegister}

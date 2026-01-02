@@ -38,7 +38,7 @@ export default function ShortsFormInputs({ formData, onChange }: ShortsFormInput
           onChange={(e) => onChange('description', e.target.value)}
           placeholder="내용을 입력하세요."
           rows={4}
-          className="w-full resize-none rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm transition-all focus:ring-2 focus:ring-black focus:outline-none"
+          className="w-full resize-none rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm transition-all placeholder:text-gray-400 focus:ring-2 focus:ring-black focus:outline-none"
         />
       </div>
 
@@ -50,8 +50,8 @@ export default function ShortsFormInputs({ formData, onChange }: ShortsFormInput
             onClick={() => onChange('isPublic', true)}
             className={`flex-1 rounded-lg py-2 text-sm font-medium transition-all ${
               isPublic
-                ? 'border-2 border-green-500 bg-green-500 text-white'
-                : 'border-2 border-transparent bg-gray-200 text-gray-600'
+                ? 'border-2 border-gray-900 bg-gray-800 text-white'
+                : 'border-2 border-gray-200 bg-white text-gray-600'
             }`}
           >
             공개
@@ -61,8 +61,8 @@ export default function ShortsFormInputs({ formData, onChange }: ShortsFormInput
             onClick={() => onChange('isPublic', false)}
             className={`flex-1 rounded-lg py-2 text-sm font-medium transition-all ${
               !isPublic
-                ? 'border-2 border-gray-500 bg-gray-500 text-white'
-                : 'border-2 border-transparent bg-gray-200 text-gray-600'
+                ? 'border-2 border-gray-900 bg-gray-800 text-white'
+                : 'border-2 border-gray-200 bg-white text-gray-600'
             }`}
           >
             비공개
