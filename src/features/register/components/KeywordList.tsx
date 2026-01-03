@@ -2,12 +2,12 @@
 
 import { X } from 'lucide-react'
 
-interface KeywordTagListProps {
+interface KeywordListProps {
   keywords: string[]
   onRemove: (keyword: string) => void
 }
 
-export default function KeywordList({ keywords, onRemove }: KeywordTagListProps) {
+export default function KeywordList({ keywords, onRemove }: KeywordListProps) {
   if (keywords.length === 0) return null
 
   return (

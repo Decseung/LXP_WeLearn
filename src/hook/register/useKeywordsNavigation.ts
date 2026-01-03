@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 interface UseKeywordsNavigationParams {
   itemCount: number
@@ -11,6 +11,15 @@ export default function useKeywordsNavigation({
 }: UseKeywordsNavigationParams) {
   const [isOpen, setIsOpen] = useState(false)
   const [activeIndex, setActiveIndex] = useState(-1)
+
+  // itemCount 변경 시 activeIndex 범위 체크
+  useEffect(() => {
+    if (itemCount === 0) {
+      setActiveIndex(-1)
+    } else if (activeIndex >= itemCount) {
+      setActiveIndex(itemCount - 1)
+    }
+  }, [itemCount, activeIndex])
 
   // 드롭다운 열기
   const open = () => setIsOpen(true)

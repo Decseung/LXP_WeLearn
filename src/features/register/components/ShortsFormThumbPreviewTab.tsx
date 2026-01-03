@@ -4,7 +4,7 @@ import { ImageIcon } from 'lucide-react'
 import ShortsFormPreviewFrame from './ShortsFormPreviewFrame'
 import ShortsFormEmptyState from './ShortsFormEmptyState'
 
-interface ThumbnailPreviewTabProps {
+interface ShortsFormThumbnailPreviewTabProps {
   thumbnail?: string | null
   onRemove: () => void
 }
@@ -12,7 +12,7 @@ interface ThumbnailPreviewTabProps {
 export default function ShortsFormThumbPreviewTab({
   thumbnail,
   onRemove,
-}: ThumbnailPreviewTabProps) {
+}: ShortsFormThumbnailPreviewTabProps) {
   // 썸네일이 있으면 미리보기 렌더링
   if (thumbnail) {
     return (

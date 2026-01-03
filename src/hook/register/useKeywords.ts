@@ -28,7 +28,6 @@ export default function useKeywords({ keywords, keywordInput, onChange }: UseKey
     close,
     handleKeyDown: navigationKeyDown,
     handleBlur,
-    resetIndex,
   } = useKeywordsNavigation({
     itemCount: suggestions.length,
     onSelect: (index) => {
@@ -48,7 +47,6 @@ export default function useKeywords({ keywords, keywordInput, onChange }: UseKey
   // 입력값 변경 핸들러
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (isMaxReached) {
-      toast.warning(`키워드는 최대 ${maxKeywords}개까지 선택 가능합니다.`)
       return
     }
     const value = e.target.value

@@ -45,7 +45,7 @@ export default function useKeywordSearch({
 
   return {
     suggestions,
-    isLoading,
+    isLoading, // api 호출 상태 반환
     clearSuggestions: () => setSuggestions([]),
   }
 }
