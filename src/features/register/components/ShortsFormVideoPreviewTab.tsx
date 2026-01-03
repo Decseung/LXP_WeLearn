@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, RefObject } from 'react'
+import { RefObject } from 'react'
 import { Button } from '@/components/ui/Button'
 import { CirclePlus } from 'lucide-react'
 import ShortsFormPreviewFrame from './ShortsFormPreviewFrame'
@@ -8,6 +8,7 @@ import ShortsFormEmptyState from './ShortsFormEmptyState'
 
 interface ShortsFormVideoPreviewTabProps {
   videoFile?: File | null
+  videoSrc: string | null
   videoInputRef: RefObject<HTMLInputElement | null>
   onVideoUpload: (e: React.ChangeEvent<HTMLInputElement>) => void
   onRemove: () => void
@@ -15,21 +16,11 @@ interface ShortsFormVideoPreviewTabProps {
 
 export default function ShortsFormVideoPreviewTab({
   videoFile,
+  videoSrc,
   videoInputRef,
   onVideoUpload,
   onRemove,
 }: ShortsFormVideoPreviewTabProps) {
-  const videoSrc = useMemo(() => {
-    if (!videoFile) return null
-    return URL.createObjectURL(videoFile)
-  }, [videoFile])
-
-  // 메모리 누수를 방지하기 위해 URL.revokeObjectURL 호출
-  useEffect(() => {
-    if (!videoSrc) return
-    return () => URL.revokeObjectURL(videoSrc)
-  }, [videoSrc])
-
   // 비디오 파일이 있으면 미리보기 렌더링
   if (videoFile && videoSrc) {
     return (

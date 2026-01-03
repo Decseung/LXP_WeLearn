@@ -9,6 +9,7 @@ type ShortsFormPreviewTabProps =
   | {
       type: 'video'
       videoFile?: File | null
+      videoSrc: string | null
       videoInputRef: React.RefObject<HTMLInputElement | null>
       onVideoUpload: (e: React.ChangeEvent<HTMLInputElement>) => void
       onRemove: () => void
@@ -25,6 +26,7 @@ export default function ShortsFormPreviewTab(props: ShortsFormPreviewTabProps) {
       // 비디오 미리보기 탭 렌더링
       <ShortsFormVideoPreviewTab
         videoFile={props.videoFile}
+        videoSrc={props.videoSrc}
         videoInputRef={props.videoInputRef}
         onVideoUpload={props.onVideoUpload}
         onRemove={props.onRemove}
