@@ -13,7 +13,7 @@ export default async function ShortsCreatePage() {
 
   // 로그인 안 된 경우 리다이렉트
   if (!user?.id) {
-    redirect('/login')
+    redirect('/signin')
   }
 
   return (
