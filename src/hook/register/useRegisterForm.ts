@@ -8,7 +8,7 @@ import {
   INITIAL_VIDEO_PREVIEW_DATA,
 } from '@/types/shortsRegister'
 import { shortsFormValidation } from '@/utils/shortsFormValidation'
-import { createUploadPayload, uploadShorts } from '@/services/shortsform.service'
+import { createUploadPayload, uploadShorts } from '@/services/mypage/register.service'
 
 // 수정 페이지에서 기존 데이터를 초기값으로 사용
 interface UseRegisterFormParams {

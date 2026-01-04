@@ -1,21 +1,24 @@
 'use client'
 
-import { ShortsVisibility } from '@/types/myshorts'
+import { ShortsStatus } from '@/types/myshorts'
 import { Globe, Lock, Pencil, Trash2 } from 'lucide-react'
 
 interface MyShortsDropdownMenuProps {
-  visibility: ShortsVisibility
+  status: ShortsStatus
   onToggleVisibility?: () => void
   onEdit?: () => void
   onDelete?: () => void
 }
 
 export default function MyShortsDropdownMenu({
-  visibility,
+  status,
   onToggleVisibility,
   onEdit,
   onDelete,
 }: MyShortsDropdownMenuProps) {
+  const isPublished = status === 'PUBLISHED'
+  const conToggle = status !== 'ARCHIVED'
+
   return (
     <div className="absolute z-30 min-w-[140px] rounded-lg border border-gray-200 bg-white py-1 shadow-lg">
       {/* 공개/비공개 전환 */}
@@ -23,7 +26,7 @@ export default function MyShortsDropdownMenu({
         onClick={onToggleVisibility}
         className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
       >
-        {visibility === 'public' ? (
+        {isPublished ? (
           <>
             <Lock size={16} />
             비공개하기

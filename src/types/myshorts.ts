@@ -1,47 +1,60 @@
-// 숏츠 공개 상태
-export type ShortsVisibility = 'public' | 'private'
+import type { components } from '@/types/api-schema'
 
-// 숏츠 아이템 (공통)
-export interface ShortsItem {
-  id: string
-  title: string
-  description?: string
-  thumbnailUrl: string | null
-  category: string
-  tags: string[]
-  authorName: string
-  createdAt: string
+// ============================================
+// API 스키마 기반 타입
+// ============================================
+export type ShortsResponse = components['schemas']['ShortsResponse']
+export type CategoryDto = components['schemas']['CategoryDto']
+export type UploaderDto = components['schemas']['UploaderDto']
+export type PageShortsResponse = components['schemas']['PageShortsResponse']
+export type ShortsUpdateRequest = components['schemas']['ShortsUpdateRequest']
+
+// ============================================
+// 공개 상태 (API 스키마 기준)
+// ============================================
+export type ShortsStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED'
+
+// 프론트엔드 표시용 매핑
+export const SHORTS_STATUS_LABEL: Record<ShortsStatus, string> = {
+  DRAFT: '비공개',
+  PUBLISHED: '공개',
+  ARCHIVED: '보관됨',
 }
 
-// 내 숏츠 아이템 (공개 상태 포함)
-export interface MyShortsItem extends ShortsItem {
-  visibility: ShortsVisibility
-}
+// ============================================
+// 컴포넌트 Props 타입
+// ============================================
 
-// 미리보기 카드 Props
+// 미리보기 카드
 export interface ShortsPreviewCardProps {
-  title?: string
-  category?: string
-  description?: string
-  thumbnailUrl?: string | null
-  authorName?: string
-  tags?: string[]
+  shorts?: ShortsResponse | null
 }
 
-// 리스트 헤더 Props
+// 리스트 헤더
 export interface ShortsListHeaderProps {
   totalCount: number
   label?: string
 }
 
-// 숏츠 카드 Props
+// 숏츠 카드
 export interface ShortsCardProps {
-  shorts: ShortsItem | MyShortsItem
+  shorts: ShortsResponse
+  isSelected?: boolean
   onSelect?: () => void
+  onMoreClick?: () => void
 }
 
-// 썸네일 Props
-export interface ShortsThumbnailProps {
-  thumbnailUrl: string | null
-  visibility?: ShortsVisibility
+// 썸네일
+export interface ShortsCardThumbnailProps {
+  thumbnailUrl?: string | null
+  videoUrl?: string | null
+  status?: ShortsStatus
+}
+
+// 드롭다운 메뉴
+export interface ShortsDropdownMenuProps {
+  status: ShortsStatus
+  onToggleVisibility?: () => void
+  onEdit?: () => void
+  onDelete?: () => void
 }
