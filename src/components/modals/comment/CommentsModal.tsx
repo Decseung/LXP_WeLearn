@@ -4,11 +4,14 @@ import { motion, AnimatePresence } from 'framer-motion'
 import CommentModalHeader from './CommentsModalHeader'
 import Comment from './Comment'
 import CommentInput from './CommentInput'
+import { useEffect, useState } from 'react'
+import useIsMobile from '@/hook/useIsMobile'
 
 export default function CommentModal() {
   const router = useRouter()
   const params = useParams()
   const pathname = usePathname()
+  const isMobile = useIsMobile()
 
   const id = params.id as string
   const isOpen = pathname.endsWith('/comments')
@@ -21,7 +24,7 @@ export default function CommentModal() {
     <AnimatePresence mode="wait">
       {isOpen && (
         <motion.aside
-          className="fixed top-32 right-32 z-50 flex min-w-lg items-center justify-center"
+          className={`fixed top-32 right-32 z-50 flex min-w-lg items-center justify-center ${isMobile ? 'top-0 right-0 h-full w-full' : ''}`}
           initial={{ x: '130%' }}
           animate={{ x: '0%' }}
           exit={{ x: '130%' }}
