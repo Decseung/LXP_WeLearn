@@ -1,8 +1,6 @@
 'use server'
 
-import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
-import { registerApi } from '@/services/mypage/register.service'
 import type { ActionState } from '@/types/action'
 import type { components } from '@/types/api-schema'
 
@@ -10,20 +8,58 @@ import type { components } from '@/types/api-schema'
 type ShortsUploadRequest = components['schemas']['ShortsUploadRequest']
 type ShortsResponse = components['schemas']['ShortsResponse']
 
+// 파일 업로드 응답 타입
+interface FileUploadResponse {
+  [key: string]: string
+}
+
 // 등록 폼 데이터 타입
-interface RegisterFormData {
+export interface RegisterFormData {
   userId: number
   categoryId: number
   title: string
   description?: string
   keywords?: string[]
-  thumbnail?: string | null // Base64
+  thumbnail?: string | null
 }
 
-// 비디오 데이터 타입
-interface VideoData {
-  videoFile: File
-  durationSec?: number
+const baseUrl = process.env.NEXT_PUBLIC_API_URL
+
+/**
+ * FormData 파일 업로드 (내부 유틸)
+ */
+async function uploadFormData<T = unknown>(endpoint: string, formData: FormData): Promise<T> {
+  const res = await fetch(`${baseUrl}${endpoint}`, {
+    method: 'POST',
+    credentials: 'include',
+    body: formData,
+  })
+
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => null)
+    throw new Error(errorData?.message || '파일 업로드 실패')
+  }
+
+  return res.json()
+}
+
+/**
+ * JSON POST 요청 (내부 유틸)
+ */
+async function postJson<T = unknown>(endpoint: string, data: unknown): Promise<T> {
+  const res = await fetch(`${baseUrl}${endpoint}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify(data),
+  })
+
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => null)
+    throw new Error(errorData?.message || '요청 실패')
+  }
+
+  return res.json()
 }
 
 /**
@@ -42,7 +78,16 @@ export async function uploadVideoAction(
   }
 
   try {
-    const videoUrl = await registerApi.uploadVideo(file)
+    const uploadData = new FormData()
+    uploadData.append('file', file)
+
+    const data = await uploadFormData<FileUploadResponse>('/api/v1/files/videos', uploadData)
+
+    const videoUrl = data.videoUrl ?? data.url ?? Object.values(data)[0]
+
+    if (!videoUrl) {
+      throw new Error('비디오 URL을 받지 못했습니다.')
+    }
 
     return {
       success: true,
@@ -72,7 +117,16 @@ export async function uploadThumbnailAction(
   }
 
   try {
-    const thumbnailUrl = await registerApi.uploadThumbnail(file)
+    const uploadData = new FormData()
+    uploadData.append('file', file)
+
+    const data = await uploadFormData<FileUploadResponse>('/api/v1/files/thumbnails', uploadData)
+
+    const thumbnailUrl = data.thumbnailUrl ?? data.url ?? Object.values(data)[0]
+
+    if (!thumbnailUrl) {
+      throw new Error('썸네일 URL을 받지 못했습니다.')
+    }
 
     return {
       success: true,
@@ -83,6 +137,26 @@ export async function uploadThumbnailAction(
       success: false,
       message: error instanceof Error ? error.message : '썸네일 업로드 실패',
     }
+  }
+}
+
+/**
+ * Base64 → Blob 변환 후 썸네일 업로드
+ */
+async function uploadThumbnailFromBase64(base64Data: string): Promise<string | null> {
+  try {
+    const response = await fetch(base64Data)
+    const blob = await response.blob()
+
+    const formData = new FormData()
+    formData.append('file', blob, 'thumbnail.jpg')
+
+    const data = await uploadFormData<FileUploadResponse>('/api/v1/files/thumbnails', formData)
+
+    return data.thumbnailUrl ?? data.url ?? Object.values(data)[0] ?? null
+  } catch (error) {
+    console.error('썸네일 업로드 실패:', error)
+    return null
   }
 }
 
@@ -99,12 +173,24 @@ export async function registerShortsAction(
 ): Promise<ActionState<ShortsResponse>> {
   try {
     // 1. 비디오 업로드
-    const videoUrl = await registerApi.uploadVideo(videoFile)
+    const videoFormData = new FormData()
+    videoFormData.append('file', videoFile)
+
+    const videoData = await uploadFormData<FileUploadResponse>(
+      '/api/v1/files/videos',
+      videoFormData,
+    )
+
+    const videoUrl = videoData.videoUrl ?? videoData.url ?? Object.values(videoData)[0]
+
+    if (!videoUrl) {
+      throw new Error('비디오 URL을 받지 못했습니다.')
+    }
 
     // 2. 썸네일 업로드 (선택)
     let thumbnailUrl: string | undefined
     if (registerFormData.thumbnail) {
-      const url = await registerApi.uploadThumbnailFromBase64(registerFormData.thumbnail)
+      const url = await uploadThumbnailFromBase64(registerFormData.thumbnail)
       if (url) {
         thumbnailUrl = url
       }
@@ -122,7 +208,7 @@ export async function registerShortsAction(
       tagNames: registerFormData.keywords?.length ? registerFormData.keywords : undefined,
     }
 
-    const data = await registerApi.uploadShorts(request)
+    const response = await postJson<{ data?: ShortsResponse }>('/api/v1/shorts', request)
 
     // 캐시 무효화
     revalidatePath('/mypage/myshorts')
@@ -130,7 +216,7 @@ export async function registerShortsAction(
     return {
       success: true,
       message: '숏츠가 등록되었습니다.',
-      data,
+      data: response?.data ?? (response as unknown as ShortsResponse),
     }
   } catch (error) {
     return {
@@ -176,12 +262,24 @@ export async function registerShortsFormAction(
 
   try {
     // 1. 비디오 업로드
-    const videoUrl = await registerApi.uploadVideo(videoFile)
+    const videoFormData = new FormData()
+    videoFormData.append('file', videoFile)
+
+    const videoData = await uploadFormData<FileUploadResponse>(
+      '/api/v1/files/videos',
+      videoFormData,
+    )
+
+    const videoUrl = videoData.videoUrl ?? videoData.url ?? Object.values(videoData)[0]
+
+    if (!videoUrl) {
+      throw new Error('비디오 URL을 받지 못했습니다.')
+    }
 
     // 2. 썸네일 업로드 (선택)
     let thumbnailUrl: string | undefined
     if (thumbnailBase64) {
-      const url = await registerApi.uploadThumbnailFromBase64(thumbnailBase64)
+      const url = await uploadThumbnailFromBase64(thumbnailBase64)
       if (url) {
         thumbnailUrl = url
       }
@@ -199,7 +297,7 @@ export async function registerShortsFormAction(
       tagNames: keywords.length > 0 ? keywords : undefined,
     }
 
-    const data = await registerApi.uploadShorts(request)
+    const response = await postJson<{ data?: ShortsResponse }>('/api/v1/shorts', request)
 
     // 캐시 무효화
     revalidatePath('/mypage/myshorts')
@@ -207,7 +305,7 @@ export async function registerShortsFormAction(
     return {
       success: true,
       message: '숏츠가 등록되었습니다.',
-      data,
+      data: response?.data ?? (response as unknown as ShortsResponse),
     }
   } catch (error) {
     return {
