@@ -1,4 +1,5 @@
 import api from '@/lib/utils/apiUtils'
+import { cookies } from 'next/headers'
 import type { operations } from '@/types/api-schema'
 import type {
   ShortsResponse,
@@ -7,13 +8,12 @@ import type {
   ShortsStatus,
 } from '@/types/myshorts'
 
-// API 응답 타입 (내부용)
+const baseUrl = process.env.NEXT_PUBLIC_API_URL
+
 type UpdateShortsApiResponse = operations['updateShorts']['responses'][200]['content']['*/*']
 
-const apiClient = api()
-
 /**
- * 내 숏츠 목록 조회
+ * 내 숏츠 목록 조회 (서버 컴포넌트용)
  */
 export async function getMyShorts({
   page = 0,
@@ -23,11 +23,41 @@ export async function getMyShorts({
   size?: number
 } = {}): Promise<PageShortsResponse | null> {
   try {
-    // get은 json() 파싱된 데이터 반환
-    return await apiClient.get('/api/v1/users/me/shorts', {
+    const cookieStore = await cookies()
+
+    // ✅ 디버깅: 모든 쿠키 확인
+    const allCookies = cookieStore.getAll()
+    // console.log('모든 쿠키:', allCookies)
+
+    // 쿠키를 문자열로 변환
+    const cookieHeader = allCookies.map((cookie) => `${cookie.name}=${cookie.value}`).join('; ')
+
+    // console.log('쿠키 헤더:', cookieHeader)
+    // console.log('요청 URL:', `${baseUrl}/api/v1/users/me/shorts?page=${page}&size=${size}`)
+
+    const response = await fetch(`${baseUrl}/api/v1/users/me/shorts?page=${page}&size=${size}`, {
+      headers: {
+        Cookie: cookieHeader,
+      },
       cache: 'no-store',
-      params: { page, size },
     })
+
+    // console.log(' Response Status:', response.status)
+    // console.log('Response Headers:', Object.fromEntries(response.headers.entries()))
+
+    if (!response.ok) {
+      console.error(`❌ API 오류: ${response.status}`)
+      return null
+    }
+
+    const text = await response.text()
+    // console.log(' Response Body:', text)
+
+    if (!text) {
+      return { content: [], totalElements: 0 } as PageShortsResponse
+    }
+
+    return JSON.parse(text)
   } catch (error) {
     console.error('내 숏츠 목록 조회 실패:', error)
     return null
@@ -35,14 +65,14 @@ export async function getMyShorts({
 }
 
 /**
- * 숏츠 수정
+ * 숏츠 수정 (클라이언트용)
  */
 export async function updateShorts(
   shortId: number,
   data: ShortsUpdateRequest,
 ): Promise<ShortsResponse | null> {
   try {
-    //  patch는 json() 파싱된 데이터 반환
+    const apiClient = api()
     const response: UpdateShortsApiResponse = await apiClient.patch(
       `/api/v1/shorts/${shortId}`,
       data,
@@ -55,11 +85,11 @@ export async function updateShorts(
 }
 
 /**
- * 숏츠 삭제
+ * 숏츠 삭제 (클라이언트용)
  */
 export async function deleteShorts(shortId: number): Promise<boolean> {
   try {
-    // delete는 json() 파싱된 데이터 반환 (204일 경우 undefined)
+    const apiClient = api()
     await apiClient.delete(`/api/v1/shorts/${shortId}`)
     return true
   } catch (error) {
@@ -69,7 +99,7 @@ export async function deleteShorts(shortId: number): Promise<boolean> {
 }
 
 /**
- * 숏츠 공개/비공개 전환
+ * 숏츠 공개/비공개 전환 (클라이언트용)
  */
 export async function toggleShortsStatus(
   shortId: number,

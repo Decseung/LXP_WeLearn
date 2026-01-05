@@ -1,18 +1,32 @@
 'use client'
 
 import type { ShortsResponse } from '@/types/myshorts'
-import { ShortsPreviewCard } from './ShortsPreviewCard'
-import { useShortsListPreview } from '@/hook/mypage/useShortsListPreview'
+import { ShortsPreviewItem } from './ShortsPreviewItem'
+import { useShortsAutoPlay } from '@/hook/mypage/useShortsAutoPlay'
 
 interface ShortsPreviewContainerProps {
   shorts?: ShortsResponse | null
+  loop?: boolean
+  autoplay?: boolean
 }
 
-export default function ShortsPreviewContainer({ shorts }: ShortsPreviewContainerProps) {
-  const { videoRef, previewBind } = useShortsListPreview({
+export default function ShortsPreviewContainer({
+  shorts,
+  loop = false,
+  autoplay = false,
+}: ShortsPreviewContainerProps) {
+  const { videoRef, handleLoadedData } = useShortsAutoPlay({
     enabled: Boolean(shorts?.videoUrl),
-    duration: 2500,
+    loop,
+    autoplay,
   })
 
-  return <ShortsPreviewCard shorts={shorts ?? null} videoRef={videoRef} previewBind={previewBind} />
+  return (
+    <ShortsPreviewItem
+      shorts={shorts ?? null}
+      videoRef={videoRef}
+      onLoadedData={handleLoadedData}
+      loop={loop}
+    />
+  )
 }

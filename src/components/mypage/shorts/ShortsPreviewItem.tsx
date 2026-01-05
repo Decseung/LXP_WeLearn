@@ -3,45 +3,42 @@
 import Image from 'next/image'
 import type { ShortsResponse } from '@/types/myshorts'
 
-export function ShortsPreviewCard({
-  shorts,
-  videoRef,
-  previewBind,
-}: {
+interface ShortsPreviewItemProps {
   shorts: ShortsResponse | null
   videoRef?: React.RefObject<HTMLVideoElement | null>
-  previewBind?: React.HTMLAttributes<HTMLDivElement>
-}) {
+  onLoadedData?: () => void
+  loop?: boolean
+}
+
+export function ShortsPreviewItem({
+  shorts,
+  videoRef,
+  onLoadedData,
+  loop = true,
+}: ShortsPreviewItemProps) {
   // 빈 상태
   if (!shorts) {
     return (
-      <div className="relative mx-auto aspect-[9/16] w-[280px] overflow-hidden rounded-2xl bg-gray-700 shadow-lg lg:mx-0">
+      <div className="relative mx-auto aspect-[9/16] w-[380px] overflow-hidden rounded-2xl bg-gray-700 shadow-lg lg:mx-0">
         <div className="absolute inset-0 flex items-center justify-center">
           <span className="text-sm text-gray-500">미리보기</span>
         </div>
-
         <div className="absolute inset-x-0 bottom-0 h-[45%] bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
       </div>
     )
   }
 
   return (
-    <div
-      className="relative mx-auto aspect-[9/16] w-[280px] overflow-hidden rounded-2xl bg-gray-200 shadow-lg lg:mx-0"
-      {...previewBind}
-    >
+    <div className="relative mx-auto aspect-[9/16] w-[380px] overflow-hidden rounded-2xl bg-gray-200 shadow-lg lg:mx-0">
+      {/* 상단 카테고리 뱃지 */}
       <div className="absolute top-3 right-3 left-3 z-10 flex items-center justify-between">
         {shorts.category?.name ? (
-          <span className="inline-flex items-center rounded-full bg-gray-600/90 px-3 py-1 text-xs font-medium text-white">
+          <span className="inline-flex items-center rounded-full bg-black/55 px-3 py-1 text-[10px] font-medium text-white">
             {shorts.category.name}
           </span>
         ) : (
           <span />
         )}
-
-        {/* <span className="inline-flex items-center rounded-full bg-gray-600/90 px-3 py-1 text-xs font-medium text-white">
-          숏강의
-        </span> */}
       </div>
 
       {/* 비디오/썸네일 영역 */}
@@ -55,13 +52,15 @@ export function ShortsPreviewCard({
             muted
             preload="metadata"
             poster={shorts.thumbnailUrl ?? undefined}
+            onLoadedData={onLoadedData}
+            loop={loop}
           />
         ) : shorts.thumbnailUrl ? (
           <Image
             src={shorts.thumbnailUrl}
             alt={shorts.title ?? '썸네일'}
             fill
-            sizes="280px"
+            sizes="380px"
             className="object-cover"
           />
         ) : (
@@ -69,6 +68,7 @@ export function ShortsPreviewCard({
         )}
       </div>
 
+      {/* 하단 그라데이션 */}
       <div className="absolute inset-x-0 bottom-0 h-[48%] bg-gradient-to-t from-black/85 via-black/45 to-transparent" />
 
       {/* 하단 정보 영역 */}
@@ -89,7 +89,7 @@ export function ShortsPreviewCard({
           </span>
 
           {shorts.category?.name && (
-            <span className="rounded-full border border-white/30 bg-gray-700/70 px-3 py-1 text-xs font-medium text-white">
+            <span className="rounded-full border border-white/25 px-3 py-1 text-[10px] text-gray-100">
               #{shorts.category.name}
             </span>
           )}

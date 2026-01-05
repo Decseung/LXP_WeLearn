@@ -27,9 +27,13 @@ export default function ShortsCardThumbnail({
           className="object-cover"
         />
       ) : (
-        <div className="absolute inset-0 flex items-center justify-center text-xs text-gray-400">
-          썸네일 없음
-        </div>
+        <Image
+          src="https://images.pexels.com/photos/12899157/pexels-photo-12899157.jpeg"
+          alt="기본 썸네일"
+          fill
+          sizes="(min-width: 640px) 144px, 112px"
+          className="object-cover"
+        />
       )}
       {/* 상태 배지 */}
       {showStatusBadge && status && <ShortsStatusBadge status={status} />}

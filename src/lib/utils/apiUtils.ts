@@ -1,11 +1,23 @@
 import { buildQueryString } from '@/utils/buildQueryString'
 
-const baseUrl = process.env.NEXT_PUBLIC_API_URL
+// const baseUrl = process.env.NEXT_PUBLIC_API_URL
+
+// cors 이슈 대응 방책
+const baseUrl =
+  typeof window === 'undefined'
+    ? process.env.NEXT_PUBLIC_API_URL // 서버: 직접 호출
+    : '' // 클라이언트: 프록시 사용 (상대 경로)
 
 async function fetchWithAuth(
   url: string,
   options: RequestInit & { revalidate?: number; retry?: boolean } = {},
 ) {
+  // 리프레시 URL 설정
+  const refreshUrl =
+    typeof window === 'undefined'
+      ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/refresh`
+      : '/api/v1/auth/refresh'
+
   const response = await fetch(url, {
     ...options,
     next: options.revalidate ? { revalidate: options.revalidate } : undefined,
@@ -96,7 +108,7 @@ export default function api() {
   ): Promise<Response> => {
     const res = await fetchWithAuth(`${baseUrl}${endpoint}`, {
       method: 'POST',
-      // ⚠️ Content-Type 헤더 생략 (브라우저가 자동 설정)
+      //  Content-Type 헤더 생략 (브라우저가 자동 설정)
       cache: options?.cache ?? 'no-store',
       next: options?.revalidate ? { revalidate: options.revalidate } : undefined,
       body: formData,

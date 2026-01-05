@@ -1,14 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-
 import MyShortsCreateButton from './MyShortsCreateButton'
-
 import ShortsListHeader from '@/components/mypage/shorts/ShortsListHeader'
 import ShortsCard from '@/components/mypage/shorts/ShortsCard'
-
 import { ShortsResponse } from '@/types/myshorts'
-import { ShortsPreviewCard } from '@/components/mypage/shorts/ShortsPreviewCard'
+import ShortsPreviewContainer from '@/components/mypage/shorts/ShortsPreviewContainer'
 
 interface MyShortsContainerProps {
   initialShorts: ShortsResponse[]
@@ -28,10 +25,10 @@ export default function MyShortsContainer({ initialShorts, totalCount }: MyShort
     <div className="h-full w-full px-4 py-8">
       <div className="flex flex-col gap-8 lg:flex-row">
         {/* 좌측 - 미리보기 */}
-        <div className="order-1 w-full lg:order-1 lg:w-80 lg:flex-shrink-0">
+        <div className="order-1 w-full lg:order-1 lg:w-100 lg:flex-shrink-0">
           <div className="lg:sticky lg:top-24">
             <h1 className="mb-6 text-2xl font-bold text-gray-900">내가 만든 숏츠</h1>
-            <ShortsPreviewCard shorts={selectedShorts} />
+            <ShortsPreviewContainer shorts={selectedShorts} loop={true} autoplay={true} />
           </div>
         </div>
 
