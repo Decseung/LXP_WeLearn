@@ -13,19 +13,19 @@ export function proxy(request: NextRequest) {
   const isProtected = protectedRoutes.some((route) => pathname.startsWith(route))
 
   // 보호된 라우트인데 토큰 없음 → 로그인으로 리다이렉트
-  // if (isProtected && !accessToken) {
-  //   const loginUrl = new URL('/signin', request.url)
-  //   return NextResponse.redirect(loginUrl)
-  // }
+  if (isProtected && !accessToken) {
+    const loginUrl = new URL('/signin', request.url)
+    return NextResponse.redirect(loginUrl)
+  }
 
-  // // 로그인 상태인데 로그인 페이지 들어오면 홈으로 보내기
-  // if (pathname === '/signin' && accessToken) {
-  //   return NextResponse.redirect(new URL('/', request.url))
-  // }
+  // 로그인 상태인데 로그인 페이지 들어오면 홈으로 보내기
+  if (pathname === '/signin' && accessToken) {
+    return NextResponse.redirect(new URL('/', request.url))
+  }
 
-  // if (pathname === '/signup' && accessToken) {
-  //   return NextResponse.redirect(new URL('/', request.url))
-  // }
+  if (pathname === '/signup' && accessToken) {
+    return NextResponse.redirect(new URL('/', request.url))
+  }
 
   return NextResponse.next()
 }
