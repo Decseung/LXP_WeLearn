@@ -2,11 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { ShortsFormLeftSection } from '@/features/register/components'
-import ShortsVideoPreview from '@/features/register/components/ShortsVideoPreview'
-import ShortsFormSubmitButtons from '@/features/register/components/ShortsFormSubmitButtons'
-import useRegisterForm from '@/hook/register/useRegisterForm'
 import { getMe } from '@/services/mypage/user.service'
+import ShortsFormContainer from './ShortsFormContainer'
 
 export default function ShortsFormClientContainer() {
   const router = useRouter()
@@ -19,7 +16,6 @@ export default function ShortsFormClientContainer() {
       const user = await getMe()
 
       if (!user?.id) {
-        // 로그인 안 된 경우 리다이렉트
         router.push('/signin')
         return
       }
@@ -40,43 +36,5 @@ export default function ShortsFormClientContainer() {
     )
   }
 
-  return <ShortsFormContent userId={userId} />
-}
-
-// 실제 폼 컨텐츠 (userId 확정 후 렌더링)
-function ShortsFormContent({ userId }: { userId: number }) {
-  const {
-    formData,
-    videoData,
-    isSubmitting,
-    handleFormChange,
-    handleVideoChange,
-    handleRegister,
-    handleCancel,
-  } = useRegisterForm({ userId })
-
-  return (
-    <div className="flex flex-col gap-8 lg:flex-row lg:gap-12">
-      {/* 왼쪽 - 숏츠 정보 입력 폼 */}
-      <div className="w-full lg:flex-1">
-        <ShortsFormLeftSection formData={formData} onChange={handleFormChange} />
-      </div>
-
-      {/* 오른쪽 - 미리보기 및 업로드 */}
-      <div className="w-full space-y-6 lg:w-96">
-        <ShortsVideoPreview
-          videoData={videoData}
-          onChange={handleVideoChange}
-          thumbnail={formData.thumbnail}
-          onThumbnailRemove={() => handleFormChange('thumbnail', null)}
-        />
-
-        <ShortsFormSubmitButtons
-          onRegister={handleRegister}
-          onCancel={handleCancel}
-          isLoading={isSubmitting}
-        />
-      </div>
-    </div>
-  )
+  return <ShortsFormContainer userId={userId} />
 }

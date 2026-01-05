@@ -6,7 +6,7 @@ import ShortsFormSubmitButtons from '@/features/register/components/ShortsFormSu
 import useRegisterForm from '@/hook/register/useRegisterForm'
 
 interface ShortsFormContainerProps {
-  userId?: number
+  userId: number
 }
 
 export default function ShortsFormContainer({ userId }: ShortsFormContainerProps) {
