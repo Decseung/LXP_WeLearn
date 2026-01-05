@@ -25,15 +25,10 @@ export async function getMyShorts({
   try {
     const cookieStore = await cookies()
 
-    // ✅ 디버깅: 모든 쿠키 확인
     const allCookies = cookieStore.getAll()
-    // console.log('모든 쿠키:', allCookies)
 
     // 쿠키를 문자열로 변환
     const cookieHeader = allCookies.map((cookie) => `${cookie.name}=${cookie.value}`).join('; ')
-
-    // console.log('쿠키 헤더:', cookieHeader)
-    // console.log('요청 URL:', `${baseUrl}/api/v1/users/me/shorts?page=${page}&size=${size}`)
 
     const response = await fetch(`${baseUrl}/api/v1/users/me/shorts?page=${page}&size=${size}`, {
       headers: {
@@ -42,16 +37,11 @@ export async function getMyShorts({
       cache: 'no-store',
     })
 
-    // console.log(' Response Status:', response.status)
-    // console.log('Response Headers:', Object.fromEntries(response.headers.entries()))
-
     if (!response.ok) {
-      console.error(`❌ API 오류: ${response.status}`)
       return null
     }
 
     const text = await response.text()
-    // console.log(' Response Body:', text)
 
     if (!text) {
       return { content: [], totalElements: 0 } as PageShortsResponse

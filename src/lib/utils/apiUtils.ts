@@ -1,18 +1,13 @@
 import { buildQueryString } from '@/utils/buildQueryString'
 
-// const baseUrl = process.env.NEXT_PUBLIC_API_URL
-
-// cors 이슈 대응 방책
-const baseUrl =
-  typeof window === 'undefined'
-    ? process.env.NEXT_PUBLIC_API_URL // 서버: 직접 호출
-    : '' // 클라이언트: 프록시 사용 (상대 경로)
+// CORS 이슈 대응
+const baseUrl = typeof window === 'undefined' ? process.env.NEXT_PUBLIC_API_URL : ''
 
 async function fetchWithAuth(
   url: string,
   options: RequestInit & { revalidate?: number; retry?: boolean } = {},
 ) {
-  // 리프레시 URL 설정
+  // 리프레시 토큰을 사용한 토큰 갱신 처리
   const refreshUrl =
     typeof window === 'undefined'
       ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/refresh`
@@ -25,13 +20,11 @@ async function fetchWithAuth(
   })
 
   if (response.status === 204) {
-    return undefined // 혹은 true / undefined 등
+    return undefined
   }
 
-  // 성공 or 401 외의 오류면 그대로 반환
   if (response.status !== 401) return response
 
-  // 이미 retry했다면 무한루프 방지 → 강제 로그아웃 처리
   if (options.retry) {
     console.log('❌ Retry already attempted. Forcing logout.')
     throw new Error('UNAUTHORIZED')
@@ -39,8 +32,7 @@ async function fetchWithAuth(
 
   console.log('⚠️ Access Token expired. Trying refresh...')
 
-  // refresh 요청
-  const refreshRes = await fetch(`${baseUrl}/api/v1/auth/refresh`, {
+  const refreshRes = await fetch(refreshUrl, {
     method: 'POST',
     credentials: 'include',
   })
@@ -52,7 +44,6 @@ async function fetchWithAuth(
 
   console.log('🔄 Refresh success. Retrying original request...')
 
-  // retry=true 추가하여 재요청 (1회만 허용)
   return fetchWithAuth(url, {
     ...options,
     retry: true,
@@ -60,13 +51,14 @@ async function fetchWithAuth(
 }
 
 export default function api() {
-  /** GET with cache + revalidate (둘 다 선택 가능) */
+  /** GET */
   const get = async (endpoint = '', options?: FetchOptions) => {
     const queryString = buildQueryString(options?.params)
     const res = await fetchWithAuth(`${baseUrl}${endpoint}${queryString}`, {
-      cache: options?.cache, // 브라우저/서버 캐시
+      cache: options?.cache,
       next: options?.revalidate ? { revalidate: options.revalidate } : undefined,
     })
+
     if (!res?.ok) {
       const errorData = await res?.json()
       throw new Error(errorData?.message || '알수없는 오류')
@@ -75,7 +67,7 @@ export default function api() {
     return res.json()
   }
 
-  /** POST (데이터 생성 → 기본적으로 캐시 사용 X) */
+  /** POST (JSON) - Response 객체 반환 */
   const post = async (endpoint = '', data?: unknown, options?: FetchOptions): Promise<Response> => {
     const res = await fetchWithAuth(`${baseUrl}${endpoint}`, {
       method: 'POST',
@@ -88,7 +80,6 @@ export default function api() {
     const contentLength = res?.headers.get('content-length')
     const isEmpty = !contentLength || contentLength === '0'
 
-    // 실패 처리
     if (!res?.ok) {
       if (!isEmpty) {
         const errorData = await res?.json()
@@ -100,15 +91,15 @@ export default function api() {
     return res
   }
 
-  /** POST FormData (파일 업로드용) */
-  const postFormData = async (
+  // JSON 파싱된 데이터 반환
+  /** POST FormData (파일 업로드용) - JSON 파싱된 데이터 반환 */
+  const postFormData = async <T = unknown>(
     endpoint = '',
     formData: FormData,
     options?: FetchOptions,
-  ): Promise<Response> => {
+  ): Promise<T> => {
     const res = await fetchWithAuth(`${baseUrl}${endpoint}`, {
       method: 'POST',
-      //  Content-Type 헤더 생략 (브라우저가 자동 설정)
       cache: options?.cache ?? 'no-store',
       next: options?.revalidate ? { revalidate: options.revalidate } : undefined,
       body: formData,
@@ -119,10 +110,10 @@ export default function api() {
       throw new Error(errorData?.message || '파일 업로드 실패')
     }
 
-    return res
+    return res.json()
   }
 
-  /** PATCH (부분 업데이트) */
+  /** PATCH */
   const patch = async (endpoint = '', data?: unknown, options?: FetchOptions) => {
     const res = await fetchWithAuth(`${baseUrl}${endpoint}`, {
       method: 'PATCH',
@@ -131,6 +122,7 @@ export default function api() {
       next: options?.revalidate ? { revalidate: options.revalidate } : undefined,
       body: JSON.stringify(data || {}),
     })
+
     if (!res?.ok) {
       const errorData = await res?.json()
       throw new Error(errorData?.message || '알수없는 오류')
@@ -146,7 +138,7 @@ export default function api() {
       cache: options?.cache ?? 'no-store',
       next: options?.revalidate ? { revalidate: options.revalidate } : undefined,
     })
-    // 204 no content 처리
+
     if (res === undefined) {
       return true
     }
@@ -161,22 +153,3 @@ export default function api() {
 
   return { get, post, postFormData, patch, delete: del }
 }
-
-//예제
-//import api from '@/lib/api';
-// const postApi = api('https://api.example.com/posts');
-
-/* 🔥 GET - ISR 적용 (10초마다 자동 갱신) */
-// const posts = await postApi.get('', { revalidate: 10 });
-
-/* 🔥 GET - 캐시 없이 최신 fetch */
-// const post = await postApi.get('/1', { cache: 'no-store' });
-
-/* 🔥 POST - 데이터를 추가하고 30초 뒤 다시 캐싱 리빌드 */
-// const newPost = await postApi.post('', { title: '새 글' }, { revalidate: 30 });
-
-/* 🔥 PATCH - 수정 + 캐시 재빌드 20초 */
-// const updated = await postApi.patch('/1', { title: '수정' }, { revalidate: 20 });
-
-/* 🔥 DELETE - 삭제 후 5초 뒤 페이지 재검증 */
-// await postApi.delete('/1', { revalidate: 5 });

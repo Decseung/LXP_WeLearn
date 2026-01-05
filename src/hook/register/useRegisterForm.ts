@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
 import {
@@ -20,23 +20,32 @@ export default function useRegisterForm(params: UseRegisterFormParams) {
   const router = useRouter()
   const { initialFormData, initialVideoData, userId } = params
 
-  const buildInitialForm = () => ({
-    ...INITIAL_SHORTS_FORM_DATA,
-    ...initialFormData,
-  })
-  const buildInitialVideo = () => ({
-    ...INITIAL_VIDEO_PREVIEW_DATA,
-    ...initialVideoData,
-  })
+  //  useCallback으로 감싸기
+  const buildInitialForm = useCallback(
+    () => ({
+      ...INITIAL_SHORTS_FORM_DATA,
+      ...initialFormData,
+    }),
+    [initialFormData],
+  )
+
+  const buildInitialVideo = useCallback(
+    () => ({
+      ...INITIAL_VIDEO_PREVIEW_DATA,
+      ...initialVideoData,
+    }),
+    [initialVideoData],
+  )
 
   const [formData, setFormData] = useState<ShortsFormData>(buildInitialForm)
   const [videoData, setVideoData] = useState<VideoPreviewData>(buildInitialVideo)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  // 의존성 배열에 useCallback 함수 사용
   useEffect(() => {
     setFormData(buildInitialForm())
     setVideoData(buildInitialVideo())
-  }, [initialFormData, initialVideoData])
+  }, [buildInitialForm, buildInitialVideo])
 
   const handleFormChange = <K extends keyof ShortsFormData>(field: K, value: ShortsFormData[K]) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
@@ -69,7 +78,6 @@ export default function useRegisterForm(params: UseRegisterFormParams) {
         toast.error('등록에 실패했습니다.')
       }
     } catch (error) {
-      console.error('등록 실패:', error)
       toast.error(error instanceof Error ? error.message : '등록에 실패했습니다.')
     } finally {
       setIsSubmitting(false)
@@ -78,10 +86,10 @@ export default function useRegisterForm(params: UseRegisterFormParams) {
 
   const handleCancel = () => router.back()
 
-  const resetForm = () => {
+  const resetForm = useCallback(() => {
     setFormData(buildInitialForm())
     setVideoData(buildInitialVideo())
-  }
+  }, [buildInitialForm, buildInitialVideo])
 
   return {
     formData,

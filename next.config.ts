@@ -1,8 +1,14 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  // 이미지 도메인 설정
+import type { NextConfig } from 'next'
+
+const nextConfig: NextConfig = {
+  // 이미지 도메인 설정 (remotePatterns 사용)
   images: {
-    domains: ['images.pexels.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.pexels.com',
+      },
+    ],
   },
 
   // API 프록시 설정
@@ -16,4 +22,4 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig
+export default nextConfig
