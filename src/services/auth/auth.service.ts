@@ -1,4 +1,4 @@
-import api from '@/lib/utils/apiUtils'
+import { api } from '@/lib/utils/apiUtils'
 import { parseSetCookie } from '@/lib/utils/parseSetCookie'
 import { cookies } from 'next/headers'
 
@@ -15,45 +15,63 @@ interface SigninRequest {
   password: string
 }
 
-const auth = api()
+/**
+ * 쿠키 헤더를 파싱하여 현재 요청의 cookieStore에 적용하는 헬퍼 함수
+ */
+async function applySetCookie(response: Response) {
+  const cookieHeader = response.headers.get('set-cookie')
+  if (cookieHeader) {
+    const cookieStore = await cookies()
+    const parsedCookies = parseSetCookie(cookieHeader)
+    parsedCookies.forEach((cookie) => {
+      // Next.js Server Action/Route Handler 환경에서 쿠키 설정
+      cookieStore.set(cookie)
+    })
+  }
+}
 
 export const authApi = {
-  // 회원가입
+  /**
+   * 회원가입
+   */
   signup: async (data: SignupRequest) => {
-    const response = await auth.post('/api/v1/auth/signup', data, { cache: 'no-store' })
-    return response
+    // 일반적인 POST 요청 (데이터만 반환)
+    return api.post('/api/v1/auth/signup', data, { cache: 'no-store' })
   },
 
-  // // 로그인
+  /**
+   * 로그인
+   * 백엔드가 Set-Cookie로 토큰을 준다면 response 헤더를 직접 핸들링해야 함
+   */
   signin: async (data: SigninRequest) => {
-    const res = await auth.post('/api/v1/auth/login', data, { cache: 'no-store' })
-    const cookieHeader = res.headers.get('set-cookie')
-    const cookieStore = await cookies()
-    if (cookieHeader) {
-      const parsedCookie = parseSetCookie(cookieHeader)
-      parsedCookie.forEach((cookie) => {
-        cookieStore.set(cookie)
-      })
-    }
+    // apiUtils에서 Response 원본을 받기 위해 필요한 경우 처리
+    // 여기서는 api.post가 내부에서 res.json()을 리턴하므로,
+    // 만약 헤더 접근이 필요하다면 apiUtils의 post가 Response를 반환하도록 유지해야 합니다.
+    const res = await api.post<Response>('/api/v1/auth/login', data, { cache: 'no-store' })
 
+    // 1. 쿠키 적용
+    await applySetCookie(res)
+
+    // 2. 바디 파싱 및 에러 체크
     const result = await res.json()
     if (!res.ok) throw new Error(result.message || '로그인 실패')
+
     return result
   },
 
-  // 로그아웃
+  /**
+   * 로그아웃
+   */
   logout: async () => {
-    const response = await auth.post('/api/v1/auth/logout')
-    const cookieHeader = response.headers.get('set-cookie')
-    const cookieStore = await cookies()
-    if (cookieHeader) {
-      const parsedCookie = parseSetCookie(cookieHeader)
-      parsedCookie.forEach((cookie) => {
-        cookieStore.set(cookie)
-      })
-    }
-    const result = await response.json()
-    if (!response.ok) throw new Error(result.message || '알 수 없는 에러 발생')
+    const res = await api.post<Response>('/api/v1/auth/logout')
+
+    // 1. 쿠키 만료 처리 (백엔드가 Max-Age=0 등으로 보낸 쿠키 적용)
+    await applySetCookie(res)
+
+    // 2. 바디 파싱
+    const result = await res.json()
+    if (!res.ok) throw new Error(result.message || '로그아웃 실패')
+
     return result
   },
 }
