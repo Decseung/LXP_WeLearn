@@ -1,148 +1,131 @@
+import { cookies } from 'next/headers'
 import { buildQueryString } from '@/utils/buildQueryString'
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL
 
-async function fetchWithAuth(
-  url: string,
-  options: RequestInit & { revalidate?: number; retry?: boolean } = {},
-) {
-  const response = await fetch(url, {
-    ...options,
-    next: options.revalidate ? { revalidate: options.revalidate } : undefined,
-    credentials: 'include',
-  })
-
-  if (response.status === 204) {
-    return undefined // 혹은 true / undefined 등
-  }
-
-  // 성공 or 401 외의 오류면 그대로 반환
-  if (response.status !== 401) return response
-
-  // 이미 retry했다면 무한루프 방지 → 강제 로그아웃 처리
-  if (options.retry) {
-    console.log('❌ Retry already attempted. Forcing logout.')
-    throw new Error('UNAUTHORIZED')
-  }
-
-  console.log('⚠️ Access Token expired. Trying refresh...')
-
-  // refresh 요청
-  const refreshRes = await fetch(`${baseUrl}/api/v1/auth/refresh`, {
-    method: 'POST',
-    credentials: 'include',
-  })
-
-  if (!refreshRes.ok) {
-    console.log('❌ Refresh failed. Redirecting to login...')
-    throw new Error('UNAUTHORIZED')
-  }
-
-  console.log('🔄 Refresh success. Retrying original request...')
-
-  // retry=true 추가하여 재요청 (1회만 허용)
-  return fetchWithAuth(url, {
-    ...options,
-    retry: true,
-  })
+interface FetchOptions extends RequestInit {
+  params?: Record<string, any>
+  revalidate?: number
+  retry?: boolean
 }
 
-export default function api() {
-  /** GET with cache + revalidate (둘 다 선택 가능) */
-  const get = async (endpoint = '', options?: FetchOptions) => {
-    const queryString = buildQueryString(options?.params)
-    const res = await fetchWithAuth(`${baseUrl}${endpoint}${queryString}`, {
-      cache: options?.cache, // 브라우저/서버 캐시
-      next: options?.revalidate ? { revalidate: options.revalidate } : undefined,
-    })
-    if (!res?.ok) {
-      const errorData = await res?.json()
-      throw new Error(errorData?.message || '알수없는 오류')
-    }
+/**
+ * 서버 사이드에서 백엔드 JwtAuthenticationFilter 규격에 맞는 헤더 생성
+ */
+async function getAuthHeaders(customHeaders: HeadersInit = {}) {
+  const cookieStore = await cookies()
 
-    return res.json()
+  // 백엔드 ACCESS_TOKEN_COOKIE 설정값인 'accessToken'으로 가져옴
+  const accessToken = cookieStore.get('accessToken')?.value
+
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+    ...customHeaders,
+  } as Record<string, string>
+
+  // 백엔드 AUTHORIZATION_HEADER / BEARER_PREFIX 규격 적용
+  if (accessToken) {
+    headers['Authorization'] = `Bearer ${accessToken}`
   }
 
-  /** POST (데이터 생성 → 기본적으로 캐시 사용 X) */
-  const post = async (endpoint = '', data?: unknown, options?: FetchOptions): Promise<Response> => {
-    const res = await fetchWithAuth(`${baseUrl}${endpoint}`, {
+  return headers
+}
+
+/**
+ * 핵심 Fetch 함수
+ */
+async function fetchWithAuth(url: string, options: FetchOptions = {}): Promise<Response> {
+  const { revalidate, retry, ...restOptions } = options
+
+  const headers = await getAuthHeaders(restOptions.headers)
+
+  const response = await fetch(url, {
+    ...restOptions,
+    headers,
+    next: revalidate !== undefined ? { revalidate } : restOptions.next,
+  })
+
+  // 1. 204 No Content 처리
+  if (response.status === 204) return response
+
+  // 2. 401 Unauthorized 처리 (토큰 만료 시)
+  if (response.status === 401 && !retry) {
+    console.warn('⚠️ Access Token expired. Attempting refresh...')
+
+    const cookieStore = await cookies()
+    const refreshToken = cookieStore.get('refreshToken')?.value // 리프레시 쿠키 이름 확인 필요
+
+    if (!refreshToken) {
+      throw new Error('UNAUTHORIZED')
+    }
+
+    // 백엔드 리프레시 엔드포인트 호출
+    const refreshRes = await fetch(`${baseUrl}/api/v1/auth/refresh`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      cache: options?.cache ?? 'no-store',
-      next: options?.revalidate ? { revalidate: options.revalidate } : undefined,
-      body: JSON.stringify(data || {}),
+      body: JSON.stringify({ refreshToken }),
     })
 
-    const contentLength = res?.headers.get('content-length')
-    const isEmpty = !contentLength || contentLength === '0'
-
-    // 실패 처리
-    if (!res?.ok) {
-      if (!isEmpty) {
-        const errorData = await res?.json()
-        throw new Error(errorData?.message || '알수없는 오류')
-      }
-      throw new Error('알수없는 오류')
+    if (refreshRes.ok) {
+      console.log('🔄 Refresh success. Retrying...')
+      return fetchWithAuth(url, { ...options, retry: true })
     }
 
-    return res
+    throw new Error('UNAUTHORIZED')
   }
 
-  /** PATCH (부분 업데이트) */
-  const patch = async (endpoint = '', data?: unknown, options?: FetchOptions) => {
-    const res = await fetchWithAuth(`${baseUrl}${endpoint}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      cache: options?.cache ?? 'no-store',
-      next: options?.revalidate ? { revalidate: options.revalidate } : undefined,
-      body: JSON.stringify(data || {}),
-    })
-    if (!res?.ok) {
-      const errorData = await res?.json()
-      throw new Error(errorData?.message || '알수없는 오류')
-    }
-
-    return res.json()
-  }
-
-  /** DELETE */
-  const del = async (endpoint = '', options?: FetchOptions) => {
-    const res = await fetchWithAuth(`${baseUrl}${endpoint}`, {
-      method: 'DELETE',
-      cache: options?.cache ?? 'no-store',
-      next: options?.revalidate ? { revalidate: options.revalidate } : undefined,
-    })
-    // 204 no content 처리
-    if (res === undefined) {
-      return true
-    }
-
-    if (!res?.ok) {
-      const errorData = await res?.json()
-      throw new Error(errorData?.message || '알수없는 오류')
-    }
-
-    return res.json()
-  }
-
-  return { get, post, patch, delete: del }
+  return response
 }
 
-//예제
-//import api from '@/lib/api';
-// const postApi = api('https://api.example.com/posts');
+/**
+ * 사용하기 편한 API 객체
+ */
+export const api = {
+  async get<T>(endpoint: string, options?: FetchOptions): Promise<T> {
+    const queryString = buildQueryString(options?.params)
+    const res = await fetchWithAuth(`${baseUrl}${endpoint}${queryString}`, {
+      ...options,
+      method: 'GET',
+    })
+    if (!res.ok) throw await handleError(res)
+    return res.json()
+  },
 
-/* 🔥 GET - ISR 적용 (10초마다 자동 갱신) */
-// const posts = await postApi.get('', { revalidate: 10 });
+  async post<T>(endpoint: string, data?: unknown, options?: FetchOptions) {
+    const res = await fetchWithAuth(`${baseUrl}${endpoint}`, {
+      ...options,
+      method: 'POST',
+      body: JSON.stringify(data || {}),
+    })
+    if (!res.ok) throw await handleError(res)
+    return res.status === 204 ? ({} as T) : res
+  },
 
-/* 🔥 GET - 캐시 없이 최신 fetch */
-// const post = await postApi.get('/1', { cache: 'no-store' });
+  async patch<T>(endpoint: string, data?: unknown, options?: FetchOptions): Promise<T> {
+    const res = await fetchWithAuth(`${baseUrl}${endpoint}`, {
+      ...options,
+      method: 'PATCH',
+      body: JSON.stringify(data || {}),
+    })
+    if (!res.ok) throw await handleError(res)
+    return res.json()
+  },
 
-/* 🔥 POST - 데이터를 추가하고 30초 뒤 다시 캐싱 리빌드 */
-// const newPost = await postApi.post('', { title: '새 글' }, { revalidate: 30 });
+  async delete(endpoint: string, options?: FetchOptions): Promise<boolean> {
+    const res = await fetchWithAuth(`${baseUrl}${endpoint}`, {
+      ...options,
+      method: 'DELETE',
+    })
+    if (!res.ok) throw await handleError(res)
+    return true
+  },
+}
 
-/* 🔥 PATCH - 수정 + 캐시 재빌드 20초 */
-// const updated = await postApi.patch('/1', { title: '수정' }, { revalidate: 20 });
-
-/* 🔥 DELETE - 삭제 후 5초 뒤 페이지 재검증 */
-// await postApi.delete('/1', { revalidate: 5 });
+async function handleError(res: Response) {
+  try {
+    const errorData = await res.json()
+    return new Error(errorData?.message || 'API 호출 오류')
+  } catch {
+    return new Error(`HTTP Error: ${res.status}`)
+  }
+}
