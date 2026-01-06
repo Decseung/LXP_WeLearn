@@ -25,8 +25,8 @@ export default function ShortsCard({
   return (
     <div
       onClick={onSelect}
-      className={`flex cursor-pointer gap-4 rounded-lg border bg-white transition-shadow hover:shadow-md ${
-        isSelected ? 'ring-black-200 border-black ring-1' : 'rounded-lg border-gray-200'
+      className={`flex cursor-pointer gap-4 rounded-lg border bg-white p-4 transition-shadow hover:shadow-md ${
+        isSelected ? 'border-green-500 ring-1 ring-green-500' : 'rounded-lg border-gray-200'
       }`}
     >
       {/* 썸네일 */}
