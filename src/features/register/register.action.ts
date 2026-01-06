@@ -1,6 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { api } from '@/lib/utils/apiUtils'
 import type { ActionState } from '@/types/action'
 import type { components } from '@/types/api-schema'
 
@@ -27,6 +28,7 @@ const baseUrl = process.env.NEXT_PUBLIC_API_URL
 
 /**
  * FormData 파일 업로드 (내부 유틸)
+ * - 파일 업로드는 multipart/form-data가 필요하므로 별도 처리
  */
 async function uploadFormData<T = unknown>(endpoint: string, formData: FormData): Promise<T> {
   const res = await fetch(`${baseUrl}${endpoint}`, {
@@ -38,25 +40,6 @@ async function uploadFormData<T = unknown>(endpoint: string, formData: FormData)
   if (!res.ok) {
     const errorData = await res.json().catch(() => null)
     throw new Error(errorData?.message || '파일 업로드 실패')
-  }
-
-  return res.json()
-}
-
-/**
- * JSON POST 요청 (내부 유틸)
- */
-async function postJson<T = unknown>(endpoint: string, data: unknown): Promise<T> {
-  const res = await fetch(`${baseUrl}${endpoint}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    credentials: 'include',
-    body: JSON.stringify(data),
-  })
-
-  if (!res.ok) {
-    const errorData = await res.json().catch(() => null)
-    throw new Error(errorData?.message || '요청 실패')
   }
 
   return res.json()
@@ -208,7 +191,8 @@ export async function registerShortsAction(
       tagNames: registerFormData.keywords?.length ? registerFormData.keywords : undefined,
     }
 
-    const response = await postJson<{ data?: ShortsResponse }>('/api/v1/shorts', request)
+    const res = await api.post<Response>('/api/v1/shorts', request)
+    const response = await res.json()
 
     // 캐시 무효화
     revalidatePath('/mypage/myshorts')
@@ -216,7 +200,7 @@ export async function registerShortsAction(
     return {
       success: true,
       message: '숏츠가 등록되었습니다.',
-      data: response?.data ?? (response as unknown as ShortsResponse),
+      data: response?.data ?? response,
     }
   } catch (error) {
     return {
@@ -297,7 +281,8 @@ export async function registerShortsFormAction(
       tagNames: keywords.length > 0 ? keywords : undefined,
     }
 
-    const response = await postJson<{ data?: ShortsResponse }>('/api/v1/shorts', request)
+    const res = await api.post<Response>('/api/v1/shorts', request)
+    const response = await res.json()
 
     // 캐시 무효화
     revalidatePath('/mypage/myshorts')
@@ -305,7 +290,7 @@ export async function registerShortsFormAction(
     return {
       success: true,
       message: '숏츠가 등록되었습니다.',
-      data: response?.data ?? (response as unknown as ShortsResponse),
+      data: response?.data ?? response,
     }
   } catch (error) {
     return {

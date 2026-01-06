@@ -1,6 +1,8 @@
 'use server'
 
 import { userApi } from '@/services/mypage/user.service'
+import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 import type { components } from '@/types/api-schema'
 
 type UserResponse = components['schemas']['UserResponse']
@@ -12,29 +14,10 @@ interface UserUpdateRequest {
 }
 
 // 액션 응답 타입
-type ActionState<T = unknown> = {
+export type ActionState<T = unknown> = {
   success: boolean
   message?: string
   data?: T
-}
-
-/**
- * 내 정보 조회 액션
- */
-export async function getMeAction(): Promise<ActionState<UserResponse>> {
-  try {
-    const user = await userApi.getMe()
-
-    return {
-      success: true,
-      data: user,
-    }
-  } catch (error) {
-    return {
-      success: false,
-      message: error instanceof Error ? error.message : '사용자 정보 조회 실패',
-    }
-  }
 }
 
 /**
@@ -47,13 +30,23 @@ export async function updateMeAction(
   const nickname = formData.get('nickname') as string
   const profileUrl = formData.get('profileUrl') as string | null
 
+  // 유효성 검사
+  if (!nickname || nickname.trim().length < 2) {
+    return {
+      success: false,
+      message: '닉네임은 2자 이상이어야 합니다.',
+    }
+  }
+
   const payload: UserUpdateRequest = {
-    nickname,
+    nickname: nickname.trim(),
     profileUrl: profileUrl || undefined,
   }
 
   try {
     const user = await userApi.updateMe(payload)
+
+    revalidatePath('/mypage') // 캐시 무효화
 
     return {
       success: true,
@@ -75,10 +68,8 @@ export async function deleteMeAction(): Promise<ActionState> {
   try {
     await userApi.deleteMe()
 
-    return {
-      success: true,
-      message: '회원 탈퇴가 완료되었습니다.',
-    }
+    // 탈퇴 후 리다이렉트
+    redirect('/')
   } catch (error) {
     return {
       success: false,
