@@ -21,11 +21,20 @@ export default function CommentModal() {
   const pathname = usePathname()
   const isMobile = useIsMobile()
   const [mounted, setMounted] = useState(false)
+  const [shortsId, setShortsId] = useState<string | null>(null)
 
   const [comments, setComments] = useState<CommentsResponse | null>(null)
   const [loading, setLoading] = useState(false)
 
   const id = params.id as string
+
+  useEffect(() => {
+    if (params.id) {
+      setShortsId(params.id as string)
+    }
+  }, [params.id])
+  console.log(shortsId)
+
   const isOpen = pathname.endsWith('/comments')
 
   const fetchComments = async () => {
@@ -50,7 +59,7 @@ export default function CommentModal() {
   }, [mounted, isOpen, id])
 
   const handleClose = () => {
-    router.replace(`/shorts/${id}`, { scroll: false })
+    router.back()
   }
 
   return (

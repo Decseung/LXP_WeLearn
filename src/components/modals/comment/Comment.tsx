@@ -19,7 +19,7 @@ export default function Comment(comments: CommentsProps) {
     <>
       {comments.comments?.map((comment) => {
         return (
-          <div className="border-b border-gray-200 py-4">
+          <div className="border-b border-gray-200 py-4" key={comment.id}>
             <div className="flex items-start justify-between">
               <div className="flex flex-1 items-start gap-3">
                 {/* 프로필 이미지 */}

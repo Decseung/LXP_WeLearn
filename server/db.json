@@ -174,7 +174,7 @@
         "name": "홍길동",
         "email": "hong@example.com",
         "nickname": "hong",
-        "profileUrl": "https://example.com/profile1.png",
+        "profileUrl": null,
         "createdAt": "2025-12-01T10:00:00Z"
       },
       "parentId": null
@@ -189,7 +189,7 @@
         "name": "김철수",
         "email": "kim@example.com",
         "nickname": "chulsoo",
-        "profileUrl": "https://example.com/profile2.png",
+        "profileUrl": null,
         "createdAt": "2025-12-05T09:00:00Z"
       },
       "parentId": null
@@ -204,7 +204,7 @@
         "name": "이영희",
         "email": "lee@example.com",
         "nickname": "younghee",
-        "profileUrl": "https://example.com/profile3.png",
+        "profileUrl": null,
         "createdAt": "2025-12-10T08:30:00Z"
       },
       "parentId": 2
@@ -219,7 +219,7 @@
         "name": "홍길동",
         "email": "hong@example.com",
         "nickname": "hong",
-        "profileUrl": "https://example.com/profile1.png",
+        "profileUrl": null,
         "createdAt": "2025-12-01T10:00:00Z"
       },
       "parentId": 2
