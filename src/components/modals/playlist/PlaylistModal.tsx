@@ -45,11 +45,7 @@ export default function PlaylistModal() {
           initial={isMobile ? { y: '100vh' } : { x: '130%' }}
           animate={isMobile ? { y: 0 } : { x: '0%' }}
           exit={isMobile ? { y: '100vh' } : { x: '130%' }}
-          transition={
-            isMobile
-              ? { type: 'spring', bounce: 0, duration: 0.4 }
-              : { type: 'spring', bounce: 0, duration: 0.4 }
-          }
+          transition={{ type: 'spring', bounce: 0, duration: 0.4 }}
         >
           {/* 모달 컨테이너 */}
           <div

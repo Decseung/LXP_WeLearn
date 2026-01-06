@@ -70,11 +70,7 @@ export default function CommentModal() {
           initial={isMobile ? { y: '100%' } : { x: '130%' }}
           animate={isMobile ? { y: 0 } : { x: '0%' }}
           exit={isMobile ? { y: '100%' } : { x: '130%' }}
-          transition={
-            isMobile
-              ? { type: 'spring', bounce: 0, duration: 0.4 }
-              : { type: 'spring', bounce: 0, duration: 0.4 }
-          }
+          transition={{ type: 'spring', bounce: 0, duration: 0.4 }}
         >
           <div>
             {/* ==================== Modal Container ==================== */}
