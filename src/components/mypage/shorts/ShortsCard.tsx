@@ -3,12 +3,16 @@
 import { MoreHorizontal } from 'lucide-react'
 import { ShortsResponse } from '@/types/mypage-shorts'
 import ShortsCardThumbnail from './ShortsCardThumbnail'
+import { DropdownMenu, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import MyShortsDropdownMenu from '@/features/mypage/myshorts/MyShortsDropdownMenu'
 
 interface ShortsCardProps {
   shorts: ShortsResponse
   isSelected?: boolean
   onSelect?: () => void
-  onMoreClick?: () => void
+  onToggleVisibility?: () => void
+  onEdit?: () => void
+  onDelete?: () => void
   viewCount?: number
   durationSec?: number
   createdAt?: string
@@ -18,7 +22,9 @@ export default function ShortsCard({
   shorts,
   isSelected = false,
   onSelect,
-  onMoreClick,
+  onToggleVisibility,
+  onEdit,
+  onDelete,
   viewCount = 100,
   createdAt = '1일 전',
 }: ShortsCardProps) {
@@ -44,20 +50,26 @@ export default function ShortsCard({
             <p className="mb-1 line-clamp-2 text-sm text-gray-700"> {shorts.description}</p>
           </div>
 
-          {/* 더보기 버튼 */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              onMoreClick?.()
-            }}
-            className="flex-shrink-0 rounded-full p-1 transition-colors hover:bg-gray-100"
-          >
-            <MoreHorizontal size={18} className="text-gray-400" />
-          </button>
+          {/* 더보기 드롭다운 메뉴 */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                onClick={(e) => e.stopPropagation()}
+                className="flex-shrink-0 rounded-full p-1 transition-colors hover:bg-gray-100"
+              >
+                <MoreHorizontal size={18} className="text-black" />
+              </button>
+            </DropdownMenuTrigger>
+            <MyShortsDropdownMenu
+              status={shorts.status}
+              onToggleVisibility={onToggleVisibility}
+              onEdit={onEdit}
+              onDelete={onDelete}
+            />
+          </DropdownMenu>
         </div>
 
         {/* 카테고리 + 키워드 */}
-
         <div className="mt-auto flex flex-wrap gap-2">
           {/* 카테고리 */}
           {shorts.category?.name && (
