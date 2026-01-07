@@ -22,16 +22,16 @@ export default function MyShortsContainer({ initialShorts, totalCount }: MyShort
   }
 
   return (
-    <div className="h-full w-full px-4 py-8">
+    <div className="h-full w-full">
       <div className="flex flex-col gap-8 lg:flex-row">
         {/* 좌측 - 미리보기 */}
         <div className="order-1 w-full lg:order-1 lg:w-100 lg:flex-shrink-0">
-          <div className="flex flex-col gap-6 lg:sticky lg:top-24">
-            <h1 className="text-center text-2xl font-black text-gray-900 uppercase lg:text-left">
+          <div className="flex flex-col items-center justify-center gap-6 py-8 md:py-0 lg:sticky lg:top-24">
+            <h1 className="pt-8 text-center text-2xl font-black text-gray-900 uppercase md:pt-0 lg:p-0 lg:text-left">
               My Created Shorts
             </h1>
             <ShortsPreviewContainer shorts={selectedShorts} loop={true} autoplay={true} />
-            <div className="w-full lg:w-[360px]">
+            <div className="w-full items-center justify-center md:flex">
               <MyShortsCreateButton />
             </div>
           </div>
@@ -48,12 +48,13 @@ export default function MyShortsContainer({ initialShorts, totalCount }: MyShort
                 <ShortsCard
                   key={shorts.shortsId}
                   shorts={shorts}
+                  status={shorts.status}
                   isSelected={selectedShorts?.shortsId === shorts.shortsId}
                   onSelect={() => handleSelectShorts(shorts)}
                 />
               ))
             ) : (
-              <div className="py-12 text-center text-gray-500">아직 만든 숏츠가 없습니다.</div>
+              <div className="py-12 text-center text-gray-500">아직 등록한 숏츠가 없습니다.</div>
             )}
           </div>
         </div>

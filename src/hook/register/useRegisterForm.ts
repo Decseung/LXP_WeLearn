@@ -7,7 +7,7 @@ import {
   INITIAL_SHORTS_FORM_DATA,
   INITIAL_VIDEO_PREVIEW_DATA,
 } from '@/features/register/types/shortsRegister'
-import { shortsFormValidation } from '@/utils/shortsFormValidation'
+import { validateShortsForm } from '@/features/register/register.validation'
 import { registerShortsAction } from '@/features/register/register.action'
 
 interface UseRegisterFormParams {
@@ -59,35 +59,30 @@ export default function useRegisterForm(params: UseRegisterFormParams) {
   const handleRegister = async () => {
     if (isSubmitting) return
 
-    const validation = shortsFormValidation(formData, videoData, true)
+    const validation = validateShortsForm(formData, videoData)
     if (!validation.isValid) {
-      return
-    }
-
-    if (!videoData.videoFile) {
-      toast.error('비디오 파일이 없습니다.')
-      return
-    }
-
-    if (!formData.categoryId) {
-      toast.error('카테고리를 선택해주세요.')
+      // 첫 번째 에러 메시지만 표시
+      const firstError = validation.errors[0]
+      if (firstError) {
+        toast.error(firstError.message)
+      }
       return
     }
 
     setIsSubmitting(true)
 
     try {
-      // 서버 액션 호출
+      // 서버 액션 호출 (검증 통과 후이므로 non-null 단언)
       const result = await registerShortsAction(
         {
           userId,
-          categoryId: formData.categoryId,
+          categoryId: formData.categoryId!,
           title: formData.title,
           description: formData.description || undefined,
           keywords: formData.keywords.length > 0 ? formData.keywords : undefined,
           thumbnail: formData.thumbnail,
         },
-        videoData.videoFile,
+        videoData.videoFile!,
         videoData.durationSec ?? undefined,
       )
 

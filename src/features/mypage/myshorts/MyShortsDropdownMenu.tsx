@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { ShortsStatus } from '@/types/mypage-shorts'
 import { Globe, Lock, Pencil, Trash2 } from 'lucide-react'
+import { toast } from 'react-toastify'
 
 interface MyShortsDropdownMenuProps {
   status: ShortsStatus
@@ -16,15 +17,6 @@ interface MyShortsDropdownMenuProps {
   onDelete?: () => void
 }
 
-/**
- * MyShortsDropdownMenu 컴포넌트
- *
- * 주요 기능:
- * - 공개/비공개 전환
- * - 숏츠 수정
- * - 숏츠 삭제
- *
- */
 export default function MyShortsDropdownMenu({
   status,
   onToggleVisibility,
@@ -38,7 +30,16 @@ export default function MyShortsDropdownMenu({
     <DropdownMenuContent className="min-w-[140px]" align="end">
       <DropdownMenuGroup>
         {/* 공개/비공개 전환 */}
-        <DropdownMenuItem className="cursor-pointer" onSelect={onToggleVisibility}>
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onSelect={() => {
+            if (isPublished) {
+              toast.info('현재 서비스 준비중입니다')
+            } else {
+              onToggleVisibility?.()
+            }
+          }}
+        >
           {isPublished ? (
             <>
               <Lock size={10} />

@@ -25,7 +25,7 @@ export default function ShortsFormCategory({ value, onChange }: ShortsFormCatego
   return (
     <div>
       <label htmlFor="category" className="mb-2 block text-sm font-medium text-gray-700">
-        카테고리
+        카테고리 <span className="text-red-600">*</span>
       </label>
       <div className="relative">
         <select

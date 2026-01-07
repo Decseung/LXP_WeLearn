@@ -1,10 +1,11 @@
 'use client'
 
 import { MoreHorizontal } from 'lucide-react'
-import { ShortsResponse } from '@/types/mypage-shorts'
+import type { ShortsResponse, ShortsStatus } from '@/types/mypage-shorts'
 import ShortsCardThumbnail from './ShortsCardThumbnail'
 import { DropdownMenu, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import MyShortsDropdownMenu from '@/features/mypage/myshorts/MyShortsDropdownMenu'
+import ShortsStatusBadge from './ShortsStatusBadge'
 
 interface ShortsCardProps {
   shorts: ShortsResponse
@@ -16,6 +17,7 @@ interface ShortsCardProps {
   viewCount?: number
   durationSec?: number
   createdAt?: string
+  status: ShortsStatus
 }
 
 export default function ShortsCard({
@@ -27,6 +29,7 @@ export default function ShortsCard({
   onDelete,
   viewCount = 100,
   createdAt = '1일 전',
+  status,
 }: ShortsCardProps) {
   return (
     <div
@@ -36,13 +39,14 @@ export default function ShortsCard({
       }`}
     >
       {/* 썸네일 */}
-      <ShortsCardThumbnail thumbnailUrl={shorts.thumbnailUrl} status={shorts.status} />
+      <ShortsCardThumbnail thumbnailUrl={shorts.thumbnailUrl} shorts={shorts} />
 
       {/* 콘텐츠 */}
-      <div className="flex min-w-0 flex-1 flex-col p-4">
+      <div className="flex min-w-0 flex-1 flex-col p-2 lg:p-4">
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0 flex-1">
-            <h3 className="mb-1 line-clamp-2 text-lg font-bold text-gray-900">{shorts.title}</h3>
+            {status && <ShortsStatusBadge status={status} />}
+            <h3 className="pt-1 text-lg font-bold text-gray-900">{shorts.title}</h3>
             <p className="mb-4 text-sm text-gray-500">
               {shorts.uploader?.nickname ?? '숏터'} {' · '} 조회수 {viewCount.toLocaleString()}회
               {' · '} {createdAt || '10일 전'}
@@ -69,23 +73,17 @@ export default function ShortsCard({
           </DropdownMenu>
         </div>
 
-        {/* 카테고리 + 키워드 */}
+        {/*  키워드 */}
         <div className="mt-auto flex flex-wrap gap-2">
-          {/* 카테고리 */}
-          {shorts.category?.name && (
-            <span className="rounded-full bg-gray-200 px-3 py-1 text-[10px] text-black">
-              {shorts.category.name}
-            </span>
-          )}
           {/* 키워드 표시 */}
           {shorts.keywords?.map((keyword: string, index: number) => (
-            <span
-              key={index}
-              className="rounded-full bg-gray-100 px-3 py-1 text-[10px] text-gray-700"
-            >
-              #{keyword}
+            <span key={index} className="px-1 py-1 text-xs text-gray-900">
+              {keyword}
             </span>
           ))}
+          <span className="px-1 py-1 text-xs text-gray-900">#shorts</span>
+          <span className="px-1 py-1 text-xs text-gray-900">#개발자</span>
+          <span className="px-1 py-1 text-xs text-gray-900">#코딩</span>
         </div>
       </div>
     </div>

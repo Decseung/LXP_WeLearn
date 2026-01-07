@@ -17,7 +17,7 @@ export default function ShortsStatusBadge({ status, className }: ShortsStatusBad
   return (
     <span
       className={cn(
-        'absolute top-2 left-2 flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[10px] text-white',
+        'inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[10px] text-white',
         config.bgColor,
         className,
       )}
