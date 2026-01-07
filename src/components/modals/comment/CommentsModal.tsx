@@ -21,7 +21,7 @@ export default function CommentModal() {
   const pathname = usePathname()
   const isMobile = useIsMobile()
   const [mounted, setMounted] = useState(false)
-  const [shortsId, setShortsId] = useState<string | null>(null)
+  const [shortsId, setShortsId] = useState<string>('')
 
   const [comments, setComments] = useState<CommentsResponse | null>(null)
   const [loading, setLoading] = useState(false)
@@ -29,11 +29,11 @@ export default function CommentModal() {
   const id = params.id as string
 
   useEffect(() => {
-    if (params.id) {
-      setShortsId(params.id as string)
+    const match = pathname.match(/\/shorts\/([^\/]+)/)
+    if (match?.[1]) {
+      setShortsId(match[1])
     }
-  }, [params.id])
-  console.log(shortsId)
+  }, [pathname])
 
   const isOpen = pathname.endsWith('/comments')
 
@@ -42,7 +42,7 @@ export default function CommentModal() {
 
     setLoading(true)
 
-    const res = await commentApi.getComment(id)
+    const res = await commentApi.getComment(shortsId)
     setComments(res)
 
     setLoading(false)
@@ -59,7 +59,7 @@ export default function CommentModal() {
   }, [mounted, isOpen, id])
 
   const handleClose = () => {
-    router.back()
+    router.push(`/shorts/${shortsId}`)
   }
 
   return (
