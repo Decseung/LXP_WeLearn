@@ -19,7 +19,9 @@ export default function ShortsFormInputs({ formData, onChange }: ShortsFormInput
   return (
     <>
       <div>
-        <label className="mb-2 block text-sm font-medium text-gray-700">숏츠 제목</label>
+        <label className="mb-2 block text-sm font-medium text-gray-700">
+          숏츠 제목 <span className="text-red-600">*</span>
+        </label>
         <Input
           type="text"
           name="title"
@@ -31,7 +33,9 @@ export default function ShortsFormInputs({ formData, onChange }: ShortsFormInput
       </div>
 
       <div>
-        <label className="mb-2 block text-sm font-medium text-gray-700">숏츠 설명</label>
+        <label className="mb-2 block text-sm font-medium text-gray-700">
+          숏츠 설명 <span className="text-red-600">*</span>
+        </label>
         <textarea
           value={description}
           name="description"

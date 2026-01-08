@@ -3,9 +3,10 @@
 import React from 'react'
 import ShortsFormThumbPreviewTab from './ShortsFormThumbPreviewTab'
 import ShortsFormVideoPreviewTab from './ShortsFormVideoPreviewTab'
+import { ShortsFormChangeHandler } from '@/features/register/types/shortsRegister'
 
-// 공통 프리뷰 탭 속성 타입 정의
-type ShortsFormPreviewTabProps =
+// 공통 프리뷰/업로드 탭 타입 정의
+type ShortsFormUploadTabProps =
   | {
       type: 'video'
       videoFile?: File | null
@@ -16,11 +17,12 @@ type ShortsFormPreviewTabProps =
     }
   | {
       type: 'thumbnail'
-      thumbnail?: string | null
-      onRemove: () => void
+      thumbnail: string | null
+      onChange: ShortsFormChangeHandler
+      onDraggingChange?: (isDragging: boolean) => void
     }
 
-export default function ShortsFormPreviewTab(props: ShortsFormPreviewTabProps) {
+export default function ShortsFormUploadTab(props: ShortsFormUploadTabProps) {
   if (props.type === 'video') {
     return (
       // 비디오 미리보기 탭 렌더링
@@ -36,6 +38,10 @@ export default function ShortsFormPreviewTab(props: ShortsFormPreviewTabProps) {
 
   return (
     // 썸네일 미리보기 탭 렌더링
-    <ShortsFormThumbPreviewTab thumbnail={props.thumbnail} onRemove={props.onRemove} />
+    <ShortsFormThumbPreviewTab
+      thumbnail={props.thumbnail}
+      onChange={props.onChange}
+      onDraggingChange={props.onDraggingChange}
+    />
   )
 }

@@ -4,7 +4,6 @@ import { ShortsFormData, ShortsFormChangeHandler } from '@/features/register/typ
 import ShortsFormInputs from './ShortsFormInputs'
 import ShortsFormCategory from './ShortsFormCategory'
 import ShortsFormKeywords from './ShortsFormKeywords'
-import ShortsFormThumbnail from './ShortsFormThumbnail'
 
 interface ShortsFormLeftSectionProps {
   formData: ShortsFormData
@@ -29,12 +28,6 @@ export default function ShortsFormLeftSection({ formData, onChange }: ShortsForm
           keywords={formData.keywords}
           keywordInput={formData.keywordInput}
           onChange={onChange}
-        />
-
-        {/* 썸네일 이미지 */}
-        <ShortsFormThumbnail
-          value={formData.thumbnail}
-          onChange={(value) => onChange('thumbnail', value)}
         />
       </div>
     </div>

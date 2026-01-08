@@ -7,7 +7,7 @@ import {
   INITIAL_SHORTS_FORM_DATA,
   INITIAL_VIDEO_PREVIEW_DATA,
 } from '@/features/register/types/shortsRegister'
-import { shortsFormValidation } from '@/utils/shortsFormValidation'
+import { validateShortsForm } from '@/features/register/register.validation'
 import { registerShortsAction } from '@/features/register/register.action'
 
 interface UseRegisterFormParams {
@@ -16,10 +16,14 @@ interface UseRegisterFormParams {
   userId: number
 }
 
+/**
+ * 숏츠 등록 폼 상태 및 로직을 관리하는 커스텀 훅
+ */
 export default function useRegisterForm(params: UseRegisterFormParams) {
   const router = useRouter()
   const { initialFormData, initialVideoData, userId } = params
 
+  // 초기 폼 데이터 생성 함수
   const buildInitialForm = useCallback(
     () => ({
       ...INITIAL_SHORTS_FORM_DATA,
@@ -28,6 +32,7 @@ export default function useRegisterForm(params: UseRegisterFormParams) {
     [initialFormData],
   )
 
+  // 초기 비디오 데이터 생성 함수
   const buildInitialVideo = useCallback(
     () => ({
       ...INITIAL_VIDEO_PREVIEW_DATA,
@@ -36,19 +41,23 @@ export default function useRegisterForm(params: UseRegisterFormParams) {
     [initialVideoData],
   )
 
+  // 상태 정의
   const [formData, setFormData] = useState<ShortsFormData>(buildInitialForm)
   const [videoData, setVideoData] = useState<VideoPreviewData>(buildInitialVideo)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  // 초기 데이터 변경 시 폼 초기화
   useEffect(() => {
     setFormData(buildInitialForm())
     setVideoData(buildInitialVideo())
   }, [buildInitialForm, buildInitialVideo])
 
+  // 폼 필드 변경 핸들러
   const handleFormChange = <K extends keyof ShortsFormData>(field: K, value: ShortsFormData[K]) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
+  // 비디오 데이터 변경 핸들러
   const handleVideoChange = <K extends keyof VideoPreviewData>(
     field: K,
     value: VideoPreviewData[K],
@@ -56,38 +65,34 @@ export default function useRegisterForm(params: UseRegisterFormParams) {
     setVideoData((prev) => ({ ...prev, [field]: value }))
   }
 
+  // 숏츠 등록 핸들러
   const handleRegister = async () => {
     if (isSubmitting) return
 
-    const validation = shortsFormValidation(formData, videoData, true)
+    const validation = validateShortsForm(formData, videoData)
     if (!validation.isValid) {
-      return
-    }
-
-    if (!videoData.videoFile) {
-      toast.error('비디오 파일이 없습니다.')
-      return
-    }
-
-    if (!formData.categoryId) {
-      toast.error('카테고리를 선택해주세요.')
+      // 첫 번째 에러 메시지만 표시
+      const firstError = validation.errors[0]
+      if (firstError) {
+        toast.error(firstError.message)
+      }
       return
     }
 
     setIsSubmitting(true)
 
     try {
-      // 서버 액션 호출
+      // 서버 액션 호출 (검증 통과 후이므로 non-null 단언)
       const result = await registerShortsAction(
         {
           userId,
-          categoryId: formData.categoryId,
+          categoryId: formData.categoryId!,
           title: formData.title,
           description: formData.description || undefined,
           keywords: formData.keywords.length > 0 ? formData.keywords : undefined,
           thumbnail: formData.thumbnail,
         },
-        videoData.videoFile,
+        videoData.videoFile!,
         videoData.durationSec ?? undefined,
       )
 
@@ -105,8 +110,10 @@ export default function useRegisterForm(params: UseRegisterFormParams) {
     }
   }
 
+  // 취소 핸들러
   const handleCancel = () => router.back()
 
+  // 폼 초기화 함수
   const resetForm = useCallback(() => {
     setFormData(buildInitialForm())
     setVideoData(buildInitialVideo())

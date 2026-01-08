@@ -1,7 +1,14 @@
 'use client'
 
+import {
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu'
 import { ShortsStatus } from '@/types/mypage-shorts'
 import { Globe, Lock, Pencil, Trash2 } from 'lucide-react'
+import { toast } from 'react-toastify'
 
 interface MyShortsDropdownMenuProps {
   status: ShortsStatus
@@ -16,46 +23,50 @@ export default function MyShortsDropdownMenu({
   onEdit,
   onDelete,
 }: MyShortsDropdownMenuProps) {
+  // 공개 상태 여부 확인
   const isPublished = status === 'PUBLISHED'
-  const conToggle = status !== 'ARCHIVED'
 
   return (
-    <div className="absolute z-30 min-w-[140px] rounded-lg border border-gray-200 bg-white py-1 shadow-lg">
-      {/* 공개/비공개 전환 */}
-      <button
-        onClick={onToggleVisibility}
-        className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
-      >
-        {isPublished ? (
-          <>
-            <Lock size={16} />
-            비공개하기
-          </>
-        ) : (
-          <>
-            <Globe size={16} />
-            공개하기
-          </>
-        )}
-      </button>
+    <DropdownMenuContent className="min-w-[140px]" align="end">
+      <DropdownMenuGroup>
+        {/* 공개/비공개 전환 */}
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onSelect={() => {
+            if (isPublished) {
+              toast.info('현재 서비스 준비중입니다')
+            } else {
+              onToggleVisibility?.()
+            }
+          }}
+        >
+          {isPublished ? (
+            <>
+              <Lock size={10} />
+              비공개하기
+            </>
+          ) : (
+            <>
+              <Globe size={10} />
+              공개하기
+            </>
+          )}
+        </DropdownMenuItem>
 
-      {/* 수정 */}
-      <button
-        onClick={onEdit}
-        className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
-      >
-        <Pencil size={16} />
-        수정
-      </button>
+        {/* 수정 */}
+        <DropdownMenuItem className="cursor-pointer" onSelect={onEdit}>
+          <Pencil size={10} />
+          수정
+        </DropdownMenuItem>
+      </DropdownMenuGroup>
+
+      <DropdownMenuSeparator />
 
       {/* 삭제 */}
-      <button
-        onClick={onDelete}
-        className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-red-600 hover:bg-gray-100"
-      >
-        <Trash2 size={16} />
+      <DropdownMenuItem className="cursor-pointer" variant="destructive" onSelect={onDelete}>
+        <Trash2 size={10} />
         삭제
-      </button>
-    </div>
+      </DropdownMenuItem>
+    </DropdownMenuContent>
   )
 }

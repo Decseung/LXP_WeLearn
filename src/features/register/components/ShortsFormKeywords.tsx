@@ -38,7 +38,7 @@ export default function ShortsFormKeywords({
   return (
     <div>
       <label id="keyword-label" className="mb-2 block text-sm font-medium text-gray-700">
-        키워드 ({keywords.length}/{maxKeywords})
+        키워드 ({keywords.length}/{maxKeywords}) <span className="text-red-600">*</span>
       </label>
 
       {/* 선택된 키워드 목록 */}

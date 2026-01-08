@@ -1,7 +1,7 @@
 'use client'
 
 import { ShortsFormLeftSection } from '@/features/register/components'
-import ShortsVideoPreview from '@/features/register/components/ShortsVideoPreview'
+import ShortsVideoPreview from '@/features/register/components/ShortsFormRightSection'
 import ShortsFormSubmitButtons from '@/features/register/components/ShortsFormSubmitButtons'
 import useRegisterForm from '@/hook/register/useRegisterForm'
 
@@ -33,7 +33,7 @@ export default function ShortsFormContainer({ userId }: ShortsFormContainerProps
           videoData={videoData}
           onChange={handleVideoChange}
           thumbnail={formData.thumbnail}
-          onThumbnailRemove={() => handleFormChange('thumbnail', null)}
+          onFormChange={handleFormChange}
         />
 
         <ShortsFormSubmitButtons

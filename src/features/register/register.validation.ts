@@ -1,0 +1,185 @@
+import type { ShortsFormData, VideoPreviewData } from './types/shortsRegister'
+
+// ========== 상수 정의 ==========
+export const VALIDATION_LIMITS = {
+  TITLE_MAX_LENGTH: 50,
+  DESCRIPTION_MAX_LENGTH: 500,
+  KEYWORDS_MIN: 1,
+  KEYWORDS_MAX: 5,
+} as const
+
+export const ALLOWED_VIDEO_TYPES = ['video/mp4', 'video/webm', 'video/quicktime']
+export const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+
+// ========== 타입 정의 ==========
+export type ValidationField =
+  | 'title'
+  | 'description'
+  | 'categoryId'
+  | 'videoFile'
+  | 'keywords'
+  | 'userId'
+
+export interface ValidationError {
+  field: ValidationField
+  message: string
+}
+
+export interface ValidationResult {
+  isValid: boolean
+  errors: ValidationError[]
+}
+
+// ========== 개별 필드 검증 함수 ==========
+
+export function validateTitle(title: string | undefined): ValidationError | null {
+  const trimmed = title?.trim() ?? ''
+  if (!trimmed) {
+    return { field: 'title', message: '제목을 입력해주세요.' }
+  }
+  if (trimmed.length > VALIDATION_LIMITS.TITLE_MAX_LENGTH) {
+    return { field: 'title', message: `제목은 ${VALIDATION_LIMITS.TITLE_MAX_LENGTH}자 이내로 입력해주세요.` }
+  }
+  return null
+}
+
+export function validateDescription(description: string | undefined): ValidationError | null {
+  const trimmed = description?.trim() ?? ''
+  if (!trimmed) {
+    return { field: 'description', message: '설명을 입력해주세요.' }
+  }
+  if (trimmed.length > VALIDATION_LIMITS.DESCRIPTION_MAX_LENGTH) {
+    return { field: 'description', message: `설명은 ${VALIDATION_LIMITS.DESCRIPTION_MAX_LENGTH}자 이내로 입력해주세요.` }
+  }
+  return null
+}
+
+export function validateCategoryId(categoryId: number | null | undefined): ValidationError | null {
+  if (categoryId === null || categoryId === undefined) {
+    return { field: 'categoryId', message: '카테고리를 선택해주세요.' }
+  }
+  return null
+}
+
+export function validateVideoFile(videoFile: File | null | undefined): ValidationError | null {
+  if (!videoFile) {
+    return { field: 'videoFile', message: '영상을 업로드해주세요.' }
+  }
+  if (!ALLOWED_VIDEO_TYPES.includes(videoFile.type)) {
+    return { field: 'videoFile', message: '지원하지 않는 영상 형식입니다. (mp4, webm, mov만 허용)' }
+  }
+  return null
+}
+
+export function validateKeywords(keywords: string[]): ValidationError | null {
+  if (keywords.length < VALIDATION_LIMITS.KEYWORDS_MIN) {
+    return { field: 'keywords', message: `키워드를 ${VALIDATION_LIMITS.KEYWORDS_MIN}개 이상 입력해주세요.` }
+  }
+  if (keywords.length > VALIDATION_LIMITS.KEYWORDS_MAX) {
+    return { field: 'keywords', message: `키워드는 최대 ${VALIDATION_LIMITS.KEYWORDS_MAX}개까지 선택 가능합니다.` }
+  }
+  return null
+}
+
+export function validateUserId(userId: number | null | undefined): ValidationError | null {
+  if (!userId) {
+    return { field: 'userId', message: '로그인이 필요합니다.' }
+  }
+  return null
+}
+
+// ========== 유틸리티 함수 ==========
+
+export function isValidVideoFile(file: File): boolean {
+  return ALLOWED_VIDEO_TYPES.includes(file.type)
+}
+
+export function isValidImageFile(file: File): boolean {
+  return ALLOWED_IMAGE_TYPES.includes(file.type)
+}
+
+export function isKeywordsMaxReached(keywords: string[]): boolean {
+  return keywords.length >= VALIDATION_LIMITS.KEYWORDS_MAX
+}
+
+export function isKeywordsValid(keywords: string[]): boolean {
+  return keywords.length >= VALIDATION_LIMITS.KEYWORDS_MIN
+}
+
+// ========== 통합 검증 함수 ==========
+
+/**
+ * 숏츠 폼 전체 유효성 검증 (클라이언트용)
+ */
+export function validateShortsForm(
+  formData: ShortsFormData,
+  videoData: VideoPreviewData,
+): ValidationResult {
+  const errors: ValidationError[] = []
+
+  const titleError = validateTitle(formData.title)
+  if (titleError) errors.push(titleError)
+
+  const descriptionError = validateDescription(formData.description)
+  if (descriptionError) errors.push(descriptionError)
+
+  const categoryError = validateCategoryId(formData.categoryId)
+  if (categoryError) errors.push(categoryError)
+
+  const videoError = validateVideoFile(videoData.videoFile)
+  if (videoError) errors.push(videoError)
+
+  const keywordsError = validateKeywords(formData.keywords)
+  if (keywordsError) errors.push(keywordsError)
+
+  return {
+    isValid: errors.length === 0,
+    errors,
+  }
+}
+
+/**
+ * 서버 액션용 유효성 검증
+ */
+export function validateRegisterFormData(data: {
+  userId?: number
+  categoryId?: number
+  title?: string
+  description?: string
+  keywords?: string[]
+  videoFile?: File | null
+}): ValidationResult {
+  const errors: ValidationError[] = []
+
+  const userIdError = validateUserId(data.userId)
+  if (userIdError) errors.push(userIdError)
+
+  const titleError = validateTitle(data.title)
+  if (titleError) errors.push(titleError)
+
+  const descriptionError = validateDescription(data.description)
+  if (descriptionError) errors.push(descriptionError)
+
+  const categoryError = validateCategoryId(data.categoryId)
+  if (categoryError) errors.push(categoryError)
+
+  const videoError = validateVideoFile(data.videoFile)
+  if (videoError) errors.push(videoError)
+
+  if (data.keywords) {
+    const keywordsError = validateKeywords(data.keywords)
+    if (keywordsError) errors.push(keywordsError)
+  }
+
+  return {
+    isValid: errors.length === 0,
+    errors,
+  }
+}
+
+/**
+ * 첫 번째 에러 메시지 반환 (서버 액션 응답용)
+ */
+export function getFirstErrorMessage(result: ValidationResult): string | null {
+  return result.errors[0]?.message ?? null
+}

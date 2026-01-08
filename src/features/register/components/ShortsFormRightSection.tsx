@@ -1,29 +1,32 @@
 'use client'
 
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { ImageIcon, VideoIcon } from 'lucide-react'
 import {
   VideoPreviewData,
   VideoPreviewChangeHandler,
+  ShortsFormChangeHandler,
 } from '@/features/register/types/shortsRegister'
 import useVideoUpload from '@/hook/register/useVideoUpload'
 import usePreviewTab from '@/hook/register/usePreviewTab'
-import ShortsFormPreviewTab from './ShortsFormPreviewTab'
+import ShortsFormUploadTab from './ShortsFormUploadTab'
 
-interface ShortsVideoPreviewProps {
+interface ShortsFormRightSectionProps {
   videoData: VideoPreviewData
   onChange: VideoPreviewChangeHandler
   thumbnail?: string | null
-  onThumbnailRemove: () => void
+  onFormChange: ShortsFormChangeHandler
 }
 
-export default function ShortsVideoPreview({
+export default function ShortsFormRightSection({
   videoData,
   onChange,
   thumbnail,
-  onThumbnailRemove,
-}: ShortsVideoPreviewProps) {
-  const { videoFile, isDragging } = videoData
+  onFormChange,
+}: ShortsFormRightSectionProps) {
+  const { videoFile, isDragging: isVideoDragging } = videoData
+  const [isThumbnailDragging, setIsThumbnailDragging] = useState(false)
+  const isDragging = isVideoDragging || isThumbnailDragging
   const videoInputRef = useRef<HTMLInputElement>(null)
 
   // 비디오 소스 메모이제이션 : 상위에서 videoFile이 변경될 때만 새로 생성
@@ -50,16 +53,19 @@ export default function ShortsVideoPreview({
     handleVideoUpload,
   } = useVideoUpload({ onChange, inputRef: videoInputRef })
 
+  const handleThumbnailRemove = () => {
+    onFormChange('thumbnail', null)
+  }
+
   const { isVideoTab, isThumbnailTab, switchToVideo, switchToThumbnail, handleRemove } =
     usePreviewTab({
       onVideoRemove: handleRemoveVideo,
-      onThumbnailRemove,
+      onThumbnailRemove: handleThumbnailRemove,
     })
 
   return (
     <div className="space-y-4">
       {/* 미리보기 전환 탭 */}
-
       <div className="flex gap-2" role="tablist" aria-label="미리보기 전환 탭">
         <button
           type="button"
@@ -99,15 +105,23 @@ export default function ShortsVideoPreview({
         onDragLeave={isVideoTab ? handleDragLeave : undefined}
         onDrop={isVideoTab ? handleDrop : undefined}
       >
-        <ShortsFormPreviewTab
-          type={isVideoTab ? 'video' : 'thumbnail'}
-          videoFile={videoFile}
-          videoSrc={videoSrc}
-          videoInputRef={videoInputRef}
-          onVideoUpload={handleVideoUpload}
-          thumbnail={thumbnail}
-          onRemove={handleRemove}
-        />
+        {isVideoTab ? (
+          <ShortsFormUploadTab
+            type="video"
+            videoFile={videoFile}
+            videoSrc={videoSrc}
+            videoInputRef={videoInputRef}
+            onVideoUpload={handleVideoUpload}
+            onRemove={handleRemove}
+          />
+        ) : (
+          <ShortsFormUploadTab
+            type="thumbnail"
+            thumbnail={thumbnail ?? null}
+            onChange={onFormChange}
+            onDraggingChange={setIsThumbnailDragging}
+          />
+        )}
       </div>
     </div>
   )

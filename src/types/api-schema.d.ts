@@ -551,7 +551,7 @@ export interface components {
        */
       thumbnailUrl?: string
       keywords?: string[]
-      status?: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED'
+      status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED'
       uploader?: components['schemas']['UploaderDto']
       category?: components['schemas']['CategoryDto']
     }
