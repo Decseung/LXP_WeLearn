@@ -10,16 +10,15 @@ interface CommentsProps {
 export default function Comment(comments: CommentsProps) {
   const [openReply, setOpenReply] = useState<number | null>(null)
 
-  console.log(comments)
-
-  const handleReply = () => {
-    // setOpenReply((prev) => (prev === Comment.id ? null : Comment.id))
+  const handelReply = (id: number) => {
+    setOpenReply(openReply === id ? null : id)
   }
+  console.log(openReply)
   return (
     <>
       {comments.comments?.map((comment) => {
         return (
-          <div className="border-b border-gray-200 py-4" key={comment.id}>
+          <div className="border-b border-gray-200 py-8" key={comment.id}>
             <div className="flex items-start justify-between">
               <div className="flex flex-1 items-start gap-3">
                 {/* 프로필 이미지 */}
@@ -45,7 +44,12 @@ export default function Comment(comments: CommentsProps) {
 
                   {/* 답글 토글 & 답글달기 */}
                   <div className="flex items-center gap-4">
-                    <button className="flex items-center gap-1 text-xs text-gray-500 transition-colors hover:text-black">
+                    <button
+                      className="flex items-center gap-1 text-xs text-gray-500 transition-colors hover:text-black"
+                      onClick={() => {
+                        handelReply(comment.id)
+                      }}
+                    >
                       답글 {comment.replies.length}개
                       <ChevronDown size={12} />
                     </button>
@@ -60,11 +64,16 @@ export default function Comment(comments: CommentsProps) {
                 <Ellipsis size={18} />
               </button>
             </div>
+            {comment.replies.length > 0 && (
+              <ReComment
+                commentReply={comment.replies}
+                openReply={openReply}
+                commentId={comment.id}
+              />
+            )}
           </div>
         )
       })}
-
-      <ReComment />
     </>
   )
 }

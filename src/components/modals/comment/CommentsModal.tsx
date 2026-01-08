@@ -21,19 +21,20 @@ export default function CommentModal() {
   const pathname = usePathname()
   const isMobile = useIsMobile()
   const [mounted, setMounted] = useState(false)
-  const [shortsId, setShortsId] = useState<string | null>(null)
+  const [shortsId, setShortsId] = useState<string>('')
 
   const [comments, setComments] = useState<CommentsResponse | null>(null)
   const [loading, setLoading] = useState(false)
 
   const id = params.id as string
 
+  console.log(comments)
   useEffect(() => {
-    if (params.id) {
-      setShortsId(params.id as string)
+    const match = pathname.match(/\/shorts\/([^\/]+)/)
+    if (match?.[1]) {
+      setShortsId(match[1])
     }
-  }, [params.id])
-  console.log(shortsId)
+  }, [pathname])
 
   const isOpen = pathname.endsWith('/comments')
 
@@ -42,7 +43,7 @@ export default function CommentModal() {
 
     setLoading(true)
 
-    const res = await commentApi.getComment(id)
+    const res = await commentApi.getComment(shortsId)
     setComments(res)
 
     setLoading(false)
@@ -59,7 +60,7 @@ export default function CommentModal() {
   }, [mounted, isOpen, id])
 
   const handleClose = () => {
-    router.back()
+    router.push(`/shorts/${shortsId}`)
   }
 
   return (
@@ -82,11 +83,17 @@ export default function CommentModal() {
               } `}
             >
               {/* ==================== Modal Header ==================== */}
-              <CommentModalHeader closeHandler={handleClose} />
+              <CommentModalHeader closeHandler={handleClose} totalCount={comments?.totalCount} />
               {/* ==================== Comment List (댓글 목록 영역) ==================== */}
               <div className="flex-1 overflow-y-auto px-4">
                 {/* ==================== Comment Block 1 ==================== */}
-                <Comment comments={comments?.comments ?? []} />
+                {comments?.totalCount !== 0 ? (
+                  <Comment comments={comments?.comments ?? []} />
+                ) : (
+                  <span className="flex h-full w-full items-center justify-center text-lg text-gray-600">
+                    등록된 댓글이 없습니다.
+                  </span>
+                )}
 
                 {/* ==================== Empty State (댓글 없을 때) ==================== */}
                 {/* 
