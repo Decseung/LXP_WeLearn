@@ -59,7 +59,7 @@ export default function ShortsCard({
             <DropdownMenuTrigger asChild>
               <button
                 onClick={(e) => e.stopPropagation()}
-                className="flex-shrink-0 rounded-full p-1 transition-colors hover:bg-gray-100"
+                className="shrink-0 rounded-full p-1 transition-colors hover:bg-gray-100"
               >
                 <MoreHorizontal size={18} className="text-black" />
               </button>
@@ -81,9 +81,6 @@ export default function ShortsCard({
               {keyword}
             </span>
           ))}
-          <span className="px-1 py-1 text-xs text-gray-900">#shorts</span>
-          <span className="px-1 py-1 text-xs text-gray-900">#개발자</span>
-          <span className="px-1 py-1 text-xs text-gray-900">#코딩</span>
         </div>
       </div>
     </div>

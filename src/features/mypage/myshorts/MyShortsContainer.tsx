@@ -25,7 +25,7 @@ export default function MyShortsContainer({ initialShorts, totalCount }: MyShort
     <div className="h-full w-full">
       <div className="flex flex-col gap-8 lg:flex-row">
         {/* 좌측 - 미리보기 */}
-        <div className="order-1 w-full lg:order-1 lg:w-100 lg:flex-shrink-0">
+        <div className="order-1 w-full lg:order-1 lg:w-100 lg:shrink-0">
           <div className="flex flex-col items-center justify-center gap-6 py-8 md:py-0 lg:sticky lg:top-24">
             <h1 className="pt-8 text-center text-2xl font-black text-gray-900 uppercase md:pt-0 lg:p-0 lg:text-left">
               My Created Shorts

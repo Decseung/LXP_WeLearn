@@ -17,7 +17,7 @@ export default function ShortsCardThumbnail({
   const imageUrl = thumbnailUrl || EXTERNAL_IMAGES.THUMBNAIL
 
   return (
-    <div className="relative h-48 w-28 flex-shrink-0 overflow-hidden rounded-lg border-transparent bg-gray-200 sm:h-48 sm:w-36">
+    <div className="relative h-48 w-28 shrink-0 overflow-hidden rounded-lg border-transparent bg-gray-200 sm:h-48 sm:w-36">
       <Image
         src={imageUrl}
         alt={title}
