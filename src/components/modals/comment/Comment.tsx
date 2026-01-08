@@ -2,6 +2,7 @@ import { ChevronDown, Ellipsis, User } from 'lucide-react'
 import ReComment from './ReComment'
 import { useState } from 'react'
 import { CommentType } from '@/types/comment'
+import ReCommentInput from './ReCommentInput'
 
 interface CommentsProps {
   comments?: CommentType[]
@@ -9,11 +10,15 @@ interface CommentsProps {
 
 export default function Comment(comments: CommentsProps) {
   const [openReply, setOpenReply] = useState<number | null>(null)
+  const [openReplyInput, setOpenReplyInput] = useState<number | null>(null)
 
   const handelReply = (id: number) => {
     setOpenReply(openReply === id ? null : id)
   }
-  console.log(openReply)
+
+  const handelReplyInput = (id: number) => {
+    setOpenReplyInput(openReplyInput === id ? null : id)
+  }
   return (
     <>
       {comments.comments?.map((comment) => {
@@ -22,15 +27,15 @@ export default function Comment(comments: CommentsProps) {
             <div className="flex items-start justify-between">
               <div className="flex flex-1 items-start gap-3">
                 {/* 프로필 이미지 */}
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gray-200 text-gray-600">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-200 text-gray-600">
                   {comment.user.profileUrl ? (
                     <img
                       src={comment.user.profileUrl}
                       alt={comment.user.name}
-                      className="h-10 w-10 rounded-full object-cover"
+                      className="h-8 w-8 rounded-full object-cover"
                     />
                   ) : (
-                    <User strokeWidth={1.5} size={24} />
+                    <User strokeWidth={1.5} size={20} className="text-gray-400" />
                   )}
                 </div>
 
@@ -53,7 +58,12 @@ export default function Comment(comments: CommentsProps) {
                       답글 {comment.replies.length}개
                       <ChevronDown size={12} />
                     </button>
-                    <button className="text-xs text-gray-500 transition-colors hover:text-black">
+                    <button
+                      className="text-xs text-gray-500 transition-colors hover:text-black"
+                      onClick={() => {
+                        handelReplyInput(comment.id)
+                      }}
+                    >
                       답글달기
                     </button>
                   </div>
@@ -64,6 +74,11 @@ export default function Comment(comments: CommentsProps) {
                 <Ellipsis size={18} />
               </button>
             </div>
+            <ReCommentInput
+              commentId={comment.id}
+              openReplyInput={openReplyInput}
+              setOpenReplyInput={setOpenReplyInput}
+            />
             {comment.replies.length > 0 && (
               <ReComment
                 commentReply={comment.replies}

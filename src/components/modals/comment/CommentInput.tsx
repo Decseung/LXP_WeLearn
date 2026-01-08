@@ -1,24 +1,33 @@
+import { Button } from '@/components/ui/Button'
+import { UserInfo } from '@/types/auth'
+import { User } from 'lucide-react'
+import { useEffect, useState } from 'react'
+
 export default function CommentInput() {
+  const [user, setUser] = useState<UserInfo | null>(null)
+
+  useEffect(() => {
+    const localUser = localStorage.getItem('user') as string
+    const parsedUser = JSON.parse(localUser)
+    setUser(parsedUser)
+  }, [])
+
   return (
     <div className="border-t border-gray-200 bg-white p-4">
       <div className="flex items-center gap-3">
         {/* 프로필 아이콘 */}
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gray-200">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="text-gray-400"
-          >
-            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-200">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-200 text-gray-600">
+            {user?.profileUrl ? (
+              <img
+                src={user.profileUrl}
+                alt={user.name}
+                className="h-8 w-8 rounded-full object-cover"
+              />
+            ) : (
+              <User strokeWidth={1.5} size={20} className="text-gray-400" />
+            )}
+          </div>
         </div>
         {/* 입력 필드 */}
         <input
@@ -29,12 +38,12 @@ export default function CommentInput() {
       </div>
       {/* 버튼 영역 */}
       <div className="mt-3 flex justify-end gap-2">
-        <button className="rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-600 transition-colors hover:bg-gray-50">
+        <Button variant="outline" className="rounded-full">
           취소
-        </button>
-        <button className="rounded-md bg-black px-6 py-2 text-sm text-white transition-colors hover:bg-gray-800 disabled:cursor-not-allowed disabled:bg-gray-300">
+        </Button>
+        <Button variant="accent" className="rounded-full">
           등록
-        </button>
+        </Button>
       </div>
     </div>
   )

@@ -26,15 +26,15 @@ export default function ReComment({ commentReply, openReply, commentId }: ReComm
                 <div className="mt-3">
                   <div className="border-gray-100 pt-3 pl-12">
                     <div className="flex items-start justify-between gap-3">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gray-200 text-gray-600">
+                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-200 text-gray-600">
                         {reply.user.profileUrl ? (
                           <img
                             src={reply.user.profileUrl}
                             alt={reply.user.name}
-                            className="h-10 w-10 rounded-full object-cover"
+                            className="h-8 w-8 rounded-full object-cover"
                           />
                         ) : (
-                          <User strokeWidth={1.5} size={24} />
+                          <User strokeWidth={1.5} size={20} className="text-gray-400" />
                         )}
                       </div>
 

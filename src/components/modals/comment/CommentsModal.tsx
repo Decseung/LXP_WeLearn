@@ -28,7 +28,6 @@ export default function CommentModal() {
 
   const id = params.id as string
 
-  console.log(comments)
   useEffect(() => {
     const match = pathname.match(/\/shorts\/([^\/]+)/)
     if (match?.[1]) {
