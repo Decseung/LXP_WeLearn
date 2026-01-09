@@ -161,5 +161,444 @@
       }
     }
   ],
-  "users": []
+  "users": [],
+  "comments": [
+    {
+      "commentId": 1,
+      "shortsId": 3,
+      "content": "이 영상 너무 좋아요",
+      "createdAt": "2026-01-07T10:15:00",
+      "writer": {
+        "userId": 1,
+        "nickname": "hojun",
+        "profileImageUrl": "https://cdn.example.com/profile/1.png"
+      },
+      "replyCount": 2,
+      "isMine": false
+    },
+    {
+      "commentId": 2,
+      "shortsId": 3,
+      "content": "설명 잘 들었습니다",
+      "createdAt": "2026-01-07T10:18:00",
+      "writer": {
+        "userId": 2,
+        "nickname": "alice",
+        "profileImageUrl": "https://cdn.example.com/profile/2.png"
+      },
+      "replyCount": 0,
+      "isMine": true
+    },
+    {
+      "commentId": 3,
+      "shortsId": 4,
+      "content": "덕분에 이해가 잘 됐어요",
+      "createdAt": "2026-01-07T10:22:00",
+      "writer": {
+        "userId": 3,
+        "nickname": "minsu",
+        "profileImageUrl": "https://cdn.example.com/profile/3.png"
+      },
+      "replyCount": 1,
+      "isMine": false
+    },
+    {
+      "commentId": 4,
+      "shortsId": 4,
+      "content": "다음 영상도 기대할게요!",
+      "createdAt": "2026-01-07T10:30:00",
+      "writer": {
+        "userId": 4,
+        "nickname": "jiyoon",
+        "profileImageUrl": "https://cdn.example.com/profile/4.png"
+      },
+      "replyCount": 0,
+      "isMine": false
+    },
+    {
+      "commentId": 5,
+      "shortsId": 5,
+      "content": "실무에서 바로 써먹을 수 있겠네요",
+      "createdAt": "2026-01-07T10:35:00",
+      "writer": {
+        "userId": 5,
+        "nickname": "developerK",
+        "profileImageUrl": "https://cdn.example.com/profile/5.png"
+      },
+      "replyCount": 3,
+      "isMine": false
+    },
+    {
+      "commentId": 6,
+      "shortsId": 5,
+      "content": "이 부분 정말 도움됐어요",
+      "createdAt": "2026-01-07T10:38:00",
+      "writer": {
+        "userId": 6,
+        "nickname": "soyeon",
+        "profileImageUrl": "https://cdn.example.com/profile/6.png"
+      },
+      "replyCount": 0,
+      "isMine": false
+    },
+    {
+      "commentId": 7,
+      "shortsId": 6,
+      "content": "이해 안 됐던 게 해결됐어요",
+      "createdAt": "2026-01-07T10:45:00",
+      "writer": {
+        "userId": 7,
+        "nickname": "junho",
+        "profileImageUrl": "https://cdn.example.com/profile/7.png"
+      },
+      "replyCount": 2,
+      "isMine": false
+    },
+    {
+      "commentId": 8,
+      "shortsId": 6,
+      "content": "시간 가는 줄 모르고 봤네요",
+      "createdAt": "2026-01-07T10:50:00",
+      "writer": {
+        "userId": 8,
+        "nickname": "hyeri",
+        "profileImageUrl": "https://cdn.example.com/profile/8.png"
+      },
+      "replyCount": 0,
+      "isMine": false
+    },
+    {
+      "commentId": 9,
+      "shortsId": 6,
+      "content": "이런 콘텐츠 너무 좋아요 👍",
+      "createdAt": "2026-01-07T10:55:00",
+      "writer": {
+        "userId": 9,
+        "nickname": "taeyang",
+        "profileImageUrl": "https://cdn.example.com/profile/9.png"
+      },
+      "replyCount": 1,
+      "isMine": false
+    },
+    {
+      "commentId": 10,
+      "shortsId": 7,
+      "content": "초보자도 이해하기 쉬웠어요",
+      "createdAt": "2026-01-07T11:00:00",
+      "writer": {
+        "userId": 10,
+        "nickname": "beginnerDev",
+        "profileImageUrl": "https://cdn.example.com/profile/10.png"
+      },
+      "replyCount": 0,
+      "isMine": false
+    },
+    {
+      "commentId": 11,
+      "shortsId": 7,
+      "content": "정리 진짜 잘하셨네요",
+      "createdAt": "2026-01-07T11:05:00",
+      "writer": {
+        "userId": 11,
+        "nickname": "seungho",
+        "profileImageUrl": "https://cdn.example.com/profile/11.png"
+      },
+      "replyCount": 0,
+      "isMine": false
+    },
+    {
+      "commentId": 12,
+      "shortsId": 7,
+      "content": "구독하고 갑니다",
+      "createdAt": "2026-01-07T11:10:00",
+      "writer": {
+        "userId": 12,
+        "nickname": "subscriber",
+        "profileImageUrl": "https://cdn.example.com/profile/12.png"
+      },
+      "replyCount": 0,
+      "isMine": false
+    },
+    {
+      "commentId": 13,
+      "shortsId": 8,
+      "content": "이 부분 코드 예제도 있으면 좋겠어요",
+      "createdAt": "2026-01-07T11:15:00",
+      "writer": {
+        "userId": 13,
+        "nickname": "codeLover",
+        "profileImageUrl": "https://cdn.example.com/profile/13.png"
+      },
+      "replyCount": 2,
+      "isMine": false
+    },
+    {
+      "commentId": 14,
+      "shortsId": 8,
+      "content": "영상 퀄리티가 점점 좋아지네요",
+      "createdAt": "2026-01-07T11:20:00",
+      "writer": {
+        "userId": 14,
+        "nickname": "videoFan",
+        "profileImageUrl": "https://cdn.example.com/profile/14.png"
+      },
+      "replyCount": 0,
+      "isMine": false
+    },
+    {
+      "commentId": 15,
+      "shortsId": 8,
+      "content": "덕분에 프로젝트에 적용했어요",
+      "createdAt": "2026-01-07T11:25:00",
+      "writer": {
+        "userId": 15,
+        "nickname": "realWorldDev",
+        "profileImageUrl": "https://cdn.example.com/profile/15.png"
+      },
+      "replyCount": 1,
+      "isMine": false
+    },
+    {
+      "commentId": 16,
+      "shortsId": 3,
+      "content": "이 영상 여러 번 봤어요",
+      "createdAt": "2026-01-07T11:30:00",
+      "writer": {
+        "userId": 16,
+        "nickname": "replayUser",
+        "profileImageUrl": "https://cdn.example.com/profile/16.png"
+      },
+      "replyCount": 0,
+      "isMine": false
+    },
+    {
+      "commentId": 17,
+      "shortsId": 4,
+      "content": "설명 속도가 딱 좋아요",
+      "createdAt": "2026-01-07T11:35:00",
+      "writer": {
+        "userId": 17,
+        "nickname": "steady",
+        "profileImageUrl": "https://cdn.example.com/profile/17.png"
+      },
+      "replyCount": 0,
+      "isMine": false
+    },
+    {
+      "commentId": 18,
+      "shortsId": 5,
+      "content": "북마크 해두고 다시 볼게요",
+      "createdAt": "2026-01-07T11:40:00",
+      "writer": {
+        "userId": 18,
+        "nickname": "bookmarkUser",
+        "profileImageUrl": "https://cdn.example.com/profile/18.png"
+      },
+      "replyCount": 0,
+      "isMine": false
+    },
+    {
+      "commentId": 19,
+      "shortsId": 6,
+      "content": "질문 하나 남겨도 될까요?",
+      "createdAt": "2026-01-07T11:45:00",
+      "writer": {
+        "userId": 19,
+        "nickname": "questioner",
+        "profileImageUrl": "https://cdn.example.com/profile/19.png"
+      },
+      "replyCount": 2,
+      "isMine": false
+    },
+    {
+      "commentId": 20,
+      "shortsId": 7,
+      "content": "오늘도 좋은 영상 감사합니다",
+      "createdAt": "2026-01-07T11:50:00",
+      "writer": {
+        "userId": 20,
+        "nickname": "thanksDev",
+        "profileImageUrl": "https://cdn.example.com/profile/20.png"
+      },
+      "replyCount": 0,
+      "isMine": false
+    }
+  ],
+  "replies": [
+    {
+      "replyId": 101,
+      "parentId": 1,
+      "content": "저도 이 부분 정말 공감했어요",
+      "createdAt": "2026-01-09T13:10:21",
+      "writer": {
+        "userId": 3,
+        "nickname": "minsu",
+        "profileImageUrl": "https://cdn.example.com/p/3.png"
+      },
+      "isMine": false
+    },
+    {
+      "replyId": 102,
+      "parentId": 1,
+      "content": "댓글 감사합니다!",
+      "createdAt": "2026-01-09T13:11:10",
+      "writer": {
+        "userId": 1,
+        "nickname": "hojun",
+        "profileImageUrl": "https://cdn.example.com/p/1.png"
+      },
+      "isMine": true
+    },
+
+    {
+      "replyId": 103,
+      "parentId": 3,
+      "content": "도움이 됐다니 다행이에요 🙂",
+      "createdAt": "2026-01-09T13:12:45",
+      "writer": {
+        "userId": 4,
+        "nickname": "jiyoon",
+        "profileImageUrl": "https://cdn.example.com/p/4.png"
+      },
+      "isMine": false
+    },
+
+    {
+      "replyId": 104,
+      "parentId": 5,
+      "content": "실무 적용 사례도 궁금하네요",
+      "createdAt": "2026-01-09T13:14:03",
+      "writer": {
+        "userId": 6,
+        "nickname": "soyeon",
+        "profileImageUrl": "https://cdn.example.com/p/6.png"
+      },
+      "isMine": false
+    },
+    {
+      "replyId": 105,
+      "parentId": 5,
+      "content": "저도 같은 생각이에요",
+      "createdAt": "2026-01-09T13:15:20",
+      "writer": {
+        "userId": 8,
+        "nickname": "hyeri",
+        "profileImageUrl": "https://cdn.example.com/p/8.png"
+      },
+      "isMine": false
+    },
+    {
+      "replyId": 106,
+      "parentId": 5,
+      "content": "다음 영상에서 다뤄볼게요!",
+      "createdAt": "2026-01-09T13:16:05",
+      "writer": {
+        "userId": 1,
+        "nickname": "hojun",
+        "profileImageUrl": "https://cdn.example.com/p/1.png"
+      },
+      "isMine": true
+    },
+
+    {
+      "replyId": 107,
+      "parentId": 7,
+      "content": "저도 여기서 막혔었어요",
+      "createdAt": "2026-01-09T13:18:11",
+      "writer": {
+        "userId": 9,
+        "nickname": "taeyang",
+        "profileImageUrl": "https://cdn.example.com/p/9.png"
+      },
+      "isMine": false
+    },
+    {
+      "replyId": 108,
+      "parentId": 7,
+      "content": "타임스탬프 참고해보세요",
+      "createdAt": "2026-01-09T13:19:02",
+      "writer": {
+        "userId": 10,
+        "nickname": "beginnerDev",
+        "profileImageUrl": "https://cdn.example.com/p/10.png"
+      },
+      "isMine": false
+    },
+
+    {
+      "replyId": 109,
+      "parentId": 9,
+      "content": "👍 완전 공감입니다",
+      "createdAt": "2026-01-09T13:20:44",
+      "writer": {
+        "userId": 11,
+        "nickname": "seungho",
+        "profileImageUrl": "https://cdn.example.com/p/11.png"
+      },
+      "isMine": false
+    },
+
+    {
+      "replyId": 110,
+      "parentId": 13,
+      "content": "코드 예제 추가되면 좋겠어요",
+      "createdAt": "2026-01-09T13:22:01",
+      "writer": {
+        "userId": 14,
+        "nickname": "videoFan",
+        "profileImageUrl": "https://cdn.example.com/p/14.png"
+      },
+      "isMine": false
+    },
+    {
+      "replyId": 111,
+      "parentId": 13,
+      "content": "깃허브 링크 있으면 최고일 듯",
+      "createdAt": "2026-01-09T13:22:48",
+      "writer": {
+        "userId": 15,
+        "nickname": "realWorldDev",
+        "profileImageUrl": "https://cdn.example.com/p/15.png"
+      },
+      "isMine": false
+    },
+
+    {
+      "replyId": 112,
+      "parentId": 15,
+      "content": "적용 후기 공유 감사합니다!",
+      "createdAt": "2026-01-09T13:24:30",
+      "writer": {
+        "userId": 1,
+        "nickname": "hojun",
+        "profileImageUrl": "https://cdn.example.com/p/1.png"
+      },
+      "isMine": true
+    },
+
+    {
+      "replyId": 113,
+      "parentId": 19,
+      "content": "질문 남겨주세요!",
+      "createdAt": "2026-01-09T13:26:10",
+      "writer": {
+        "userId": 20,
+        "nickname": "thanksDev",
+        "profileImageUrl": "https://cdn.example.com/p/20.png"
+      },
+      "isMine": false
+    },
+    {
+      "replyId": 114,
+      "parentId": 19,
+      "content": "저도 같은 궁금증 있어요",
+      "createdAt": "2026-01-09T13:27:00",
+      "writer": {
+        "userId": 7,
+        "nickname": "mina",
+        "profileImageUrl": "https://cdn.example.com/p/7.png"
+      },
+      "isMine": true
+    }
+  ]
 }

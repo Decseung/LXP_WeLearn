@@ -11,8 +11,8 @@ import { commentApi } from '@/services/comments/comments.service'
 import { CommentType } from '@/types/comment'
 
 export interface CommentsResponse {
-  totalCount: number
-  comments: CommentType[]
+  success: boolean
+  data: CommentType[]
 }
 
 export default function CommentModal() {
@@ -42,7 +42,7 @@ export default function CommentModal() {
 
     setLoading(true)
 
-    const res = await commentApi.getComment(shortsId)
+    const res = await commentApi.getComment(Number(shortsId))
     setComments(res)
 
     setLoading(false)
@@ -52,6 +52,7 @@ export default function CommentModal() {
     setMounted(true)
   }, [])
 
+  console.log(comments)
   useEffect(() => {
     if (!mounted || !isOpen || !id) return
 
@@ -82,27 +83,18 @@ export default function CommentModal() {
               } `}
             >
               {/* ==================== Modal Header ==================== */}
-              <CommentModalHeader closeHandler={handleClose} totalCount={comments?.totalCount} />
+              <CommentModalHeader closeHandler={handleClose} totalCount={comments?.data.length} />
               {/* ==================== Comment List (댓글 목록 영역) ==================== */}
               <div className="flex-1 overflow-y-auto px-4">
                 {/* ==================== Comment Block 1 ==================== */}
-                {comments?.totalCount !== 0 ? (
-                  <Comment comments={comments?.comments ?? []} />
+                {comments?.data.length !== 0 ? (
+                  <Comment comments={comments?.data ?? []} />
                 ) : (
                   <span className="flex h-full w-full items-center justify-center text-lg text-gray-600">
                     등록된 댓글이 없습니다.
                   </span>
                 )}
-
-                {/* ==================== Empty State (댓글 없을 때) ==================== */}
-                {/* 
-          <div className="flex flex-col items-center justify-center h-full text-gray-400">
-            <p>아직 댓글이 없습니다.</p>
-            <p className="text-sm mt-1">첫 번째 댓글을 남겨보세요!</p>
-          </div>
-          */}
               </div>
-              {/* ==================== Comment Input Section Fixed (하단 고정 입력창) ==================== */}
               <CommentInput />
             </div>
 

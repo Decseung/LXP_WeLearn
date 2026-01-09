@@ -195,31 +195,26 @@ server.post('/api/v1/auth/logout', (req, res) => {
 server.post('/api/v1/shorts/:shortsId/comments', (req, res) => {
   const db = router.db
   const shortsId = Number(req.params.shortsId)
-  const { content, parentId = null } = req.body
-  const currentUserId = 1
+  const { content } = req.body
 
   if (!content) {
-    return res.status(400).json({
-      success: false,
-      error: '댓글 내용이 필요합니다.',
-    })
+    return res.status(400).json({ success: false, error: '내용 필요' })
   }
 
   const newComment = {
     id: Date.now(),
     shortsId,
-    userId: currentUserId,
-    parentId,
+    parentId: null,
+    userId: CURRENT_USER_ID,
     content,
     createdAt: new Date().toISOString(),
   }
 
   db.get('comments').push(newComment).write()
 
-  res.status(201).json({
+  res.status(200).json({
     success: true,
     data: { commentId: newComment.id },
-    error: null,
   })
 })
 
@@ -227,38 +222,29 @@ server.post('/api/v1/shorts/:shortsId/comments', (req, res) => {
 server.get('/api/v1/shorts/:shortsId/comments', (req, res) => {
   const db = router.db
   const shortsId = Number(req.params.shortsId)
-  const currentUserId = 1 // mock 로그인 유저
 
   const comments = db.get('comments').filter({ shortsId }).value()
-
   const users = db.get('users').value()
 
-  const result = comments
-    .filter((c) => c.parentId === null)
-    .map((comment) => {
-      const writer = users.find((u) => u.id === comment.userId)
-      const replyCount = comments.filter((c) => c.parentId === comment.id).length
+  const result = comments.map((comment) => {
+    const writer = users.find((u) => u.id === comment.userId)
+    const replyCount = comments.filter((c) => c.parentId === comment.id).length
 
-      return {
-        commentId: comment.id,
-        parentId: comment.parentId,
-        content: comment.content,
-        createdAt: comment.createdAt,
-        writer: {
-          userId: writer.id,
-          nickname: writer.nickname,
-          profileImageUrl: writer.profileImageUrl,
-        },
-        replyCount,
-        isMine: comment.userId === currentUserId,
-      }
-    })
-
-  res.json({
-    success: true,
-    data: result,
-    error: null,
+    return {
+      commentId: comment.id,
+      content: comment.content,
+      createdAt: comment.createdAt,
+      writer: {
+        userId: writer?.id,
+        nickname: writer?.nickname,
+        profileImageUrl: writer?.profileImageUrl,
+      },
+      replyCount,
+      isMine: false,
+    }
   })
+
+  res.json({ success: true, data: result })
 })
 
 // PUT 댓글 수정
@@ -266,44 +252,42 @@ server.put('/api/v1/comments/:commentId', (req, res) => {
   const db = router.db
   const commentId = Number(req.params.commentId)
   const { content } = req.body
-  const currentUserId = 1
 
   const comment = db.get('comments').find({ id: commentId }).value()
 
   if (!comment) {
-    return res.status(404).json({ success: false, error: '댓글이 없습니다.' })
+    return res.status(404).json({ success: false })
   }
 
-  if (comment.userId !== currentUserId) {
-    return res.status(403).json({ success: false, error: '권한 없음' })
+  if (comment.userId !== CURRENT_USER_ID) {
+    return res.status(403).json({ success: false })
   }
 
   db.get('comments').find({ id: commentId }).assign({ content }).write()
 
-  res.json({ success: true, error: null })
+  res.json({ success: true })
 })
 
 // delete 댓글 삭제
 server.delete('/api/v1/comments/:commentId', (req, res) => {
   const db = router.db
   const commentId = Number(req.params.commentId)
-  const currentUserId = 1
 
   const comment = db.get('comments').find({ id: commentId }).value()
 
   if (!comment) {
-    return res.status(404).json({ success: false, error: '댓글이 없습니다.' })
+    return res.status(404).json({ success: false })
   }
 
-  if (comment.userId !== currentUserId) {
-    return res.status(403).json({ success: false, error: '권한 없음' })
+  if (comment.userId !== CURRENT_USER_ID) {
+    return res.status(403).json({ success: false })
   }
 
   db.get('comments')
     .remove((c) => c.id === commentId || c.parentId === commentId)
     .write()
 
-  res.json({ success: true, error: null })
+  res.json({ success: true })
 })
 
 // ==========================================
@@ -313,34 +297,28 @@ server.delete('/api/v1/comments/:commentId', (req, res) => {
 server.get('/api/v1/comments/:commentId/replies', (req, res) => {
   const db = router.db
   const commentId = Number(req.params.commentId)
-  const currentUserId = 1
+  const users = db.get('users').value()
 
   const replies = db.get('comments').filter({ parentId: commentId }).value()
-
-  const users = db.get('users').value()
 
   const result = replies.map((reply) => {
     const writer = users.find((u) => u.id === reply.userId)
 
     return {
-      commentId: reply.id,
+      replyId: reply.id,
       parentId: reply.parentId,
       content: reply.content,
       createdAt: reply.createdAt,
       writer: {
-        userId: writer.id,
-        nickname: writer.nickname,
-        profileImageUrl: writer.profileImageUrl,
+        userId: writer?.id,
+        nickname: writer?.nickname,
+        profileImageUrl: writer?.profileImageUrl,
       },
-      isMine: reply.userId === currentUserId,
+      isMine: reply.userId === CURRENT_USER_ID,
     }
   })
 
-  res.json({
-    success: true,
-    data: result,
-    error: null,
-  })
+  res.json({ success: true, data: result })
 })
 
 // 대댓글 작성
@@ -348,20 +326,21 @@ server.post('/api/v1/comments/:commentId/replies', (req, res) => {
   const db = router.db
   const parentId = Number(req.params.commentId)
   const { content } = req.body
-  const currentUserId = 1
 
   if (!content) {
-    return res.status(400).json({
-      success: false,
-      error: '내용을 입력해주세요',
-    })
+    return res.status(400).json({ success: false })
+  }
+
+  const parent = db.get('comments').find({ id: parentId, parentId: null }).value()
+  if (!parent) {
+    return res.status(404).json({ success: false })
   }
 
   const newReply = {
     id: Date.now(),
     parentId,
-    userId: currentUserId,
-    shortsId: null, // parent 댓글에서 유추 가능
+    shortsId: null,
+    userId: CURRENT_USER_ID,
     content,
     createdAt: new Date().toISOString(),
   }
@@ -370,86 +349,49 @@ server.post('/api/v1/comments/:commentId/replies', (req, res) => {
 
   res.status(201).json({
     success: true,
-    data: { commentId: newReply.id },
-    error: null,
+    data: { replyId: newReply.id },
   })
 })
 
 // 대댓글 수정
-server.put('/api/v1/comments/:commentId', (req, res) => {
+server.put('/api/v1/replies/:replyId', (req, res) => {
   const db = router.db
-  const commentId = Number(req.params.commentId)
+  const replyId = Number(req.params.replyId)
   const { content } = req.body
-  const currentUserId = 1
 
-  if (!content) {
-    return res.status(400).json({
-      success: false,
-      error: '댓글 내용이 필요합니다.',
-    })
+  const reply = db.get('comments').find({ id: replyId }).value()
+
+  if (!reply || reply.parentId === null) {
+    return res.status(404).json({ success: false })
   }
 
-  const comment = db.get('comments').find({ id: commentId }).value()
-
-  if (!comment) {
-    return res.status(404).json({
-      success: false,
-      error: '댓글이 존재하지 않습니다.',
-    })
+  if (reply.userId !== CURRENT_USER_ID) {
+    return res.status(403).json({ success: false })
   }
 
-  // 🔥 댓글 / 대댓글 공통 권한 체크
-  if (comment.userId !== currentUserId) {
-    return res.status(403).json({
-      success: false,
-      error: '본인 댓글만 수정할 수 있습니다.',
-    })
-  }
+  db.get('comments').find({ id: replyId }).assign({ content }).write()
 
-  db.get('comments').find({ id: commentId }).assign({ content }).write()
-
-  res.json({
-    success: true,
-    error: null,
-  })
+  res.json({ success: true })
 })
 
 // 대댓글 삭제
-server.delete('/api/v1/comments/:commentId', (req, res) => {
+server.delete('/api/v1/replies/:replyId', (req, res) => {
   const db = router.db
-  const commentId = Number(req.params.commentId)
-  const currentUserId = 1
+  const replyId = Number(req.params.replyId)
 
-  const comment = db.get('comments').find({ id: commentId }).value()
+  const reply = db.get('comments').find({ id: replyId }).value()
 
-  if (!comment) {
-    return res.status(404).json({
-      success: false,
-      error: '댓글이 존재하지 않습니다.',
-    })
+  if (!reply || reply.parentId === null) {
+    return res.status(404).json({ success: false })
   }
 
-  if (comment.userId !== currentUserId) {
-    return res.status(403).json({
-      success: false,
-      error: '본인 댓글만 삭제할 수 있습니다.',
-    })
+  if (reply.userId !== CURRENT_USER_ID) {
+    return res.status(403).json({ success: false })
   }
 
-  if (comment.parentId === null) {
-    // 🔥 댓글 삭제 → 대댓글 함께 삭제
-    db.get('comments')
-      .remove((c) => c.id === commentId || c.parentId === commentId)
-      .write()
-  } else {
-    // 🔥 대댓글 삭제 → 자기 자신만
-    db.get('comments').remove({ id: commentId }).write()
-  }
+  db.get('comments').remove({ id: replyId }).write()
 
-  res.json({
-    success: true,
-    error: null,
-  })
+  res.json({ success: true })
 })
 
 // ==========================================

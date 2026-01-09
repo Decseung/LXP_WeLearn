@@ -5,9 +5,9 @@ export interface UserInfo {
 }
 
 export interface CommentType {
-  id: number
   content: string
   createdAt: string
-  user: UserInfo
-  replies: CommentType[] // 대댓글
+  isMine: boolean
+  replyCount: number
+  writer: UserInfo
 }

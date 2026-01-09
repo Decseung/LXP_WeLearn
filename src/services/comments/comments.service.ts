@@ -9,7 +9,7 @@ interface PostCommentRequest {
 
 export const commentApi = {
   // 해당 숏폼 댓글 조회
-  getComment: async (id: string) => {
+  getComment: async (id: number) => {
     const response = await fetch(`http://localhost:4000/api/v1/shorts/${id}/comments`, {
       cache: 'no-store',
     })
