@@ -9,6 +9,8 @@ import {
 } from '@/features/register/types/shortsRegister'
 import { validateShortsForm } from '@/features/register/register.validation'
 import { registerShortsAction } from '@/features/register/register.action'
+import { shortsUploadApi } from '@/services/shorts/upload.service'
+import { uploadVideoToS3 } from '@/lib/utils/s3Upload'
 
 interface UseRegisterFormParams {
   initialFormData?: Partial<ShortsFormData>
@@ -64,7 +66,7 @@ export default function useRegisterForm(params: UseRegisterFormParams = {}) {
     setVideoData((prev) => ({ ...prev, [field]: value }))
   }
 
-  // 숏츠 등록 핸들러
+  // 숏츠 등록 핸들러 (S3 직접 업로드 방식)
   const handleRegister = async () => {
     if (isSubmitting) return
 
@@ -81,20 +83,44 @@ export default function useRegisterForm(params: UseRegisterFormParams = {}) {
     setIsSubmitting(true)
 
     try {
-      // 서버 액션 호출 (검증 통과 후이므로 non-null 단언)
-      const result = await registerShortsAction(
-        {
-          categoryId: formData.categoryId!,
-          title: formData.title,
-          description: formData.description || undefined,
-          keywords: formData.keywords.length > 0 ? formData.keywords : undefined,
-          thumbnail: formData.thumbnail,
+      const videoFile = videoData.videoFile!
+
+      // 1. Presigned URL 발급 요청 (비디오)
+      toast.info('비디오 업로드 준비 중...')
+      const videoPresigned = await shortsUploadApi.getPresignedUrl({
+        filename: videoFile.name,
+        contentType: videoFile.type,
+      })
+
+      // 2. S3에 비디오 직접 업로드
+      toast.info('비디오 업로드 중...')
+      const videoUploadResult = await uploadVideoToS3(
+        videoPresigned.presignedUrl,
+        videoFile,
+        (progress) => {
+          console.log(`비디오 업로드 진행률: ${progress}%`)
         },
-        videoData.videoFile!,
-        videoData.durationSec ?? undefined,
       )
 
-      //  ActionState 기반 응답 처리
+      if (!videoUploadResult.success) {
+        throw new Error(videoUploadResult.error || '비디오 업로드 실패')
+      }
+
+      const videoUrl = videoUploadResult.videoFileUrl || videoPresigned.videoFileUrl
+
+      // 3. 숏츠 메타데이터 등록 (S3 업로드된 비디오 URL + 썸네일 Base64)
+      toast.info('숏츠 등록 중...')
+      const result = await registerShortsAction({
+        categoryId: formData.categoryId!,
+        title: formData.title,
+        description: formData.description || undefined,
+        keywords: formData.keywords.length > 0 ? formData.keywords : undefined,
+        videoUrl,
+        thumbnail: formData.thumbnail,
+        durationSec: videoData.durationSec ?? undefined,
+      })
+
+      // ActionState 기반 응답 처리
       if (result.success) {
         toast.success(result.message || '등록이 완료되었습니다.')
         router.push('/mypage/myshorts')
