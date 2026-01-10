@@ -38,7 +38,7 @@ export default function ShortsFormVideoPreviewTab({
         </video>
         {/* 수정 모드 안내 */}
         {isEditMode && (
-          <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-black/70 px-3 py-1.5 text-xs text-white">
+          <div className="absolute top-6 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-black/70 px-3 py-1.5 text-sm text-white">
             <Lock size={12} />
             영상은 수정할 수 없습니다
           </div>
