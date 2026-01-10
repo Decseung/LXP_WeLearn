@@ -8,12 +8,14 @@ interface ReCommnetInputProps {
   commentId: number
   openReplyInput: number | null
   setOpenReplyInput: (commentId: number | null) => void
+  ReplyAction: (formData: FormData) => void
 }
 
 export default function ReCommentInput({
   commentId,
   openReplyInput,
   setOpenReplyInput,
+  ReplyAction,
 }: ReCommnetInputProps) {
   const [user, setUser] = useState<UserInfo | null>(null)
 
@@ -47,11 +49,16 @@ export default function ReCommentInput({
                   <User strokeWidth={1.5} size={20} className="text-gray-400" />
                 )}
               </div>
-              <input
-                type="text"
-                placeholder="답글을 입력하세요..."
-                className="flex-1 rounded-full border border-gray-300 px-3 py-2 text-sm no-underline focus:border-black focus:ring-1 focus:ring-black focus:outline-none"
-              />
+              <form className="flex flex-1" action={ReplyAction}>
+                <input type="hidden" name="commentId" value={commentId} />
+                <input
+                  type="text"
+                  name="replyComment"
+                  placeholder="답글을 입력하세요..."
+                  autoComplete="off"
+                  className="flex-1 rounded-full border border-gray-300 px-3 py-2 text-sm no-underline focus:border-black focus:ring-1 focus:ring-black focus:outline-none"
+                />
+              </form>
             </div>
             <div className="flex justify-end gap-2 pt-3">
               <Button
@@ -64,7 +71,7 @@ export default function ReCommentInput({
                 취소
               </Button>
 
-              <Button variant="accent" className="rounded-full">
+              <Button variant="accent" className="rounded-full" type="submit">
                 등록
               </Button>
             </div>

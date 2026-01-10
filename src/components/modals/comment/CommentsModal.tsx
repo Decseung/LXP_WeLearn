@@ -1,23 +1,19 @@
 'use client'
 
-import { useParams, usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import CommentModalHeader from './CommentsModalHeader'
 import Comment from './Comment'
 import CommentInput from './CommentInput'
 import useIsMobile from '@/hook/useIsMobile'
-import { useEffect, useState } from 'react'
+import { useActionState, useEffect, useState } from 'react'
 import { commentApi } from '@/services/comments/comments.service'
-import { CommentType } from '@/types/comment'
-
-export interface CommentsResponse {
-  success: boolean
-  data: CommentType[]
-}
+import { CommentsResponse } from '@/types/comment'
+import { postCommentAction, postReplyAction } from '@/features/comment/action'
+import { toast } from 'react-toastify'
 
 export default function CommentModal() {
   const router = useRouter()
-  const params = useParams()
   const pathname = usePathname()
   const isMobile = useIsMobile()
   const [mounted, setMounted] = useState(false)
@@ -26,8 +22,15 @@ export default function CommentModal() {
   const [comments, setComments] = useState<CommentsResponse | null>(null)
   const [loading, setLoading] = useState(false)
 
-  const id = params.id as string
+  const [Commentstate, CommentAction] = useActionState(postCommentAction, {
+    success: false,
+    message: '',
+    errors: {},
+  })
 
+  // pathname에서 shortsId 추출
+  // 스와이프로 shortsId가 변화하는것을 감지하여 shortsId에 넣어준다.
+  // URL이 /shorts/{shortsId}/comments 형식일 때, {shortsId} 부분을 state에 저장
   useEffect(() => {
     const match = pathname.match(/\/shorts\/([^\/]+)/)
     if (match?.[1]) {
@@ -35,33 +38,47 @@ export default function CommentModal() {
     }
   }, [pathname])
 
+  // 현재 모달이 열려 있는지 판단
   const isOpen = pathname.endsWith('/comments')
 
+  // 댓글 목록 불러오기
   const fetchComments = async () => {
-    if (!id) return
-
+    if (!shortsId) return
     setLoading(true)
-
     const res = await commentApi.getComment(Number(shortsId))
     setComments(res)
-
     setLoading(false)
   }
 
+  // 컴포넌트가 마운트되었는지 체크
+  // mounted가 true가 되어야 fetchComments 실행
   useEffect(() => {
     setMounted(true)
   }, [])
 
-  console.log(comments)
+  // 댓글 목록을 가져오는 useEffect
+  // mounted가 true이고, 모달이 열려 있으며, shortsId가 존재할 때 fetchComments 실행
   useEffect(() => {
-    if (!mounted || !isOpen || !id) return
+    if (!mounted || !isOpen || !shortsId) return
 
     fetchComments()
-  }, [mounted, isOpen, id])
+  }, [mounted, isOpen, shortsId])
 
+  // 모달 닫기 함수
+  // 모달을 닫으면 /shorts/{shortsId} 경로로 이동
   const handleClose = () => {
     router.push(`/shorts/${shortsId}`)
   }
+
+  // 댓글 성공시 토스트 ui
+  useEffect(() => {
+    if (Commentstate.success) {
+      toast.success('댓글 등록에 성공하였습니다.🚀')
+      fetchComments()
+    } else if (Commentstate.success === false && Commentstate.message) {
+      toast.error(Commentstate.message)
+    }
+  }, [Commentstate])
 
   return (
     <AnimatePresence mode="wait">
@@ -83,11 +100,11 @@ export default function CommentModal() {
               } `}
             >
               {/* ==================== Modal Header ==================== */}
-              <CommentModalHeader closeHandler={handleClose} totalCount={comments?.data.length} />
+              <CommentModalHeader closeHandler={handleClose} totalCount={comments?.data?.length} />
               {/* ==================== Comment List (댓글 목록 영역) ==================== */}
               <div className="flex-1 overflow-y-auto px-4">
                 {/* ==================== Comment Block 1 ==================== */}
-                {comments?.data.length !== 0 ? (
+                {comments?.data?.length !== 0 ? (
                   <Comment comments={comments?.data ?? []} />
                 ) : (
                   <span className="flex h-full w-full items-center justify-center text-lg text-gray-600">
@@ -95,28 +112,8 @@ export default function CommentModal() {
                   </span>
                 )}
               </div>
-              <CommentInput />
+              <CommentInput CommentAction={CommentAction} />
             </div>
-
-            {/* ==================== Dropdown Menu (더보기 드롭다운) - hidden 제거하여 표시 ==================== */}
-            {/* 
-      <div className="absolute bg-white border border-gray-200 rounded-lg shadow-lg py-1 min-w-[100px] z-50">
-        <button className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-          </svg>
-          수정
-        </button>
-        <button className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-gray-100 flex items-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="3 6 5 6 21 6"></polyline>
-            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-          </svg>
-          삭제
-        </button>
-      </div>
-      */}
 
             {/* ==================== Confirm Modal (삭제 확인 모달) - hidden 제거하여 표시 ==================== */}
             {/* 

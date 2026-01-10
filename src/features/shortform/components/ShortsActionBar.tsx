@@ -51,7 +51,6 @@ export default function ShortsActionBar({ id }: ShortsActionBarProps) {
         onClick={handleComment}
       >
         <MessageSquareText strokeWidth={1.5} />
-        <span className="mt-1 text-xs">57</span>
       </button>
 
       {/* 저장 */}

@@ -1,16 +1,24 @@
 import { ChevronDown, Ellipsis, User } from 'lucide-react'
-import ReComment from './ReComment'
-import { useState } from 'react'
+import { useActionState, useState } from 'react'
 import { CommentType } from '@/types/comment'
 import ReCommentInput from './ReCommentInput'
+import ReComment from './ReComment'
+import { timeAgo } from '@/utils/timeAgo'
+import { postReplyAction } from '@/features/comment/action'
 
 interface CommentsProps {
-  comments?: CommentType[]
+  comments: CommentType[]
 }
 
-export default function Comment(comments: CommentsProps) {
+export default function Comment({ comments }: CommentsProps) {
   const [openReply, setOpenReply] = useState<number | null>(null)
   const [openReplyInput, setOpenReplyInput] = useState<number | null>(null)
+
+  const [Replystate, ReplyAction] = useActionState(postReplyAction, {
+    success: false,
+    message: '',
+    errors: {},
+  })
 
   const handelReply = (id: number) => {
     setOpenReply(openReply === id ? null : id)
@@ -18,20 +26,22 @@ export default function Comment(comments: CommentsProps) {
 
   const handelReplyInput = (id: number) => {
     setOpenReplyInput(openReplyInput === id ? null : id)
+    setOpenReply(id)
   }
+
   return (
     <>
-      {comments.comments?.map((comment) => {
+      {comments?.map((comment) => {
         return (
-          <div className="border-b border-gray-200 py-8" key={comment.id}>
+          <div className="border-b border-gray-200 py-8" key={comment.commentId}>
             <div className="flex items-start justify-between">
               <div className="flex flex-1 items-start gap-3">
                 {/* 프로필 이미지 */}
                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-200 text-gray-600">
-                  {comment.user.profileUrl ? (
+                  {comment.writer.profileUrl ? (
                     <img
-                      src={comment.user.profileUrl}
-                      alt={comment.user.name}
+                      src={comment.writer.profileUrl}
+                      alt={comment.writer.name}
                       className="h-8 w-8 rounded-full object-cover"
                     />
                   ) : (
@@ -42,8 +52,10 @@ export default function Comment(comments: CommentsProps) {
                 {/* 댓글 내용 */}
                 <div className="flex-1">
                   <div className="mb-1 flex items-center gap-2">
-                    <span className="text-sm font-medium text-gray-900">{comment.user.name}</span>
-                    <span className="text-xs text-gray-400">12시간 전</span>
+                    <span className="text-sm font-medium text-gray-900">
+                      {comment.writer.nickname}
+                    </span>
+                    <span className="text-xs text-gray-400">{timeAgo(comment.createdAt)}</span>
                   </div>
                   <p className="mb-2 text-sm leading-relaxed text-gray-700">{comment.content}</p>
 
@@ -52,16 +64,16 @@ export default function Comment(comments: CommentsProps) {
                     <button
                       className="flex items-center gap-1 text-xs text-gray-500 transition-colors hover:text-black"
                       onClick={() => {
-                        handelReply(comment.id)
+                        handelReply(comment.commentId)
                       }}
                     >
-                      답글 {comment.replies.length}개
+                      답글 {comment.replyCount}개
                       <ChevronDown size={12} />
                     </button>
                     <button
                       className="text-xs text-gray-500 transition-colors hover:text-black"
                       onClick={() => {
-                        handelReplyInput(comment.id)
+                        handelReplyInput(comment.commentId)
                       }}
                     >
                       답글달기
@@ -75,15 +87,16 @@ export default function Comment(comments: CommentsProps) {
               </button>
             </div>
             <ReCommentInput
-              commentId={comment.id}
+              commentId={comment.commentId}
               openReplyInput={openReplyInput}
               setOpenReplyInput={setOpenReplyInput}
+              ReplyAction={ReplyAction}
             />
-            {comment.replies.length > 0 && (
+            {comment.replyCount > 0 && (
               <ReComment
-                commentReply={comment.replies}
                 openReply={openReply}
-                commentId={comment.id}
+                commentId={comment.commentId}
+                Replystate={Replystate}
               />
             )}
           </div>

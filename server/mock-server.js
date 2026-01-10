@@ -57,20 +57,35 @@ server.post('/api/v1/auth/login', (req, res) => {
 // ==========================================
 server.use((req, res, next) => {
   // 인증이 필요 없는 공개 경로들
-  const publicPaths = ['/api/v1/auth/login', '/api/v1/auth/signup', '/api/v1/auth/logout']
+  const publicPaths = [
+    '/api/v1/auth/login',
+    '/api/v1/auth/signup',
+    '/api/v1/auth/logout',
+    /^\/api\/v1\/shorts\/\d+\/comments$/, // 댓글 GET/POST
+    /^\/api\/v1\/comments\/\d+\/replies$/, // 대댓글 GET/POST
+  ]
 
-  // GET 요청(조회)은 게시글 목록 같은 경우 공개일 수 있으므로 일단 통과
-  // (단, /users/me 같은 개인정보는 아래에서 별도 처리)
-  if (req.method === 'GET' && !req.path.startsWith('/api/users/me')) {
+  // 1️⃣ GET 요청은 대부분 공개
+  if (req.method === 'GET' && !req.path.startsWith('/api/v1/users/me')) {
     return next()
   }
 
-  // 공개 경로가 아니면 토큰 검사
-  if (!publicPaths.includes(req.path)) {
+  // 2️⃣ 공개 경로인지 체크 (문자열 + 정규식 모두 지원)
+  const isPublic = publicPaths.some((path) => {
+    if (path instanceof RegExp) {
+      return path.test(req.path)
+    }
+    return path === req.path
+  })
+
+  // 3️⃣ 공개 경로가 아니면 토큰 검사
+  if (!isPublic) {
     const authHeader = req.headers.authorization
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ message: '로그인이 필요합니다 (토큰 없음).' })
+      return res.status(401).json({
+        message: '로그인이 필요합니다 (토큰 없음).',
+      })
     }
   }
 
@@ -102,7 +117,7 @@ server.post('/api/v1/posts', (req, res, next) => {
   // 실제라면 토큰을 디코딩해서 userId를 뽑지만,
   // 여기선 테스트를 위해 무조건 id:1 (홍길동)이 쓴 것으로 간주합니다.
   // (다른 유저로 테스트하고 싶으면 이 값을 바꾸세요)
-  const currentUserId = 1
+  const currentUserId = 16
   req.body.userId = currentUserId
   req.body.author = '홍길동'
   req.body.createdAt = new Date().toISOString()
@@ -198,23 +213,37 @@ server.post('/api/v1/shorts/:shortsId/comments', (req, res) => {
   const { content } = req.body
 
   if (!content) {
-    return res.status(400).json({ success: false, error: '내용 필요' })
+    return res.status(400).json({
+      success: false,
+      message: 'content is required',
+    })
+  }
+
+  const CURRENT_USER = {
+    userId: 16,
+    nickname: '먕먕먕',
+    profileImageUrl: null,
   }
 
   const newComment = {
-    id: Date.now(),
+    commentId: Date.now(),
     shortsId,
-    parentId: null,
-    userId: CURRENT_USER_ID,
     content,
-    createdAt: new Date().toISOString(),
+    createdAt: new Date(new Date().getTime() + 9 * 60 * 60 * 1000).toISOString(),
+    isMine: true,
+    replyCount: 0,
+    writer: {
+      userId: CURRENT_USER.userId,
+      nickname: CURRENT_USER.nickname,
+      profileImageUrl: CURRENT_USER.profileImageUrl,
+    },
   }
 
   db.get('comments').push(newComment).write()
 
-  res.status(200).json({
+  return res.status(201).json({
     success: true,
-    data: { commentId: newComment.id },
+    data: newComment,
   })
 })
 
@@ -224,22 +253,15 @@ server.get('/api/v1/shorts/:shortsId/comments', (req, res) => {
   const shortsId = Number(req.params.shortsId)
 
   const comments = db.get('comments').filter({ shortsId }).value()
-  const users = db.get('users').value()
 
   const result = comments.map((comment) => {
-    const writer = users.find((u) => u.id === comment.userId)
-    const replyCount = comments.filter((c) => c.parentId === comment.id).length
-
     return {
-      commentId: comment.id,
+      commentId: comment.commentId,
+      shortsId: comment.shortsId,
       content: comment.content,
       createdAt: comment.createdAt,
-      writer: {
-        userId: writer?.id,
-        nickname: writer?.nickname,
-        profileImageUrl: writer?.profileImageUrl,
-      },
-      replyCount,
+      writer: comment.writer, // ✅ 그대로 사용
+      replyCount: comment.replyCount,
       isMine: false,
     }
   })
@@ -297,24 +319,17 @@ server.delete('/api/v1/comments/:commentId', (req, res) => {
 server.get('/api/v1/comments/:commentId/replies', (req, res) => {
   const db = router.db
   const commentId = Number(req.params.commentId)
-  const users = db.get('users').value()
 
-  const replies = db.get('comments').filter({ parentId: commentId }).value()
+  const replies = db.get('replies').filter({ parentId: commentId }).value()
 
   const result = replies.map((reply) => {
-    const writer = users.find((u) => u.id === reply.userId)
-
     return {
-      replyId: reply.id,
+      replyId: reply.replyId,
       parentId: reply.parentId,
       content: reply.content,
       createdAt: reply.createdAt,
-      writer: {
-        userId: writer?.id,
-        nickname: writer?.nickname,
-        profileImageUrl: writer?.profileImageUrl,
-      },
-      isMine: reply.userId === CURRENT_USER_ID,
+      writer: reply.writer,
+      isMine: reply.isMine,
     }
   })
 
@@ -327,25 +342,43 @@ server.post('/api/v1/comments/:commentId/replies', (req, res) => {
   const parentId = Number(req.params.commentId)
   const { content } = req.body
 
+  const CURRENT_USER = {
+    userId: 16,
+    nickname: '먕먕먕',
+    profileImageUrl: null,
+  }
+
   if (!content) {
-    return res.status(400).json({ success: false })
+    return res.status(400).json({ success: false, message: 'content is required' })
   }
 
-  const parent = db.get('comments').find({ id: parentId, parentId: null }).value()
-  if (!parent) {
-    return res.status(404).json({ success: false })
+  // 원본 댓글 가져오기
+  const parentComment = db.get('comments').find({ commentId: parentId }).value()
+  if (!parentComment) {
+    return res.status(404).json({ success: false, message: 'Parent comment not found' })
   }
 
+  // 새로운 reply 생성
   const newReply = {
-    id: Date.now(),
+    replyId: Date.now(),
     parentId,
-    shortsId: null,
-    userId: CURRENT_USER_ID,
+    writer: {
+      userId: CURRENT_USER.userId,
+      nickname: CURRENT_USER.nickname,
+      profileImageUrl: CURRENT_USER.profileImageUrl,
+    },
     content,
-    createdAt: new Date().toISOString(),
+    createdAt: new Date(new Date().getTime() + 9 * 60 * 60 * 1000).toISOString(), // KST
   }
 
-  db.get('comments').push(newReply).write()
+  // replies DB에 추가
+  db.get('replies').push(newReply).write()
+
+  // 원본 comment replyCount 1 증가
+  db.get('comments')
+    .find({ commentId: parentId })
+    .assign({ replyCount: (parentComment.replyCount || 0) + 1 })
+    .write()
 
   res.status(201).json({
     success: true,

@@ -1,10 +1,17 @@
 import { Button } from '@/components/ui/Button'
-import { UserInfo } from '@/types/auth'
+import { UserInfo } from '@/types/comment'
 import { User } from 'lucide-react'
+import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
-export default function CommentInput() {
-  const [user, setUser] = useState<UserInfo | null>(null)
+interface CommentInputProps {
+  CommentAction: (formData: FormData) => void
+}
+
+export default function CommentInput({ CommentAction }: CommentInputProps) {
+  const [user, setUser] = useState<UserInfo>()
+  const params = useParams()
+  const shortsId = Number(params.id)
 
   useEffect(() => {
     const localUser = localStorage.getItem('user') as string
@@ -30,11 +37,16 @@ export default function CommentInput() {
           </div>
         </div>
         {/* 입력 필드 */}
-        <input
-          type="text"
-          placeholder="댓글을 입력하세요..."
-          className="flex-1 rounded-full border border-gray-300 px-4 py-3 text-sm focus:border-black focus:ring-1 focus:ring-black focus:outline-none"
-        />
+        <form action={CommentAction} className="flex flex-1">
+          <input name="shortsid" type="hidden" value={shortsId} />
+          <input
+            name="comment"
+            type="text"
+            placeholder="댓글을 입력하세요..."
+            autoComplete="off"
+            className="flex-1 rounded-full border border-gray-300 px-4 py-3 text-sm focus:border-black focus:ring-1 focus:ring-black focus:outline-none"
+          />
+        </form>
       </div>
       {/* 버튼 영역 */}
       <div className="mt-3 flex justify-end gap-2">
