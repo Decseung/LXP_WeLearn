@@ -1,30 +1,26 @@
 import { ChevronDown, Ellipsis, User } from 'lucide-react'
-import { useActionState, useState } from 'react'
+import { useState } from 'react'
 import { CommentType } from '@/types/comment'
 import ReCommentInput from './ReCommentInput'
 import ReComment from './ReComment'
 import { timeAgo } from '@/utils/timeAgo'
-import { postReplyAction } from '@/features/comment/action'
+import { ReplyActionState } from '@/features/comment/action'
 
 interface CommentsProps {
   comments: CommentType[]
+  Replystate: ReplyActionState
+  ReplyAction: (formData: FormData) => void
 }
 
-export default function Comment({ comments }: CommentsProps) {
+export default function Comment({ comments, Replystate, ReplyAction }: CommentsProps) {
   const [openReply, setOpenReply] = useState<number | null>(null)
   const [openReplyInput, setOpenReplyInput] = useState<number | null>(null)
 
-  const [Replystate, ReplyAction] = useActionState(postReplyAction, {
-    success: false,
-    message: '',
-    errors: {},
-  })
-
-  const handelReply = (id: number) => {
+  const handleReply = (id: number) => {
     setOpenReply(openReply === id ? null : id)
   }
 
-  const handelReplyInput = (id: number) => {
+  const handleReplyInput = (id: number) => {
     setOpenReplyInput(openReplyInput === id ? null : id)
     setOpenReply(id)
   }
@@ -64,7 +60,7 @@ export default function Comment({ comments }: CommentsProps) {
                     <button
                       className="flex items-center gap-1 text-xs text-gray-500 transition-colors hover:text-black"
                       onClick={() => {
-                        handelReply(comment.commentId)
+                        handleReply(comment.commentId)
                       }}
                     >
                       답글 {comment.replyCount}개
@@ -73,7 +69,7 @@ export default function Comment({ comments }: CommentsProps) {
                     <button
                       className="text-xs text-gray-500 transition-colors hover:text-black"
                       onClick={() => {
-                        handelReplyInput(comment.commentId)
+                        handleReplyInput(comment.commentId)
                       }}
                     >
                       답글달기

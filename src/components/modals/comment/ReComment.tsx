@@ -5,7 +5,6 @@ import { timeAgo } from '@/utils/timeAgo'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Ellipsis, User } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
 
 interface ReCommentProps {
   openReply: number | null
@@ -25,17 +24,7 @@ export default function ReComment({ openReply, commentId, Replystate }: ReCommen
     if (!openReply || !commentId) return
 
     fetchReplyComment()
-  }, [openReply, commentId])
-
-  useEffect(() => {
-    if (Replystate.success) {
-      toast.success('댓글 등록에 성공하였습니다.🚀')
-      fetchReplyComment()
-    } else if (Replystate.success === false && Replystate.message) {
-      toast.error(Replystate.message)
-    }
-  }, [Replystate])
-  console.log(Replystate)
+  }, [openReply, commentId, Replystate])
 
   return (
     <>

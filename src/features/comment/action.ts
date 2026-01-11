@@ -3,6 +3,7 @@
 import { commentApi } from '@/services/comments/comments.service'
 import { RecommentApi } from '@/services/comments/recomments.service'
 import { CommentType, ReplyCommetType } from '@/types/comment'
+import { revalidatePath } from 'next/cache'
 
 export type CommentActionState = {
   success: boolean
@@ -11,6 +12,7 @@ export type CommentActionState = {
     content?: string
   }
   data?: CommentType
+  timestamp?: number
 }
 
 export type ReplyActionState = {
@@ -36,11 +38,19 @@ export const postCommentAction = async (
     }
   }
 
-  const res = await commentApi.postComment(shortsId, { content })
-
-  return {
-    success: true,
-    data: res.data,
+  try {
+    const res = await commentApi.postComment(shortsId, { content })
+    revalidatePath(`/shorts/${shortsId}`)
+    return {
+      success: true,
+      data: res.data,
+      timestamp: Date.now(), // 매번 다른 값을 보냄으로써 useEffect 실행 보장
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: '댓글 등록 중 오류가 발생했습니다.',
+    }
   }
 }
 

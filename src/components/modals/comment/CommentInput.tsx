@@ -6,13 +6,13 @@ import { useEffect, useState } from 'react'
 
 interface CommentInputProps {
   CommentAction: (formData: FormData) => void
+  shortsId: string
 }
 
-export default function CommentInput({ CommentAction }: CommentInputProps) {
+export default function CommentInput({ CommentAction, shortsId }: CommentInputProps) {
   const [user, setUser] = useState<UserInfo>()
-  const params = useParams()
-  const shortsId = Number(params.id)
 
+  console.log(shortsId)
   useEffect(() => {
     const localUser = localStorage.getItem('user') as string
     const parsedUser = JSON.parse(localUser)

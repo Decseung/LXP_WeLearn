@@ -22,7 +22,16 @@ export default function CommentModal() {
   const [comments, setComments] = useState<CommentsResponse | null>(null)
   const [loading, setLoading] = useState(false)
 
+  // 댓글 Action
   const [Commentstate, CommentAction] = useActionState(postCommentAction, {
+    success: false,
+    message: '',
+    errors: {},
+    timestamp: 0,
+  })
+
+  // 대댓글 Action
+  const [Replystate, ReplyAction] = useActionState(postReplyAction, {
     success: false,
     message: '',
     errors: {},
@@ -72,13 +81,23 @@ export default function CommentModal() {
 
   // 댓글 성공시 토스트 ui
   useEffect(() => {
-    if (Commentstate.success) {
+    if (Commentstate.success && shortsId) {
       toast.success('댓글 등록에 성공하였습니다.🚀')
       fetchComments()
     } else if (Commentstate.success === false && Commentstate.message) {
       toast.error(Commentstate.message)
     }
-  }, [Commentstate])
+  }, [Commentstate.timestamp])
+
+  // 대댓글 성공시 토스트 ui
+  useEffect(() => {
+    if (Replystate.success) {
+      toast.success('댓글 등록에 성공하였습니다.🚀')
+      fetchComments()
+    } else if (Replystate.success === false && Replystate.message) {
+      toast.error(Replystate.message)
+    }
+  }, [Replystate])
 
   return (
     <AnimatePresence mode="wait">
@@ -105,14 +124,18 @@ export default function CommentModal() {
               <div className="flex-1 overflow-y-auto px-4">
                 {/* ==================== Comment Block 1 ==================== */}
                 {comments?.data?.length !== 0 ? (
-                  <Comment comments={comments?.data ?? []} />
+                  <Comment
+                    comments={comments?.data ?? []}
+                    Replystate={Replystate}
+                    ReplyAction={ReplyAction}
+                  />
                 ) : (
                   <span className="flex h-full w-full items-center justify-center text-lg text-gray-600">
                     등록된 댓글이 없습니다.
                   </span>
                 )}
               </div>
-              <CommentInput CommentAction={CommentAction} />
+              <CommentInput CommentAction={CommentAction} shortsId={shortsId} />
             </div>
 
             {/* ==================== Confirm Modal (삭제 확인 모달) - hidden 제거하여 표시 ==================== */}
