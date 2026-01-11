@@ -45,7 +45,7 @@ export default function ShortsCard({
           <div className="min-w-0 flex-1">
             {status && <ShortsStatusBadge status={status} />}
             <h3 className="pt-1 text-lg font-bold text-gray-900">{shorts.title}</h3>
-            <p className="mb-4 text-sm text-gray-500">
+            <p className="mt-1.5 mb-4 text-sm text-gray-500">
               {shorts.uploader?.nickname ?? '숏터'} {' · '} 조회수 {viewCount.toLocaleString()}회
               {' · '} {createdAt || '10일 전'}
             </p>
@@ -76,7 +76,7 @@ export default function ShortsCard({
           {/* 키워드 표시 */}
           {shorts.keywords?.map((keyword: string, index: number) => (
             <span key={index} className="px-1 py-1 text-xs text-gray-900">
-              {keyword}
+              #{keyword}
             </span>
           ))}
         </div>

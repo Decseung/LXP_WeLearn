@@ -17,14 +17,14 @@ import {
 import { updateShortsAction } from '@/features/mypage/myshorts/myshorts.action'
 
 interface UseEditShortsFormParams {
-  shortId: number
+  shortsId: number
   initialData: ShortsEditInitialData
 }
 
 /**
  * 숏츠 수정 폼 상태 및 로직을 관리하는 커스텀 훅
  */
-export default function useEditShortsForm({ shortId, initialData }: UseEditShortsFormParams) {
+export default function useEditShortsForm({ shortsId, initialData }: UseEditShortsFormParams) {
   const router = useRouter()
 
   // 초기 폼 데이터 구성
@@ -49,13 +49,20 @@ export default function useEditShortsForm({ shortId, initialData }: UseEditShort
   const [formData, setFormData] = useState<ShortsFormData>(initialFormData)
   const [videoData, setVideoData] = useState<VideoPreviewData>(initialVideoData)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isThumbnailDeleted, setIsThumbnailDeleted] = useState(false)
 
   // 폼 필드 변경 핸들러
   const handleFormChange = useCallback(
     <K extends keyof ShortsFormData>(field: K, value: ShortsFormData[K]) => {
+      // 썸네일 삭제 추적
+      if (field === 'thumbnail' && value === null && initialData.thumbnailUrl) {
+        setIsThumbnailDeleted(true)
+      } else if (field === 'thumbnail' && value !== null) {
+        setIsThumbnailDeleted(false)
+      }
       setFormData((prev) => ({ ...prev, [field]: value }))
     },
-    [],
+    [initialData.thumbnailUrl],
   )
 
   // 비디오 데이터 변경 핸들러 (수정 모드에서는 영상 파일 변경 불가)
@@ -112,19 +119,25 @@ export default function useEditShortsForm({ shortId, initialData }: UseEditShort
     try {
       // FormData 생성
       const submitFormData = new FormData()
-      submitFormData.append('shortId', shortId.toString())
+      submitFormData.append('shortsId', shortsId.toString())
       submitFormData.append('title', formData.title)
       submitFormData.append('description', formData.description || '')
       submitFormData.append('categoryId', formData.categoryId?.toString() || '')
       submitFormData.append('status', formData.isPublic ? 'PUBLISHED' : 'DRAFT')
 
-      // 키워드 추가 (tagNames로 전송)
+      // 키워드 추가
       formData.keywords.forEach((keyword) => {
-        submitFormData.append('tagNames', keyword)
+        submitFormData.append('keywords', keyword)
       })
 
-      // 썸네일 변경 시 추가 (base64 → File 변환 필요 시 별도 처리)
-      // TODO: 썸네일 업로드 로직은 API 스펙에 따라 조정 필요
+      // 썸네일 처리
+      if (isThumbnailDeleted) {
+        // 썸네일 삭제 요청
+        submitFormData.append('thumbnailUrl', '')
+      } else if (formData.thumbnail) {
+        // 새 썸네일 업로드 (base64 데이터)
+        submitFormData.append('thumbnailUrl', formData.thumbnail)
+      }
 
       const result = await updateShortsAction({ success: false, message: '' }, submitFormData)
 
@@ -139,7 +152,7 @@ export default function useEditShortsForm({ shortId, initialData }: UseEditShort
     } finally {
       setIsSubmitting(false)
     }
-  }, [isSubmitting, validateEditForm, shortId, formData, router])
+  }, [isSubmitting, validateEditForm, shortsId, formData, router])
 
   // 취소 핸들러
   const handleCancel = useCallback(() => {
@@ -157,6 +170,7 @@ export default function useEditShortsForm({ shortId, initialData }: UseEditShort
     formData,
     videoData,
     isSubmitting,
+    isThumbnailDeleted,
 
     // 핸들러
     handleFormChange,

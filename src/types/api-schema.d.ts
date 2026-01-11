@@ -252,7 +252,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/api/v1/shorts/{shortId}': {
+  '/api/v1/shorts/{shortsId}': {
     parameters: {
       query?: never
       header?: never
@@ -501,7 +501,7 @@ export interface components {
        *       "백엔드"
        *     ]
        */
-      tagNames?: string[]
+      keywords?: string[]
     }
     ApiResponseShortsResponse: {
       success?: boolean
@@ -550,6 +550,12 @@ export interface components {
        * @example https://cdn.xxx/t.png
        */
       thumbnailUrl?: string
+      /**
+       * Format: int32
+       * @description 영상 길이(초)
+       * @example 45
+       */
+      durationSec?: number
       keywords?: string[]
       status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED'
       uploader?: components['schemas']['UploaderDto']
@@ -668,7 +674,7 @@ export interface components {
        *       "프론트엔드"
        *     ]
        */
-      tagNames?: string[]
+      keywords?: string[]
     }
     /** @description 사용자 응답 */
     UserResponse: {
@@ -2203,7 +2209,7 @@ export interface operations {
          * @description 숏폼 ID
          * @example 1
          */
-        shortId: number
+        shortsId: number
       }
       cookie?: never
     }
@@ -2283,7 +2289,7 @@ export interface operations {
          * @description 숏폼 ID
          * @example 1
          */
-        shortId: number
+        shortsId: number
       }
       cookie?: never
     }
@@ -2363,7 +2369,7 @@ export interface operations {
          * @description 숏폼 ID
          * @example 1
          */
-        shortId: number
+        shortsId: number
       }
       cookie?: never
     }

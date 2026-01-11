@@ -5,7 +5,7 @@ import useEditShortsForm from '@/hook/register/useEditShortsForm'
 import type { ShortsEditInitialData } from '@/features/register/types/shortsEdit'
 
 interface ShortsFormContainerEditProps {
-  shortId: number
+  shortsId: number
   initialData: ShortsEditInitialData
 }
 
@@ -13,20 +13,21 @@ interface ShortsFormContainerEditProps {
  * 숏츠 수정 폼 컨테이너
  */
 export default function ShortsFormContainerEdit({
-  shortId,
+  shortsId,
   initialData,
 }: ShortsFormContainerEditProps) {
   const {
     formData,
     videoData,
     isSubmitting,
+    isThumbnailDeleted,
     handleFormChange,
     handleVideoChange,
     handleUpdate,
     handleCancel,
     existingVideoUrl,
     existingThumbnailUrl,
-  } = useEditShortsForm({ shortId, initialData })
+  } = useEditShortsForm({ shortsId, initialData })
 
   return (
     <ShortsFormLayout
@@ -40,6 +41,7 @@ export default function ShortsFormContainerEdit({
       isEditMode={true}
       existingVideoUrl={existingVideoUrl}
       existingThumbnailUrl={existingThumbnailUrl ?? undefined}
+      isThumbnailDeleted={isThumbnailDeleted}
       submitText="수정하기"
     />
   )
