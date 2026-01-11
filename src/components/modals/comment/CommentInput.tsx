@@ -12,7 +12,6 @@ interface CommentInputProps {
 export default function CommentInput({ CommentAction, shortsId }: CommentInputProps) {
   const [user, setUser] = useState<UserInfo>()
 
-  console.log(shortsId)
   useEffect(() => {
     const localUser = localStorage.getItem('user') as string
     const parsedUser = JSON.parse(localUser)
