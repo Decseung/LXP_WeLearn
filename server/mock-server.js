@@ -317,21 +317,140 @@ server.get('/api/v1/shorts/:id', (req, res) => {
     return res.status(404).json({ message: '숏츠를 찾을 수 없습니다.' })
   }
 
-  // API 스키마에 맞게 응답 형식 조정
+  // 실제 API 스키마에 맞게 페이지네이션 응답 구조로 반환
   const response = {
-    shortsId: shorts.id,
-    title: shorts.title,
-    description: shorts.description,
-    videoUrl: shorts.videoUrl,
-    thumbnailUrl: shorts.thumbnailUrl,
-    uploader: shorts.uploader,
-    category: shorts.category,
-    keywords: shorts.keywords || [],
-    status: shorts.status || 'PUBLISHED',
-    durationSec: shorts.durationSec || 60,
+    success: true,
+    message: '숏츠 조회 성공',
+    data: {
+      content: [
+        {
+          shortsId: shorts.id,
+          title: shorts.title,
+          description: shorts.description,
+          videoUrl: shorts.videoUrl,
+          thumbnailUrl: shorts.thumbnailUrl,
+          uploader: shorts.uploader,
+          category: shorts.category,
+          keywords: shorts.keywords || [],
+          status: shorts.status || 'PUBLISHED',
+          durationSec: shorts.durationSec || 60,
+        },
+      ],
+      totalElements: 1,
+      totalPages: 1,
+      size: 1,
+      number: 0,
+      first: true,
+      last: true,
+      numberOfElements: 1,
+      empty: false,
+    },
   }
 
   res.json(response)
+})
+
+// ==========================================
+// 8-2. 숏츠 수정 (PATCH /api/v1/shorts/:id)
+// ==========================================
+server.patch('/api/v1/shorts/:id', (req, res) => {
+  const db = router.db
+  const shortsId = parseInt(req.params.id)
+
+  const shorts = db.get('shorts').find({ id: shortsId }).value()
+
+  if (!shorts) {
+    return res.status(404).json({
+      success: false,
+      message: '숏츠를 찾을 수 없습니다.'
+    })
+  }
+
+  // 업데이트할 데이터 추출
+  const { title, description, categoryId, status, keywords, thumbnailUrl } = req.body
+
+  // 카테고리 정보 업데이트 (categoryId가 제공된 경우)
+  // 카테고리 매핑 (DUMMY_CATEGORIES와 일치)
+  const categoryMap = {
+    1: { categoryId: 1, name: '프론트엔드' },
+    2: { categoryId: 2, name: '백엔드' },
+    3: { categoryId: 3, name: '디자인' },
+    4: { categoryId: 4, name: '데이터' },
+    5: { categoryId: 5, name: 'DevOps' },
+    6: { categoryId: 6, name: '모바일' },
+  }
+  let category = shorts.category
+  if (categoryId) {
+    const parsedCategoryId = parseInt(categoryId)
+    if (categoryMap[parsedCategoryId]) {
+      category = categoryMap[parsedCategoryId]
+    }
+  }
+
+  // 썸네일 처리: 빈 문자열이면 null, 값이 있으면 업데이트, undefined면 기존 유지
+  let newThumbnailUrl = shorts.thumbnailUrl
+  if (thumbnailUrl !== undefined) {
+    newThumbnailUrl = thumbnailUrl === '' ? null : thumbnailUrl
+  }
+
+  // 업데이트된 숏츠 데이터
+  const updatedShorts = {
+    ...shorts,
+    title: title || shorts.title,
+    description: description !== undefined ? description : shorts.description,
+    category: category,
+    status: status || shorts.status,
+    keywords: keywords || shorts.keywords || [],
+    thumbnailUrl: newThumbnailUrl,
+  }
+
+  // DB 업데이트
+  db.get('shorts').find({ id: shortsId }).assign(updatedShorts).write()
+
+  // 실제 API 스키마에 맞는 응답 반환
+  const response = {
+    success: true,
+    message: '숏츠 수정 성공',
+    data: {
+      shortsId: updatedShorts.id,
+      title: updatedShorts.title,
+      description: updatedShorts.description,
+      videoUrl: updatedShorts.videoUrl,
+      thumbnailUrl: updatedShorts.thumbnailUrl,
+      uploader: updatedShorts.uploader,
+      category: updatedShorts.category,
+      keywords: updatedShorts.keywords,
+      status: updatedShorts.status,
+      durationSec: updatedShorts.durationSec || 60,
+    },
+  }
+
+  res.json(response)
+})
+
+// ==========================================
+// 8-3. 숏츠 삭제 (DELETE /api/v1/shorts/:id)
+// ==========================================
+server.delete('/api/v1/shorts/:id', (req, res) => {
+  const db = router.db
+  const shortsId = parseInt(req.params.id)
+
+  const shorts = db.get('shorts').find({ id: shortsId }).value()
+
+  if (!shorts) {
+    return res.status(404).json({
+      success: false,
+      message: '숏츠를 찾을 수 없습니다.',
+    })
+  }
+
+  // DB에서 삭제
+  db.get('shorts').remove({ id: shortsId }).write()
+
+  res.json({
+    success: true,
+    message: '숏츠가 삭제되었습니다.',
+  })
 })
 
 // ==========================================
@@ -349,6 +468,8 @@ server.listen(PORT, () => {
   console.log(`- Me:    GET /api/v1/users/me`)
   console.log(`- Posts: GET /api/v1/posts`)
   console.log('- Shorts: GET /api/v1/shorts/:id')
+  console.log('- Shorts: PATCH /api/v1/shorts/:id')
+  console.log('- Shorts: DELETE /api/v1/shorts/:id')
   console.log('- Comments: GET /api/v1/shorts/:shortsId/comments')
   console.log('- Comments: POST /api/v1/posts/:postId/comments')
 })

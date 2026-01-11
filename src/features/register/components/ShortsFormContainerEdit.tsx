@@ -20,6 +20,7 @@ export default function ShortsFormContainerEdit({
     formData,
     videoData,
     isSubmitting,
+    isThumbnailDeleted,
     handleFormChange,
     handleVideoChange,
     handleUpdate,
@@ -40,6 +41,7 @@ export default function ShortsFormContainerEdit({
       isEditMode={true}
       existingVideoUrl={existingVideoUrl}
       existingThumbnailUrl={existingThumbnailUrl ?? undefined}
+      isThumbnailDeleted={isThumbnailDeleted}
       submitText="수정하기"
     />
   )

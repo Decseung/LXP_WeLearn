@@ -26,14 +26,17 @@ export async function updateShortsAction(
   const description = formData.get('description') as string | null
   const categoryId = formData.get('categoryId')
   const status = formData.get('status') as ShortsUpdateRequest['status'] | null
-  const tagNames = formData.getAll('tagNames') as string[]
+  const keywords = formData.getAll('keywords') as string[]
+  const thumbnailUrl = formData.get('thumbnailUrl') as string | null
 
   const payload: ShortsUpdateRequest = {
     title: title || undefined,
     description: description || undefined,
     categoryId: categoryId ? Number(categoryId) : undefined,
     status: status || undefined,
-    tagNames: tagNames.length > 0 ? tagNames : undefined,
+    keywords: keywords.length > 0 ? keywords : undefined,
+    // 썸네일: 빈 문자열이면 삭제, 값이 있으면 업데이트, 없으면 유지
+    thumbnailUrl: thumbnailUrl !== null ? thumbnailUrl : undefined,
   }
 
   try {

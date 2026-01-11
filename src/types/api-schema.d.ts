@@ -501,7 +501,7 @@ export interface components {
        *       "백엔드"
        *     ]
        */
-      tagNames?: string[]
+      keywords?: string[]
     }
     ApiResponseShortsResponse: {
       success?: boolean
@@ -674,7 +674,7 @@ export interface components {
        *       "프론트엔드"
        *     ]
        */
-      tagNames?: string[]
+      keywords?: string[]
     }
     /** @description 사용자 응답 */
     UserResponse: {

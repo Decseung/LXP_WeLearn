@@ -29,6 +29,7 @@ interface ShortsFormLayoutProps {
   isEditMode?: boolean
   existingVideoUrl?: string
   existingThumbnailUrl?: string
+  isThumbnailDeleted?: boolean
 
   // 버튼 텍스트
   submitText?: string
@@ -48,6 +49,7 @@ export default function ShortsFormLayout({
   isEditMode = false,
   existingVideoUrl,
   existingThumbnailUrl,
+  isThumbnailDeleted = false,
   submitText = '등록하기',
 }: ShortsFormLayoutProps) {
   // === 오른쪽 섹션 로직 (기존 ShortsFormRightSection) ===
@@ -75,7 +77,10 @@ export default function ShortsFormLayout({
   }, [videoSrc, isEditMode])
 
   // 썸네일 소스 결정
-  const thumbnailSrc = formData.thumbnail ?? existingThumbnailUrl ?? null
+  // 수정 모드에서 썸네일이 명시적으로 삭제된 경우 null 반환
+  const thumbnailSrc = isThumbnailDeleted
+    ? null
+    : formData.thumbnail ?? existingThumbnailUrl ?? null
 
   const {
     handleDragEnter,

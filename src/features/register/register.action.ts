@@ -158,7 +158,7 @@ export async function registerShortsAction(
       videoUrl: metadata.videoUrl, // S3에 직접 업로드된 비디오 URL
       thumbnailUrl, // 서버에 업로드된 썸네일 URL (Base64 → 서버)
       durationSec: metadata.durationSec ?? undefined,
-      tagNames: metadata.keywords?.length ? metadata.keywords : undefined,
+      keywords: metadata.keywords?.length ? metadata.keywords : undefined,
     }
 
     const res = await api.post<Response>('/api/v1/shorts', request)
