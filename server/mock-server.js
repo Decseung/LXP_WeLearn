@@ -305,7 +305,56 @@ server.delete('/api/v1/comments/:id', (req, res) => {
 })
 
 // ==========================================
-// 8. 숏츠 상세 조회 (GET /api/v1/shorts/:id)
+// 8. 내 숏츠 목록 조회 (GET /api/v1/users/me/shorts)
+// ==========================================
+server.get('/api/v1/users/me/shorts', (req, res) => {
+  const db = router.db
+  const { page = 0, size = 20 } = req.query
+
+  // 전체 숏츠 목록 (Mock에서는 전체 반환)
+  const allShorts = db.get('shorts').value()
+
+  // 페이지네이션 처리
+  const pageNum = parseInt(page)
+  const sizeNum = parseInt(size)
+  const startIndex = pageNum * sizeNum
+  const endIndex = startIndex + sizeNum
+  const paginatedShorts = allShorts.slice(startIndex, endIndex)
+
+  // API 스키마에 맞게 응답 형식 조정
+  const content = paginatedShorts.map((shorts) => ({
+    shortsId: shorts.id,
+    title: shorts.title,
+    description: shorts.description,
+    videoUrl: shorts.videoUrl,
+    thumbnailUrl: shorts.thumbnailUrl,
+    uploader: shorts.uploader,
+    category: shorts.category,
+    keywords: shorts.keywords || [],
+    status: shorts.status || 'PUBLISHED',
+    durationSec: shorts.durationSec || 60,
+  }))
+
+  const totalElements = allShorts.length
+  const totalPages = Math.ceil(totalElements / sizeNum)
+
+  const response = {
+    content,
+    totalElements,
+    totalPages,
+    size: sizeNum,
+    number: pageNum,
+    first: pageNum === 0,
+    last: pageNum >= totalPages - 1,
+    numberOfElements: content.length,
+    empty: content.length === 0,
+  }
+
+  res.json(response)
+})
+
+// ==========================================
+// 8-1. 숏츠 상세 조회 (GET /api/v1/shorts/:id)
 // ==========================================
 server.get('/api/v1/shorts/:id', (req, res) => {
   const db = router.db
@@ -467,6 +516,7 @@ server.listen(PORT, () => {
   console.log(`- Register: POST /api/v1/auth/register`)
   console.log(`- Me:    GET /api/v1/users/me`)
   console.log(`- Posts: GET /api/v1/posts`)
+  console.log('- MyShorts: GET /api/v1/users/me/shorts')
   console.log('- Shorts: GET /api/v1/shorts/:id')
   console.log('- Shorts: PATCH /api/v1/shorts/:id')
   console.log('- Shorts: DELETE /api/v1/shorts/:id')
