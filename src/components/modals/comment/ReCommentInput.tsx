@@ -49,7 +49,7 @@ export default function ReCommentInput({
                   <User strokeWidth={1.5} size={20} className="text-gray-400" />
                 )}
               </div>
-              <form className="flex flex-1" action={ReplyAction}>
+              <form className="flex flex-1" action={ReplyAction} id="replycomment-form">
                 <input type="hidden" name="commentId" value={commentId} />
                 <input
                   type="text"
@@ -71,7 +71,12 @@ export default function ReCommentInput({
                 취소
               </Button>
 
-              <Button variant="accent" className="rounded-full" type="submit">
+              <Button
+                variant="accent"
+                className="rounded-full"
+                type="submit"
+                form="replycomment-form"
+              >
                 등록
               </Button>
             </div>

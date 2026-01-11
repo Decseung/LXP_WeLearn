@@ -36,7 +36,7 @@ export default function CommentInput({ CommentAction, shortsId }: CommentInputPr
           </div>
         </div>
         {/* 입력 필드 */}
-        <form action={CommentAction} className="flex flex-1">
+        <form id="comment-form" action={CommentAction} className="flex flex-1">
           <input name="shortsid" type="hidden" value={shortsId} />
           <input
             name="comment"
@@ -52,7 +52,7 @@ export default function CommentInput({ CommentAction, shortsId }: CommentInputPr
         <Button variant="outline" className="rounded-full">
           취소
         </Button>
-        <Button variant="accent" className="rounded-full">
+        <Button variant="accent" className="rounded-full" type="submit" form="comment-form">
           등록
         </Button>
       </div>
