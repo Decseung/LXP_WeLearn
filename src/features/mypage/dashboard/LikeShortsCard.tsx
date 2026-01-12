@@ -28,7 +28,7 @@ export default function LikeShortsCard({
           />
 
           {/* 상단 배지 */}
-          <div className="pointer-events-none absolute inset-x-0 top-0 z-10 pt-1 pl-3">
+          <div className="pointer-events-none absolute inset-x-0 top-0 z-10 pt-1.5 pl-3">
             <span className="rounded-full bg-black/55 px-2 py-0.5 text-[10px] font-medium text-white backdrop-blur">
               {category}
             </span>
@@ -50,6 +50,7 @@ export default function LikeShortsCard({
             </div>
           </div>
         </div>
+        x
       </article>
     </div>
   )
