@@ -1,6 +1,6 @@
 import { Category } from '@/features/home/types/Category'
 import { ShortsItem } from '@/features/home/types/shortsItem'
-import { PlaylistItem } from '@/features/home/types/PlayListItem'
+import { PlaylistItem } from '@/features/home/types/playListItem'
 import { shorts } from '@/features/home/types/categoryShortsList'
 
 export const shortsItems: ShortsItem[] = [
@@ -41,7 +41,7 @@ export const likeShorts = [
     category: '프로그래밍',
     thumbnailUrl: 'https://images.pexels.com/photos/303383/pexels-photo-303383.jpeg',
     title: 'Spring Boot 시작하기',
-    channelName: '개발자홍길동',
+    nickname: '개발자홍길동',
     progress: 75,
   },
   {
@@ -50,7 +50,7 @@ export const likeShorts = [
 
     thumbnailUrl: 'https://images.pexels.com/photos/35008891/pexels-photo-35008891.jpeg',
     title: 'Figma 오토 레이아웃 기초',
-    channelName: '디자인펭귄',
+    nickname: '디자인펭귄',
     progress: 50,
   },
   {
@@ -58,7 +58,7 @@ export const likeShorts = [
     category: '프로그래밍',
     thumbnailUrl: 'https://images.pexels.com/photos/35383162/pexels-photo-35383162.jpeg',
     title: 'React 상태 관리 30초 요약',
-    channelName: '프론트선배',
+    nickname: '프론트선배',
     progress: 100,
   },
   {
@@ -66,7 +66,7 @@ export const likeShorts = [
     category: 'UI/UX',
     thumbnailUrl: 'https://images.pexels.com/photos/2182863/pexels-photo-2182863.jpeg',
     title: 'CSS Grid 1분 이해',
-    channelName: 'CSS요정',
+    nickname: 'CSS요정',
     progress: 25,
   },
   {
@@ -74,9 +74,8 @@ export const likeShorts = [
     category: '프로그래밍',
     thumbnailUrl: 'https://images.pexels.com/photos/5483075/pexels-photo-5483075.jpeg',
     title: 'DB 인덱스는 왜 필요할까?',
-    channelName: '백엔드러버',
+    nickname: '백엔드러버',
     progress: 0,
-    isNew: true,
   },
 ]
 
@@ -158,7 +157,7 @@ export const savedPlaylists: {
     id: '8',
     visibility: 'public',
     shortsCount: 9,
-    thumbnailUrl: 'https://images.pexels.com/photos/35308304/pexels-photo-35308304jpeg',
+    thumbnailUrl: 'https://images.pexels.com/photos/35308304/pexels-photo-35308304.jpeg',
     title: '알고리즘 정복하기',
     category: '프로그래밍',
     progress: 66,
@@ -169,7 +168,7 @@ export const savedPlaylists: {
 export const user = {
   name: '김코딩',
   email: 'test@test.com',
-  profileImageUrl: 'https://images.pexels.com/photos/35308304/pexels-photo-35308304jpeg',
+  profileImageUrl: 'https://images.pexels.com/photos/35308304/pexels-photo-35308304.jpeg',
 }
 
 export const playlistGroup: PlaylistItem[] = [

@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { Play } from 'lucide-react'
-import { PlaylistItem } from '@/features/home/types/PlayListItem'
+import { PlaylistItem } from '@/features/home/types/playListItem'
 import PlaylistButton from '@/features/home/playlist/PlaylistButton'
 
 export default async function PlaylistSection({ items }: { items: PlaylistItem[] }) {
