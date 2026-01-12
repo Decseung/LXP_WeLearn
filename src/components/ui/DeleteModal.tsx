@@ -1,21 +1,27 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { Button } from './Button'
 import { useActionState, useEffect } from 'react'
-import { deleteCommentAction } from '@/features/comment/action'
+import { deleteCommentAction, deleteReplyCommentAction } from '@/features/comment/action'
 import { toast } from 'react-toastify'
 
 interface DeleteModalProps {
   isDelete: boolean
-  commentId: number
+  commentId?: number
+  replyId?: number
   setIsDelete: (props: boolean) => void
   setIsUpdate: React.Dispatch<React.SetStateAction<number>>
+  setIsReplyUpdate?: React.Dispatch<React.SetStateAction<number>>
+  mode: 'comment' | 'reply'
 }
 
 export default function DeleteModal({
   isDelete,
   setIsDelete,
   commentId,
+  replyId,
   setIsUpdate,
+  setIsReplyUpdate,
+  mode,
 }: DeleteModalProps) {
   // 댓글 삭제 Action
   const [commentDeleteState, commentDeleteAction] = useActionState(deleteCommentAction, {
@@ -24,16 +30,35 @@ export default function DeleteModal({
     errors: {},
   })
 
+  const [replyCommentDeleteState, replyCommentDeleteAction] = useActionState(
+    deleteReplyCommentAction,
+    {
+      success: false,
+      message: '',
+      errors: {},
+    },
+  )
+
   // 댓글 삭제 성공 시 토스트 ui
   useEffect(() => {
     if (commentDeleteState.success) {
       toast.success('댓글 삭제에 성공하였습니다.🚀')
       setIsUpdate((prev) => prev + 1)
       setIsDelete(false)
-    } else if (commentDeleteState.success === false && commentDeleteState.message) {
+    } else if (replyCommentDeleteState.success) {
+      toast.success('댓글 삭제에 성공하였습니다.🚀')
+      setIsUpdate((prev) => prev + 1)
+      if (setIsReplyUpdate) {
+        setIsReplyUpdate((prev) => prev + 1)
+      }
+      setIsDelete(false)
+    } else if (
+      (commentDeleteState.success === false && commentDeleteState.message) ||
+      (replyCommentDeleteState.success === false && replyCommentDeleteState.message)
+    ) {
       toast.error(commentDeleteState.message)
     }
-  }, [commentDeleteState])
+  }, [commentDeleteState, replyCommentDeleteState])
 
   return (
     <AnimatePresence>
@@ -51,8 +76,12 @@ export default function DeleteModal({
                 <Button variant="outline" onClick={() => setIsDelete(false)}>
                   취소
                 </Button>
-                <form action={commentDeleteAction}>
-                  <input type="hidden" name="commentId" value={commentId} />
+                <form action={commentId ? commentDeleteAction : replyCommentDeleteAction}>
+                  <input
+                    type="hidden"
+                    name={commentId ? 'commentId' : 'replyId'}
+                    value={commentId ? commentId : replyId}
+                  />
                   <Button variant="default">삭제</Button>
                 </form>
               </div>

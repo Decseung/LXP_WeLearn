@@ -406,17 +406,13 @@ server.delete('/api/v1/replies/:replyId', (req, res) => {
   const db = router.db
   const replyId = Number(req.params.replyId)
 
-  const reply = db.get('comments').find({ id: replyId }).value()
+  const reply = db.get('replies').find({ replyId: replyId }).value()
 
   if (!reply || reply.parentId === null) {
     return res.status(404).json({ success: false })
   }
 
-  if (reply.userId !== CURRENT_USER_ID) {
-    return res.status(403).json({ success: false })
-  }
-
-  db.get('comments').remove({ id: replyId }).write()
+  db.get('comments').remove({ replyId: replyId }).write()
 
   res.json({ success: true })
 })

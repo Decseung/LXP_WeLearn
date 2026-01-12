@@ -32,13 +32,6 @@ export const postCommentAction = async (
   const content = formData.get('comment') as string
   const shortsId = Number(formData.get('shortsid') || 0)
 
-  if (!content) {
-    return {
-      success: false,
-      errors: { content: '댓글을 입력해주세요' },
-    }
-  }
-
   try {
     const res = await commentApi.postComment(shortsId, { content })
     revalidatePath(`/shorts/${shortsId}`)
@@ -132,5 +125,31 @@ export const postReplyAction = async (
   return {
     success: true,
     data: res.data,
+  }
+}
+
+export const deleteReplyCommentAction = async (
+  prevState: CommentActionState,
+  formData: FormData,
+): Promise<CommentActionState> => {
+  const replyId = Number(formData.get('replyId') || 0)
+
+  if (!replyId) {
+    return {
+      success: false,
+      errors: { content: '존재 하지 않는 댓글입니다.' },
+    }
+  }
+
+  try {
+    const res = await RecommentApi.deleteReplyComment(replyId)
+    return {
+      success: true,
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: '댓글 삭제 중 오류가 발생하였습니다.',
+    }
   }
 }

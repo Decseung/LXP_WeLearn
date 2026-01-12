@@ -1,17 +1,37 @@
+import CommentDropDownMenu from '@/components/ui/CommentDropdownMenu'
+import DeleteModal from '@/components/ui/DeleteModal'
 import { RecommentApi } from '@/services/comments/recomments.service'
 import { ReplyCommentResponse } from '@/types/comment'
 import { timeAgo } from '@/utils/timeAgo'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Ellipsis, User } from 'lucide-react'
+import { User } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 interface ReCommentProps {
   openReply: number | null
   commentId: number
   isReplyUpdate: number
+  isDelete: boolean
+  setIsEditMode: React.Dispatch<React.SetStateAction<number | null>>
+  setIsDelete: (props: boolean) => void
+  setIsUpdate: React.Dispatch<React.SetStateAction<number>>
+  handleDeleteMode: () => void
+  setIsReplyUpdate: React.Dispatch<React.SetStateAction<number>>
+  setDeleteMode: (mode: 'comment' | 'reply') => void
 }
 
-export default function ReComment({ openReply, commentId, isReplyUpdate }: ReCommentProps) {
+export default function ReComment({
+  openReply,
+  commentId,
+  isReplyUpdate,
+  isDelete,
+  setIsDelete,
+  setIsUpdate,
+  setIsEditMode,
+  handleDeleteMode,
+  setIsReplyUpdate,
+  setDeleteMode,
+}: ReCommentProps) {
   const [replyComment, setReplyComment] = useState<ReplyCommentResponse | null>(null)
 
   const fetchReplyComment = async () => {
@@ -63,12 +83,25 @@ export default function ReComment({ openReply, commentId, isReplyUpdate }: ReCom
                       </div>
                       <p className="mb-2 text-sm leading-relaxed text-gray-700">{reply.content}</p>
                     </div>
-                    <button className="rounded-full p-1 text-gray-400 transition-colors hover:bg-gray-100">
-                      <Ellipsis size={18} />
-                    </button>
+                    {reply.isMine && (
+                      <CommentDropDownMenu
+                        setDeleteMode={setDeleteMode}
+                        setIsEditMode={setIsEditMode}
+                        commentId={reply.replyId}
+                        handleDeleteMode={handleDeleteMode}
+                      />
+                    )}
                   </div>
                 </div>
               </div>
+              <DeleteModal
+                mode="reply"
+                isDelete={isDelete}
+                setIsDelete={setIsDelete}
+                replyId={reply.replyId}
+                setIsUpdate={setIsUpdate}
+                setIsReplyUpdate={setIsReplyUpdate}
+              />
             </motion.div>
           ))}
       </AnimatePresence>

@@ -14,6 +14,7 @@ import {
 import { Button } from '@/components/ui/Button'
 import DeleteModal from '@/components/ui/DeleteModal'
 import { toast } from 'react-toastify'
+import CommentDropDownMenu from '@/components/ui/CommentDropdownMenu'
 
 interface CommentsProps {
   comments: CommentType[]
@@ -23,6 +24,8 @@ interface CommentsProps {
   setIsDelete: (props: boolean) => void
   setIsUpdate: React.Dispatch<React.SetStateAction<number>>
 }
+
+type DeleteMode = 'comment' | 'reply'
 
 export default function Comment({
   comments,
@@ -36,6 +39,7 @@ export default function Comment({
   const [openReplyInput, setOpenReplyInput] = useState<number | null>(null)
   const [isEditMode, setIsEditMode] = useState<number | null>(null)
   const [isReplyUpdate, setIsReplyUpdate] = useState(0)
+  const [deleteMode, setDeleteMode] = useState<DeleteMode>('comment')
 
   // 댓글 수정 Action
   const [commentPatchState, commentPatchAction] = useActionState(patchCommentAction, {
@@ -73,6 +77,7 @@ export default function Comment({
         return (
           <div className="border-b border-gray-200 py-8" key={comment.commentId}>
             <DeleteModal
+              mode="comment"
               isDelete={isDelete}
               setIsDelete={setIsDelete}
               commentId={comment.commentId}
@@ -155,40 +160,13 @@ export default function Comment({
                 </div>
               </div>
               {/* 더보기 버튼 */}
-              {comment.isMine === true ? (
-                <button className="rounded-full p-1 text-gray-400 transition-colors hover:bg-gray-100">
-                  <DropdownMenu modal={false}>
-                    <DropdownMenuTrigger asChild>
-                      <Ellipsis size={18} />
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent
-                      align="end"
-                      className="flex min-w-25 flex-col items-center justify-center gap-1"
-                    >
-                      <DropdownMenuItem
-                        className="w-full cursor-pointer justify-center gap-4 p-1"
-                        onClick={() => {
-                          setIsEditMode(comment.commentId)
-                        }}
-                      >
-                        <Pencil />
-                        <span>수정</span>
-                      </DropdownMenuItem>
-                      <hr className="w-full" />
-                      <DropdownMenuItem
-                        className="w-full cursor-pointer justify-center gap-4 p-1 text-red-600"
-                        onClick={() => {
-                          handleDeleteMode()
-                        }}
-                      >
-                        <Trash2 color="#fb2c36" />
-                        <span className="text-red-600">삭제</span>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </button>
-              ) : (
-                ''
+              {comment.isMine && (
+                <CommentDropDownMenu
+                  setIsEditMode={setIsEditMode}
+                  commentId={comment.commentId}
+                  handleDeleteMode={handleDeleteMode}
+                  setDeleteMode={setDeleteMode}
+                />
               )}
             </div>
             <ReCommentInput
@@ -203,6 +181,13 @@ export default function Comment({
                 openReply={openReply}
                 commentId={comment.commentId}
                 isReplyUpdate={isReplyUpdate}
+                isDelete={isDelete}
+                setIsEditMode={setIsEditMode}
+                setIsDelete={setIsDelete}
+                setIsUpdate={setIsUpdate}
+                handleDeleteMode={handleDeleteMode}
+                setIsReplyUpdate={setIsReplyUpdate}
+                setDeleteMode={setDeleteMode}
               />
             )}
           </div>
