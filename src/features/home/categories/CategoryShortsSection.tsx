@@ -25,7 +25,7 @@ export default function CategoryShortsSection({ shorts }: { shorts: shorts[] }) 
   }
 
   return (
-    <section className="mb-12">
+    <section className="my-12 pt-10">
       <div className="mb-6 flex items-center justify-between">
         <h2 className="text-xl font-extrabold text-gray-900 uppercase">Categories</h2>
         <button className="flex items-center gap-1 rounded-md border border-gray-300 px-3 py-1.5 text-sm transition-colors hover:bg-gray-50">

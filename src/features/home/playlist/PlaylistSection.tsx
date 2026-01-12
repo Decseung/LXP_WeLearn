@@ -1,12 +1,12 @@
 import Image from 'next/image'
 import { Play } from 'lucide-react'
-import { PlaylistItem } from '@/features/home/types/playListItem'
+import { PlaylistItem } from '@/features/home/types/PlayListItem'
 import PlaylistButton from '@/features/home/playlist/PlaylistButton'
 
 export default async function PlaylistSection({ items }: { items: PlaylistItem[] }) {
   return (
     <section className="mb-12">
-      <h2 className="mb-4 text-lg font-bold text-gray-900 uppercase">Knowledge Blocks</h2>
+      <h2 className="mb-4 text-xl font-extrabold text-gray-900 uppercase">Knowledge Blocks</h2>
       <div className="grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-3 md:grid-cols-4">
         {items.map((item) => (
           <PlaylistButton key={item.id}>
@@ -39,11 +39,11 @@ export default async function PlaylistSection({ items }: { items: PlaylistItem[]
                 </div>
               </div>
 
-              <p className="truncate text-sm font-medium text-gray-900 group-hover:text-black">
+              <p className="truncate p-2 text-sm font-medium text-gray-900 group-hover:text-black">
                 {item.title}
               </p>
-              <p className="text-xs text-gray-500">
-                {item.category} {} {item.shortsCount}개
+              <p className="pb-2 text-xs text-gray-500">
+                {item.category} {'·'} {item.shortsCount}개
               </p>
             </div>
           </PlaylistButton>
