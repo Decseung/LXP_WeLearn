@@ -109,15 +109,12 @@ export default function ShortPreviewCard({ item }: { item: ShortsItem }) {
           )}
 
           {/* 상단 배지 */}
-          <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex justify-between p-4">
+          <div className="pointer-events-none absolute inset-x-0 top-0 z-10 p-4">
             {item.category?.name && (
               <span className="rounded-full bg-black/55 px-2 py-0.5 text-[10px] font-medium text-white backdrop-blur">
                 {item.category.name}
               </span>
             )}
-            <span className="rounded-full bg-black/45 px-2 py-0.5 text-[10px] text-gray-100 backdrop-blur">
-              숏강의
-            </span>
           </div>
 
           {/* 하단 그라데이션 + 텍스트 */}
