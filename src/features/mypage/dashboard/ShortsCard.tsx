@@ -32,7 +32,9 @@ export default function ShortsCard({
   const progressColorClass = isLike ? 'bg-red-500' : 'bg-green-500'
 
   return (
-    <div className={`${isLike ? 'w-56 shrink-0' : 'group cursor-pointer'}`}>
+    <div
+      className={`${isLike ? 'w-56 shrink-0' : 'group cursor-pointer'} transition-all duration-200 hover:-translate-y-1 hover:drop-shadow-lg`}
+    >
       <div className="relative mb-2 aspect-9/16 overflow-hidden rounded-lg bg-gray-200">
         <span
           className={`absolute top-3 left-3 z-10 rounded bg-black/80 px-2 py-0.5 text-xs text-white`}
@@ -41,10 +43,13 @@ export default function ShortsCard({
         </span>
 
         {isSaved && shortsCount !== undefined && (
-          <span className="absolute right-3 bottom-3 z-10 flex items-center gap-1 rounded bg-black/60 px-2 py-0.5 text-xs text-white">
-            <Play size={12} fill="currentColor" />
-            {shortsCount}
-          </span>
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 bg-transparent text-white">
+            <p className="text-md max-w-[80%] truncate pb-2 font-medium">{title}</p>
+            <div className="flex items-center justify-center gap-2 rounded-xl border-2 border-white/50 bg-black/50 px-4 py-3">
+              <Play size={24} fill="currentColor" />
+              <span className="m-0 p-0 text-lg font-bold">{shortsCount}개</span>
+            </div>
+          </div>
         )}
 
         <Image src={thumbnailUrl} alt={title} fill className="object-cover" sizes="224px" />

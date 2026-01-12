@@ -107,15 +107,15 @@ export default function HeaderDropdown({ user }: UserDropdownProps) {
             </button> */}
             <Link href="/mypage/likes" className="flex gap-4 p-1">
               <Heart />
-              좋아요한 숏츠
+              좋아요 숏츠
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">
+          {/* <DropdownMenuItem className="cursor-pointer">
             <Link href="/mypage/saved" className="flex gap-4 p-1">
               <Layers />
               저장한 숏츠
             </Link>
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
           <DropdownMenuItem className="cursor-pointer">
             <Link href="/mypage/myshorts" className="flex gap-4 p-1">
               <CirclePlay />

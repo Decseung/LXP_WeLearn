@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import ShortsCard from './ShortsCard'
 
 interface SavedPlaylist {
@@ -21,18 +22,19 @@ export default function SavedShortsList({ playlists }: SavedShortsListProps) {
         <h2 className="text-lg font-bold text-gray-900 uppercase">Saved Shorts</h2>
       </div>
 
-      <div className="mb-8 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+      <div className="mb-10 grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-3 md:grid-cols-4">
         {playlists.map((playlist) => (
-          <ShortsCard
-            key={playlist.id}
-            variant="saved"
-            visibility={playlist.visibility}
-            shortsCount={playlist.shortsCount}
-            thumbnailUrl={playlist.thumbnailUrl}
-            title={playlist.title}
-            category={playlist.category}
-            progress={playlist.progress}
-          />
+          <Link key={playlist.id} href={`/mypage/saved/${playlist.id}`}>
+            <ShortsCard
+              variant="saved"
+              visibility={playlist.visibility}
+              shortsCount={playlist.shortsCount}
+              thumbnailUrl={playlist.thumbnailUrl}
+              title={playlist.title}
+              category={playlist.category}
+              progress={playlist.progress}
+            />
+          </Link>
         ))}
       </div>
     </section>
