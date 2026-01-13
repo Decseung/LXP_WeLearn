@@ -8,22 +8,33 @@ import { patchCommentAction } from '@/features/comment/action'
 import { Button } from '@/components/ui/Button'
 import { toast } from 'react-toastify'
 import CommentDropDownMenu from '@/components/ui/CommentDropdownMenu'
+import { DeleteTarget } from './CommentsModal'
+import { AnimatePresence, motion } from 'framer-motion'
 
 interface CommentsProps {
   comments: CommentType[]
   shortsId: string
+  deleteTarget: DeleteTarget
+  isReplyUpdate: number
   setIsUpdate: React.Dispatch<React.SetStateAction<number>>
+  setDeleteTarget: React.Dispatch<React.SetStateAction<DeleteTarget>>
+  setIsReplyUpdate: React.Dispatch<React.SetStateAction<number>>
 }
 
 export type EditTarget = { mode: 'comment'; id: number } | { mode: 'reply'; id: number } | null
-export type DeleteTarget = { mode: `comment`; id: number } | { mode: 'reply'; id: number } | null
 
-export default function Comment({ comments, shortsId, setIsUpdate }: CommentsProps) {
+export default function Comment({
+  comments,
+  shortsId,
+  deleteTarget,
+  isReplyUpdate,
+  setIsUpdate,
+  setDeleteTarget,
+  setIsReplyUpdate,
+}: CommentsProps) {
   const [openReply, setOpenReply] = useState<number | null>(null)
   const [openReplyInput, setOpenReplyInput] = useState<number | null>(null)
   const [editTarget, setEditTarget] = useState<EditTarget>(null)
-  const [deleteTarget, setDeleteTarget] = useState<DeleteTarget>(null)
-  const [isReplyUpdate, setIsReplyUpdate] = useState(0)
 
   // 댓글 수정 Action
   const [commentPatchState, commentPatchAction] = useActionState(patchCommentAction, {
@@ -126,7 +137,17 @@ export default function Comment({ comments, shortsId, setIsUpdate }: CommentsPro
                       }}
                     >
                       답글 {comment.replyCount}개
-                      <ChevronDown size={12} />
+                      <AnimatePresence>
+                        <motion.div
+                          animate={{
+                            rotate:
+                              openReply === comment.commentId && comment.replyCount > 0 ? 180 : 0,
+                          }}
+                          transition={{ duration: 0.25, ease: 'easeInOut' }}
+                        >
+                          <ChevronDown size={12} />
+                        </motion.div>
+                      </AnimatePresence>
                     </button>
                     <button
                       className="text-xs text-gray-500 transition-colors hover:text-black"

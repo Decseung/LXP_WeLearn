@@ -3,11 +3,9 @@ import { Button } from './Button'
 import { useActionState, useEffect } from 'react'
 import { deleteCommentAction, deleteReplyCommentAction } from '@/features/comment/action'
 import { toast } from 'react-toastify'
-import { DeleteTarget } from '../modals/comment/Comment'
+import { DeleteTarget } from '../modals/comment/CommentsModal'
 
 interface DeleteModalProps {
-  id: number
-  mode: 'comment' | 'reply'
   deleteTarget: DeleteTarget
   setIsUpdate: React.Dispatch<React.SetStateAction<number>>
   setIsReplyUpdate?: React.Dispatch<React.SetStateAction<number>>
@@ -15,8 +13,6 @@ interface DeleteModalProps {
 }
 
 export default function DeleteModal({
-  id,
-  mode,
   deleteTarget,
   setIsUpdate,
   setIsReplyUpdate,

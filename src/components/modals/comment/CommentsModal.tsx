@@ -10,6 +10,9 @@ import { useEffect, useState } from 'react'
 import { commentApi } from '@/services/comments/comments.service'
 import { CommentsResponse } from '@/types/comment'
 import { toast } from 'react-toastify'
+import DeleteModal from '@/components/ui/DeleteModal'
+
+export type DeleteTarget = { mode: 'comment'; id: number } | { mode: 'reply'; id: number } | null
 
 export default function CommentModal() {
   const router = useRouter()
@@ -20,6 +23,8 @@ export default function CommentModal() {
   const [isUpdate, setIsUpdate] = useState(0)
   const [comments, setComments] = useState<CommentsResponse | null>(null)
   const [loading, setLoading] = useState(false)
+  const [deleteTarget, setDeleteTarget] = useState<DeleteTarget>(null)
+  const [isReplyUpdate, setIsReplyUpdate] = useState(0)
 
   // pathname에서 shortsId 추출
   // 스와이프로 shortsId가 변화하는것을 감지하여 shortsId에 넣어준다.
@@ -101,6 +106,10 @@ export default function CommentModal() {
                     comments={comments?.data ?? []}
                     shortsId={shortsId}
                     setIsUpdate={setIsUpdate}
+                    isReplyUpdate={isReplyUpdate}
+                    setIsReplyUpdate={setIsReplyUpdate}
+                    deleteTarget={deleteTarget}
+                    setDeleteTarget={setDeleteTarget}
                   />
                 ) : (
                   <span className="flex h-full w-full items-center justify-center text-lg text-gray-600">
@@ -111,7 +120,14 @@ export default function CommentModal() {
               <CommentInput shortsId={shortsId} setIsUpdate={setIsUpdate} />
             </div>
 
-            {/* ==================== Confirm Modal (삭제 확인 모달) - hidden 제거하여 표시 ==================== */}
+            {deleteTarget && (
+              <DeleteModal
+                deleteTarget={deleteTarget}
+                setIsUpdate={setIsUpdate}
+                setIsReplyUpdate={setIsReplyUpdate}
+                setDeleteTarget={setDeleteTarget}
+              />
+            )}
           </div>
         </motion.aside>
       )}

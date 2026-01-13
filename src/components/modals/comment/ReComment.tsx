@@ -1,15 +1,15 @@
 import CommentDropDownMenu from '@/components/ui/CommentDropdownMenu'
-import DeleteModal from '@/components/ui/DeleteModal'
 import { RecommentApi } from '@/services/comments/recomments.service'
 import { ReplyCommentResponse } from '@/types/comment'
 import { timeAgo } from '@/utils/timeAgo'
 import { AnimatePresence, motion } from 'framer-motion'
 import { User } from 'lucide-react'
 import { useActionState, useEffect, useState } from 'react'
-import { DeleteTarget, EditTarget } from './Comment'
+import { EditTarget } from './Comment'
 import { Button } from '@/components/ui/Button'
 import { patchReplyCommentAction } from '@/features/comment/action'
 import { toast } from 'react-toastify'
+import { DeleteTarget } from './CommentsModal'
 
 interface ReCommentProps {
   openReply: number | null
@@ -43,8 +43,10 @@ export default function ReComment({
   })
 
   const fetchReplyComment = async () => {
-    const res = await RecommentApi.getReplyComment(Number(commentId))
-    setReplyComment(res)
+    if (commentId === openReply) {
+      const res = await RecommentApi.getReplyComment(Number(commentId))
+      setReplyComment(res)
+    }
   }
 
   useEffect(() => {

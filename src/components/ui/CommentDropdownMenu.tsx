@@ -58,16 +58,6 @@ export default function CommentDropDownMenu({
           </DropdownMenuContent>
         </DropdownMenu>
       </button>
-      {deleteTarget?.id && (
-        <DeleteModal
-          id={id}
-          deleteTarget={deleteTarget}
-          mode={mode}
-          setIsUpdate={setIsUpdate}
-          setIsReplyUpdate={setIsReplyUpdate}
-          setDeleteTarget={setDeleteTarget}
-        />
-      )}
     </>
   )
 }
