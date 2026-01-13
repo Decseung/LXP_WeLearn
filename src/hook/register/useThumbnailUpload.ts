@@ -26,6 +26,7 @@ export default function useThumbnailUpload({ onChange, inputRef }: UseThumbnailU
       const reader = new FileReader()
       reader.onloadend = () => {
         onChange('thumbnail', reader.result as string)
+        onChange('thumbnailFile', file)
         resetInput()
       }
       reader.onerror = () => {
@@ -74,6 +75,7 @@ export default function useThumbnailUpload({ onChange, inputRef }: UseThumbnailU
   // 썸네일 삭제
   const handleRemoveThumbnail = useCallback(() => {
     onChange('thumbnail', null)
+    onChange('thumbnailFile', null)
     resetInput()
   }, [onChange, resetInput])
 

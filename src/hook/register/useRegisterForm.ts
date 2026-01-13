@@ -8,9 +8,7 @@ import {
   INITIAL_VIDEO_PREVIEW_DATA,
 } from '@/features/register/types/shortsRegister'
 import { validateShortsForm } from '@/features/register/register.validation'
-import { registerShortsAction } from '@/features/register/register.action'
 import { shortsUploadApi } from '@/services/shorts/upload.service'
-import { uploadVideoToS3 } from '@/lib/utils/s3Upload'
 
 interface UseRegisterFormParams {
   initialFormData?: Partial<ShortsFormData>
@@ -84,49 +82,28 @@ export default function useRegisterForm(params: UseRegisterFormParams = {}) {
 
     try {
       const videoFile = videoData.videoFile!
+      const thumbnailFile = formData.thumbnailFile!
 
-      // 1. Presigned URL 발급 요청 (비디오)
-      toast.info('비디오 업로드 준비 중...')
-      const videoPresigned = await shortsUploadApi.getPresignedUrl({
-        filename: videoFile.name,
-        contentType: videoFile.type,
-      })
+      toast.info('숏츠 업로드 중...')
 
-      // 2. S3에 비디오 직접 업로드
-      toast.info('비디오 업로드 중...')
-      const videoUploadResult = await uploadVideoToS3(
-        videoPresigned.presignedUrl,
-        videoFile,
-        (progress) => {
-          console.log(`비디오 업로드 진행률: ${progress}%`)
+      // 전체 업로드 플로우 실행 (Presigned URL 발급 → S3 업로드 → 완료 확정)
+      const result = await shortsUploadApi.uploadShorts(
+        {
+          title: formData.title,
+          description: formData.description || '',
+          categoryId: formData.categoryId!,
+          keywords: formData.keywords,
+          fileName: videoFile.name,
+          fileSize: videoFile.size,
+          contentType: videoFile.type,
+          durationSec: videoData.durationSec ?? 0,
         },
+        videoFile,
+        thumbnailFile,
       )
 
-      if (!videoUploadResult.success) {
-        throw new Error(videoUploadResult.error || '비디오 업로드 실패')
-      }
-
-      const videoUrl = videoUploadResult.videoFileUrl || videoPresigned.videoFileUrl
-
-      // 3. 숏츠 메타데이터 등록 (S3 업로드된 비디오 URL + 썸네일 Base64)
-      toast.info('숏츠 등록 중...')
-      const result = await registerShortsAction({
-        categoryId: formData.categoryId!,
-        title: formData.title,
-        description: formData.description || undefined,
-        keywords: formData.keywords.length > 0 ? formData.keywords : undefined,
-        videoUrl,
-        thumbnail: formData.thumbnail,
-        durationSec: videoData.durationSec ?? undefined,
-      })
-
-      // ActionState 기반 응답 처리
-      if (result.success) {
-        toast.success(result.message || '등록이 완료되었습니다.')
-        router.push('/mypage/myshorts')
-      } else {
-        toast.error(result.message || '등록에 실패했습니다.')
-      }
+      toast.success('등록이 완료되었습니다.')
+      router.push('/mypage/myshorts')
     } catch (error) {
       toast.error(error instanceof Error ? error.message : '등록에 실패했습니다.')
     } finally {
