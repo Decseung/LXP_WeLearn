@@ -41,7 +41,7 @@ export default function PlaylistModal() {
     <AnimatePresence mode="wait">
       {isOpen && mounted && (
         <motion.aside
-          className={`fixed z-50 flex min-w-lg items-center justify-center ${isMobile ? 'right-0 bottom-0 box-border w-screen' : 'top-32 right-32'}`}
+          className={`fixed z-50 flex min-w-lg items-center justify-center ${isMobile ? 'right-0 bottom-0 box-border w-screen' : 'top-27 right-26'}`}
           initial={isMobile ? { y: '100vh' } : { x: '130%' }}
           animate={isMobile ? { y: 0 } : { x: '0%' }}
           exit={isMobile ? { y: '100vh' } : { x: '130%' }}

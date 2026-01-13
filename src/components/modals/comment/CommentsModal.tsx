@@ -81,7 +81,7 @@ export default function CommentModal() {
     <AnimatePresence mode="wait">
       {isOpen && mounted && (
         <motion.aside
-          className={`fixed z-50 flex min-w-lg items-center justify-center ${isMobile ? 'top-0 right-0 box-border h-full w-screen' : 'top-32 right-32'}`}
+          className={`fixed z-50 flex min-w-lg items-center justify-center ${isMobile ? 'top-0 right-0 box-border h-full w-screen' : 'top-27 right-24'}`}
           initial={isMobile ? { y: '100%' } : { x: '130%' }}
           animate={isMobile ? { y: 0 } : { x: '0%' }}
           exit={isMobile ? { y: '100%' } : { x: '130%' }}
