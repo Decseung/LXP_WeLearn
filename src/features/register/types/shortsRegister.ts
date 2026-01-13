@@ -7,6 +7,7 @@ export interface ShortsFormData {
   keywords: string[]
   keywordInput: string
   thumbnail: string | null // base64 (미리보기용)
+  thumbnailFile: File | null // 업로드용 원본 File
 }
 
 // 폼 데이터 초기값
@@ -18,6 +19,7 @@ export const INITIAL_SHORTS_FORM_DATA: ShortsFormData = {
   keywords: [],
   keywordInput: '',
   thumbnail: null,
+  thumbnailFile: null,
 }
 
 // 비디오 프리뷰 데이터 타입
