@@ -3,11 +3,9 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import type { components } from '@/types/api-schema'
 import { useDragNavigation } from '@/hook/useDragNavigation'
+import type { ShortsItem } from './ShortsCarousel'
 import ShortPreviewCard from './ShortPreviewCard'
-
-type ShortsItem = components['schemas']['ShortsResponse']
 
 type ShortsCarouselSwipeProps = {
   items: ShortsItem[]

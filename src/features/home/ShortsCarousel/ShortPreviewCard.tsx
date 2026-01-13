@@ -2,9 +2,7 @@
 
 import React, { useEffect, useRef } from 'react'
 import Link from 'next/link'
-import type { components } from '@/types/api-schema'
-
-type ShortsItem = components['schemas']['ShortsResponse']
+import type { ShortsItem } from './ShortsCarousel'
 
 const PREVIEW_DURATION = 3500 // ms, 3.5초 정도만 재생
 
