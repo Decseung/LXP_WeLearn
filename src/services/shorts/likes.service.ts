@@ -4,11 +4,9 @@ export const likeApi = {
   like: async (shortsId: number) => {
     const response = await clientApi.post<Response>(`api/v1/${shortsId}/likes`)
 
-    const result = await response.json()
+    if (!response.ok) throw new Error('좋아요 실패')
 
-    if (!response.ok) throw new Error(result.message || '좋아요 실패')
-
-    return result
+    return response
   },
 
   unlike: async (shortsId: number) => {
