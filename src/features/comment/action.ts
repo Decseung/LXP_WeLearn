@@ -12,7 +12,6 @@ export type CommentActionState = {
     content?: string
   }
   data?: CommentType
-  timestamp?: number
 }
 
 export type ReplyActionState = {
@@ -31,9 +30,16 @@ export type GetCommentType = {
     content?: string
   }
   data?: CommentType[]
-  timestamp?: number
 }
 
+export type GetReplyType = {
+  success: boolean
+  message?: string
+  errors?: {
+    content?: string
+  }
+  data?: ReplyCommetType[]
+}
 // 댓글 조회 액션
 export const getCommentAction = async (
   prevState: CommentActionState,
@@ -63,11 +69,11 @@ export const postCommentAction = async (
 
   try {
     const res = await commentApi.postComment(shortsId, { content })
+
     revalidatePath(`/shorts/${shortsId}`)
     return {
       success: true,
       data: res.data,
-      timestamp: Date.now(), // 매번 다른 값을 보냄으로써 useEffect 실행 보장
     }
   } catch (error) {
     return {
@@ -94,10 +100,10 @@ export const patchCommentAction = async (
 
   try {
     await commentApi.patchComment(commentId, { content })
+    revalidatePath(`/shorts/${commentId}`)
 
     return {
       success: true,
-      timestamp: Date.now(),
     }
   } catch {
     return {
@@ -123,6 +129,8 @@ export const deleteCommentAction = async (
 
   try {
     const res = await commentApi.deleteComment(commentId)
+    revalidatePath(`/shorts/${commentId}`)
+
     return {
       success: true,
     }
@@ -138,7 +146,7 @@ export const deleteCommentAction = async (
 export const getReplyAction = async (
   prevState: ReplyActionState,
   id: number,
-): Promise<ReplyActionState> => {
+): Promise<GetReplyType> => {
   try {
     const replyData = await RecommentApi.getReplyComment(id)
     return {
@@ -169,6 +177,7 @@ export const postReplyAction = async (
   }
 
   const res = await RecommentApi.postReplyComment(commentId, { content })
+  revalidatePath(`shorts/${commentId}/comments`)
 
   return {
     success: true,
@@ -178,9 +187,9 @@ export const postReplyAction = async (
 
 // 대댓글 수정 액션
 export const patchReplyCommentAction = async (
-  prevState: CommentActionState,
+  prevState: GetReplyType,
   formData: FormData,
-): Promise<CommentActionState> => {
+): Promise<GetReplyType> => {
   const replyId = Number(formData.get('replyId') || 0)
   const content = formData.get('comment') as string
 
@@ -195,7 +204,7 @@ export const patchReplyCommentAction = async (
     const res = await RecommentApi.patchReplyComment(replyId, { content })
     return {
       success: true,
-      data: res.data,
+      data: res?.data,
     }
   } catch (error) {
     return {

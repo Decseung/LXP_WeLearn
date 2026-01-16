@@ -4,11 +4,11 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useDragNavigation } from '@/hook/useDragNavigation'
-import type { ShortsItem } from './ShortsCarousel'
 import ShortPreviewCard from './ShortPreviewCard'
+import { ShortsItemType } from '@/types/shorts'
 
 type ShortsCarouselSwipeProps = {
-  items: ShortsItem[]
+  items: ShortsItemType[]
 }
 
 // 화면 너비에 따라 한 페이지에 표시할 아이템 수 반환

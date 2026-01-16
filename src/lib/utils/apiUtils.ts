@@ -27,7 +27,6 @@ async function getAuthHeaders(customHeaders: HeadersInit = {}) {
   if (accessToken) {
     headers['Authorization'] = `Bearer ${accessToken}`
   }
-
   return headers
 }
 
@@ -92,16 +91,19 @@ export const api = {
   },
 
   async post<T>(endpoint: string, data?: unknown, options?: FetchOptions) {
+    console.log(data)
     const res = await fetchWithAuth(`${baseUrl}${endpoint}`, {
       ...options,
       method: 'POST',
       body: JSON.stringify(data),
     })
+    console.log('--------포스트')
+    console.log(res)
     if (!res.ok) throw await handleError(res)
     return res.status === 204 ? ({} as T) : res.json()
   },
 
-  async patch<T>(endpoint: string, data?: unknown, options?: FetchOptions): Promise<T | null> {
+  async patch<T>(endpoint: string, data?: unknown, options?: FetchOptions) {
     const res = await fetchWithAuth(`${baseUrl}${endpoint}`, {
       ...options,
       method: 'PATCH',
@@ -111,9 +113,7 @@ export const api = {
     if (!res.ok) throw await handleError(res)
 
     // ✅ PATCH 성공 + No Content 대응
-    if (res.status === 204) return null
-
-    return res.json()
+    return res.status === 204 ? ({} as T) : res.json()
   },
 
   async delete(endpoint: string, options?: FetchOptions): Promise<boolean> {

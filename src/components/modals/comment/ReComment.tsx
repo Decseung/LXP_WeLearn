@@ -1,6 +1,6 @@
 import CommentDropDownMenu from '@/components/ui/CommentDropdownMenu'
 import { RecommentApi } from '@/services/comments/recomments.service'
-import { ReplyCommentResponse } from '@/types/comment'
+import { ReplyCommentResponse, ReplyCommetType } from '@/types/comment'
 import { timeAgo } from '@/utils/timeAgo'
 import { AnimatePresence, motion } from 'framer-motion'
 import { User } from 'lucide-react'
@@ -14,6 +14,7 @@ import { DeleteTarget } from './CommentsModal'
 interface ReCommentProps {
   openReply: number | null
   commentId: number
+  replies: ReplyCommetType[] | null | undefined
   isReplyUpdate: number
   deleteTarget: DeleteTarget
   editTarget: EditTarget
@@ -27,6 +28,7 @@ export default function ReComment({
   openReply,
   commentId,
   isReplyUpdate,
+  replies,
   deleteTarget,
   editTarget,
   setDeleteTarget,
@@ -34,7 +36,7 @@ export default function ReComment({
   setEditTarget,
   setIsReplyUpdate,
 }: ReCommentProps) {
-  const [replyComment, setReplyComment] = useState<ReplyCommentResponse | null>(null)
+  const [replyComment, setReplyComment] = useState<ReplyCommetType[] | null | undefined>(replies)
 
   const [replyPatchState, replyPatchAction] = useActionState(patchReplyCommentAction, {
     success: false,
@@ -42,17 +44,8 @@ export default function ReComment({
     errors: {},
   })
 
-  const fetchReplyComment = async () => {
-    if (commentId === openReply) {
-      const res = await RecommentApi.getReplyComment(Number(commentId))
-      setReplyComment(res)
-    }
-  }
-
   useEffect(() => {
     if (!openReply || !commentId) return
-
-    fetchReplyComment()
   }, [openReply, commentId, isReplyUpdate])
 
   useEffect(() => {
@@ -69,7 +62,7 @@ export default function ReComment({
     <>
       <AnimatePresence initial={false}>
         {openReply === commentId &&
-          replyComment?.data.map((reply) => (
+          replyComment?.map((reply) => (
             <motion.div
               key={reply.replyId}
               initial={{ height: 0, opacity: 0 }}
@@ -86,7 +79,7 @@ export default function ReComment({
                         {reply.writer.profileUrl ? (
                           <img
                             src={reply.writer.profileUrl}
-                            alt={reply.writer.name}
+                            alt={reply.writer.nickname}
                             className="h-8 w-8 rounded-full object-cover"
                           />
                         ) : (

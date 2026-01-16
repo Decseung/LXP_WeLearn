@@ -1,6 +1,5 @@
 export interface UserInfo {
   id: number | null
-  name: string
   profileUrl: string | null
   nickname?: string
 }

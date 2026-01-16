@@ -7,6 +7,7 @@ import Comment from './Comment'
 import CommentInput from './CommentInput'
 import useIsMobile from '@/hook/useIsMobile'
 import { useEffect, useState } from 'react'
+import { commentApi } from '@/services/comments/comments.service'
 import { CommentType } from '@/types/comment'
 import DeleteModal from '@/components/ui/DeleteModal'
 
@@ -79,13 +80,13 @@ export default function CommentModal({ comment }: CommentModalProps) {
               } `}
             >
               {/* ==================== Modal Header ==================== */}
-              <CommentModalHeader closeHandler={handleClose} totalCount={comments?.length} />
+              <CommentModalHeader closeHandler={handleClose} totalCount={comment?.length} />
               {/* ==================== Comment List (댓글 목록 영역) ==================== */}
               <div className="flex-1 overflow-y-auto px-4">
                 {/* ==================== Comment Block 1 ==================== */}
-                {comments?.length !== 0 ? (
+                {comment?.length !== 0 ? (
                   <Comment
-                    comments={comments ?? []}
+                    comments={comment ?? []}
                     shortsId={shortsId}
                     setIsUpdate={setIsUpdate}
                     isReplyUpdate={isReplyUpdate}
