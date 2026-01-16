@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     serverActions: {
-      bodySizeLimit: '10mb', // 필요에 따라 2mb, 5mb, 50mb 등 가능
+      bodySizeLimit: '100mb', // 필요에 따라 2mb, 5mb, 50mb 등 가능
     },
   },
 }
