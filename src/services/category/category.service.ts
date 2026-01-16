@@ -5,8 +5,13 @@ export interface CategoryResponse {
   name: string
 }
 
+interface CategoryListResponse {
+  data: CategoryResponse[]
+}
+
 export const categoryApi = {
   getAll: async (): Promise<CategoryResponse[]> => {
-    return api.get<CategoryResponse[]>('/api/v1/categories')
+    const response = await api.get<CategoryListResponse>('/api/v1/categories')
+    return response.data ?? []
   },
 }

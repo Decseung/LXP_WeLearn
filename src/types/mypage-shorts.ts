@@ -9,7 +9,7 @@ export type ShortsStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED'
 export interface UploaderDto {
   userId?: number
   nickname?: string
-  profileUrl?: string
+  profileImageUrl?: string
 }
 
 // ============================================
