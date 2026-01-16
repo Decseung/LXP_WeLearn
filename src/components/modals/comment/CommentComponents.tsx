@@ -9,6 +9,9 @@ import { CommentType } from '@/types/comment'
 
 interface CommentComponent {
   comment: CommentType
+  commentPatchAction: (formData: FormData) => void
+  openReply: number | null
+  handleReply: (id: number) => Promise<void>
 }
 export default function CommentComponent({ comment }: CommentComponent) {
   return (
