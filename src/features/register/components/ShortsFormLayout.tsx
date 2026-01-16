@@ -71,22 +71,14 @@ export default function ShortsFormLayout({
     errors: {},
   })
 
-  const [isRedirecting, setIsRedirecting] = useState(false)
-
   useEffect(() => {
-    if (state.success === true && !isRedirecting) {
-      setIsRedirecting(true)
+    if (state.success === true) {
       toast.success('업로드가 완료되었습니다.')
-
-      setTimeout(() => {
-        router.push('/mypage/myshorts')
-      }, 1500)
-    }
-
-    if (state.success === false && state.message) {
+      router.push('/mypage/myshorts')
+    } else if (state.success === false && state.message) {
       toast.error(state.message)
     }
-  }, [state, isRedirecting, router])
+  }, [state])
 
   // 비디오 소스 메모이제이션
   const videoSrc = useMemo(() => {
