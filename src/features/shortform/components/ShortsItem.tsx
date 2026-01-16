@@ -22,7 +22,7 @@ export default function ShortsItem({ shorts, userProfileUrl }: ShortsItemProps) 
       {/* 오버레이 컨텐츠 */}
       <div className="pointer-events-none absolute inset-0 flex flex-col justify-end">
         {/* 업로더 정보  */}
-        <div className="pointer-events-auto w-full">
+        <div className="pointer-events-auto w-full bg-linear-to-t from-black/80 to-transparent">
           <ShortsCreateInfo
             uploader={{
               userId: shorts.userId,
