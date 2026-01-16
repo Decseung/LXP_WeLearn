@@ -13,6 +13,7 @@ import type { ShortsFormData, VideoPreviewData } from '@/features/register/types
 import { uploadShortsAction, UploadShortsPayload } from '../register.action'
 import { toast } from 'react-toastify'
 import { extractVideoDuration } from '@/utils/extractVideoDuration'
+import { useRouter } from 'next/navigation'
 
 interface ShortsFormLayoutProps {
   // 폼 데이터
@@ -55,7 +56,10 @@ export default function ShortsFormLayout({
   isThumbnailDeleted = false,
   submitText = '등록하기',
 }: ShortsFormLayoutProps) {
+  const router = useRouter()
+
   // === 오른쪽 섹션 로직 (기존 ShortsFormRightSection) ===
+
   const { videoFile, isDragging: isVideoDragging } = videoData
   const [isThumbnailDragging, setIsThumbnailDragging] = useState(false)
   const isDragging = isVideoDragging || isThumbnailDragging
@@ -67,14 +71,22 @@ export default function ShortsFormLayout({
     errors: {},
   })
 
+  const [isRedirecting, setIsRedirecting] = useState(false)
+
   useEffect(() => {
-    if (state.success === true) {
+    if (state.success === true && !isRedirecting) {
+      setIsRedirecting(true)
       toast.success('업로드가 완료되었습니다.')
+
+      setTimeout(() => {
+        router.push('/mypage/myshorts')
+      }, 1500)
     }
+
     if (state.success === false && state.message) {
       toast.error(state.message)
     }
-  }, [state])
+  }, [state, isRedirecting, router])
 
   // 비디오 소스 메모이제이션
   const videoSrc = useMemo(() => {
