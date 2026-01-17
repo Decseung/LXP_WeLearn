@@ -1,5 +1,10 @@
+'use client'
+
 import { ChevronDown, MoreHorizontal, Play } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
+import { DropdownMenu, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import LikeShortsDropdownMenu from '@/features/mypage/likes/LikeShortsDropdownMenu'
 
 export default function LikeShortsPage() {
   return (
@@ -23,9 +28,12 @@ export default function LikeShortsPage() {
               </div>
 
               {/* 썸네일 영역 */}
-              <div className="absolute inset-0 flex items-center justify-center bg-gray-700">
-                <span className="text-sm text-gray-500">Video Preview</span>
-              </div>
+              <Image
+                src="https://images.pexels.com/photos/303383/pexels-photo-303383.jpeg"
+                alt="Spring Boot 시작하기"
+                fill
+                className="object-cover"
+              />
 
               {/* 하단 그라데이션 */}
               <div className="absolute inset-x-0 bottom-0 h-[48%] bg-linear-to-t from-black/85 via-black/45 to-transparent" />
@@ -70,15 +78,6 @@ export default function LikeShortsPage() {
                 최신순
                 <ChevronDown strokeWidth={1.5} size={14} />
               </button>
-
-              {/* ==================== Sort Dropdown (정렬 드롭다운) - hidden 제거하여 표시 ==================== */}
-              {/*
-              <div className="absolute right-0 top-10 bg-white border border-gray-200 rounded-lg shadow-lg py-1 min-w-[140px] z-20">
-                <button className="w-full px-4 py-2 text-left text-sm text-black font-medium hover:bg-gray-100">좋아요 누른 날짜 / 시간 순</button>
-                <button className="w-full px-4 py-2 text-left text-sm text-gray-600 hover:bg-gray-100">최신 순</button>
-                <button className="w-full px-4 py-2 text-left text-sm text-gray-600 hover:bg-gray-100">인기 순</button>
-              </div>
-              */}
             </div>
           </div>
 
@@ -88,9 +87,12 @@ export default function LikeShortsPage() {
             <div className="flex cursor-pointer gap-4 rounded-lg border border-gray-200 bg-white p-4 transition-shadow hover:shadow-md">
               {/* 썸네일 */}
               <div className="relative h-48 w-28 shrink-0 overflow-hidden rounded-lg border-transparent bg-gray-200 sm:h-48 sm:w-36">
-                <div className="absolute inset-0 flex items-center justify-center text-xs text-gray-400">
-                  thumbnailUrl
-                </div>
+                <Image
+                  src="https://images.pexels.com/photos/303383/pexels-photo-303383.jpeg"
+                  alt="Spring Boot 시작하기"
+                  fill
+                  className="object-cover"
+                />
                 <span className="absolute top-2 left-2 rounded-full border border-gray-400/20 bg-black/25 px-3 py-1 text-[10px] text-white">
                   개발
                 </span>
@@ -105,10 +107,18 @@ export default function LikeShortsPage() {
                     </p>
                     <p className="mb-1 line-clamp-2 text-sm text-gray-700">description</p>
                   </div>
-                  {/* 더보기 버튼 */}
-                  <button className="shrink-0 rounded-full p-1 transition-colors hover:bg-gray-100">
-                    <MoreHorizontal size={18} className="text-black" />
-                  </button>
+                  {/* 더보기 드롭다운 메뉴 */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button
+                        onClick={(e) => e.stopPropagation()}
+                        className="shrink-0 rounded-full p-1 transition-colors hover:bg-gray-100"
+                      >
+                        <MoreHorizontal size={18} className="text-black" />
+                      </button>
+                    </DropdownMenuTrigger>
+                    <LikeShortsDropdownMenu />
+                  </DropdownMenu>
                 </div>
                 {/* 키워드 */}
                 <div className="mt-auto flex flex-wrap gap-2">
@@ -120,9 +130,12 @@ export default function LikeShortsPage() {
             {/* ==================== Shorts Card 2 ==================== */}
             <div className="flex cursor-pointer gap-4 rounded-lg border border-gray-200 bg-white p-4 transition-shadow hover:shadow-md">
               <div className="relative h-48 w-28 shrink-0 overflow-hidden rounded-lg border-transparent bg-gray-200 sm:h-48 sm:w-36">
-                <div className="absolute inset-0 flex items-center justify-center text-xs text-gray-400">
-                  thumbnailUrl
-                </div>
+                <Image
+                  src="https://images.pexels.com/photos/35008891/pexels-photo-35008891.jpeg"
+                  alt="Figma 오토 레이아웃 기초"
+                  fill
+                  className="object-cover"
+                />
                 <span className="absolute top-2 left-2 rounded-full border border-gray-400/20 bg-black/25 px-3 py-1 text-[10px] text-white">
                   개발
                 </span>
@@ -140,9 +153,18 @@ export default function LikeShortsPage() {
                       MCP에 대한 모든 것을 알려드립니다.
                     </p>
                   </div>
-                  <button className="shrink-0 rounded-full p-1 transition-colors hover:bg-gray-100">
-                    <MoreHorizontal size={18} className="text-black" />
-                  </button>
+                  {/* 더보기 드롭다운 메뉴 */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button
+                        onClick={(e) => e.stopPropagation()}
+                        className="shrink-0 rounded-full p-1 transition-colors hover:bg-gray-100"
+                      >
+                        <MoreHorizontal size={18} className="text-black" />
+                      </button>
+                    </DropdownMenuTrigger>
+                    <LikeShortsDropdownMenu />
+                  </DropdownMenu>
                 </div>
                 <div className="mt-auto flex flex-wrap gap-2">
                   <span className="px-1 py-1 text-xs text-gray-900">#프로그래밍</span>
@@ -155,9 +177,12 @@ export default function LikeShortsPage() {
             {/* ==================== Shorts Card 3 ==================== */}
             <div className="flex cursor-pointer gap-4 rounded-lg border border-gray-200 bg-white p-4 transition-shadow hover:shadow-md">
               <div className="relative h-48 w-28 shrink-0 overflow-hidden rounded-lg border-transparent bg-gray-200 sm:h-48 sm:w-36">
-                <div className="absolute inset-0 flex items-center justify-center text-xs text-gray-400">
-                  thumbnailUrl
-                </div>
+                <Image
+                  src="https://images.pexels.com/photos/35383162/pexels-photo-35383162.jpeg"
+                  alt="React 상태 관리 30초 요약"
+                  fill
+                  className="object-cover"
+                />
                 <span className="absolute top-2 left-2 rounded-full border border-gray-400/20 bg-black/25 px-3 py-1 text-[10px] text-white">
                   개발
                 </span>
@@ -175,9 +200,18 @@ export default function LikeShortsPage() {
                       파이썬을 일주일 만에 마스터하는 방법을 알려드립니다.
                     </p>
                   </div>
-                  <button className="shrink-0 rounded-full p-1 transition-colors hover:bg-gray-100">
-                    <MoreHorizontal size={18} className="text-black" />
-                  </button>
+                  {/* 더보기 드롭다운 메뉴 */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button
+                        onClick={(e) => e.stopPropagation()}
+                        className="shrink-0 rounded-full p-1 transition-colors hover:bg-gray-100"
+                      >
+                        <MoreHorizontal size={18} className="text-black" />
+                      </button>
+                    </DropdownMenuTrigger>
+                    <LikeShortsDropdownMenu />
+                  </DropdownMenu>
                 </div>
                 <div className="mt-auto flex flex-wrap gap-2">
                   <span className="px-1 py-1 text-xs text-gray-900">#프로그래밍</span>
@@ -190,9 +224,12 @@ export default function LikeShortsPage() {
             {/* ==================== Shorts Card 4 ==================== */}
             <div className="flex cursor-pointer gap-4 rounded-lg border border-gray-200 bg-white p-4 transition-shadow hover:shadow-md">
               <div className="relative h-48 w-28 shrink-0 overflow-hidden rounded-lg border-transparent bg-gray-200 sm:h-48 sm:w-36">
-                <div className="absolute inset-0 flex items-center justify-center text-xs text-gray-400">
-                  thumbnailUrl
-                </div>
+                <Image
+                  src="https://images.pexels.com/photos/2182863/pexels-photo-2182863.jpeg"
+                  alt="CSS Grid 1분 이해"
+                  fill
+                  className="object-cover"
+                />
                 <span className="absolute top-2 left-2 rounded-full border border-gray-400/20 bg-black/25 px-3 py-1 text-[10px] text-white">
                   개발
                 </span>
@@ -210,9 +247,18 @@ export default function LikeShortsPage() {
                       다크 모드의 장점과 개발자들이 선호하는 이유를 알아봅니다.
                     </p>
                   </div>
-                  <button className="shrink-0 rounded-full p-1 transition-colors hover:bg-gray-100">
-                    <MoreHorizontal size={18} className="text-black" />
-                  </button>
+                  {/* 더보기 드롭다운 메뉴 */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button
+                        onClick={(e) => e.stopPropagation()}
+                        className="shrink-0 rounded-full p-1 transition-colors hover:bg-gray-100"
+                      >
+                        <MoreHorizontal size={18} className="text-black" />
+                      </button>
+                    </DropdownMenuTrigger>
+                    <LikeShortsDropdownMenu />
+                  </DropdownMenu>
                 </div>
                 <div className="mt-auto flex flex-wrap gap-2">
                   <span className="px-1 py-1 text-xs text-gray-900">#개발자</span>
@@ -225,9 +271,12 @@ export default function LikeShortsPage() {
             {/* ==================== Shorts Card 5 ==================== */}
             <div className="flex cursor-pointer gap-4 rounded-lg border border-gray-200 bg-white p-4 transition-shadow hover:shadow-md">
               <div className="relative h-48 w-28 shrink-0 overflow-hidden rounded-lg border-transparent bg-gray-200 sm:h-48 sm:w-36">
-                <div className="absolute inset-0 flex items-center justify-center text-xs text-gray-400">
-                  thumbnailUrl
-                </div>
+                <Image
+                  src="https://images.pexels.com/photos/5483075/pexels-photo-5483075.jpeg"
+                  alt="DB 인덱스는 왜 필요할까?"
+                  fill
+                  className="object-cover"
+                />
                 <span className="absolute top-2 left-2 rounded-full border border-gray-400/20 bg-black/25 px-3 py-1 text-[10px] text-white">
                   개발
                 </span>
@@ -245,9 +294,18 @@ export default function LikeShortsPage() {
                       파이썬의 기초부터 차근차근 배워봅시다.
                     </p>
                   </div>
-                  <button className="shrink-0 rounded-full p-1 transition-colors hover:bg-gray-100">
-                    <MoreHorizontal size={18} className="text-black" />
-                  </button>
+                  {/* 더보기 드롭다운 메뉴 */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button
+                        onClick={(e) => e.stopPropagation()}
+                        className="shrink-0 rounded-full p-1 transition-colors hover:bg-gray-100"
+                      >
+                        <MoreHorizontal size={18} className="text-black" />
+                      </button>
+                    </DropdownMenuTrigger>
+                    <LikeShortsDropdownMenu />
+                  </DropdownMenu>
                 </div>
                 <div className="mt-auto flex flex-wrap gap-2">
                   <span className="px-1 py-1 text-xs text-gray-900">#프로그래밍</span>
@@ -260,37 +318,6 @@ export default function LikeShortsPage() {
           </div>
         </div>
       </div>
-
-      {/* ==================== Dropdown Menu (더보기 클릭 시) - hidden 제거하여 표시 ==================== */}
-      {/*
-      <div className="absolute bg-white border border-gray-200 rounded-lg shadow-lg py-1 min-w-[160px] z-30">
-        <button className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-            <polyline points="17 21 17 13 7 13 7 21"></polyline>
-            <polyline points="7 3 7 8 15 8"></polyline>
-          </svg>
-          재생목록에 저장
-        </button>
-        <button className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="18" cy="5" r="3"></circle>
-            <circle cx="6" cy="12" r="3"></circle>
-            <circle cx="18" cy="19" r="3"></circle>
-            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-          </svg>
-          공유 제공
-        </button>
-        <button className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-gray-100 flex items-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="3 6 5 6 21 6"></polyline>
-            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-          </svg>
-          좋아요 숏츠에서 삭제
-        </button>
-      </div>
-      */}
     </div>
   )
 }
