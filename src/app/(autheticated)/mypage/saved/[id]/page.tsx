@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/Button'
 import SavedShortsCard from '@/features/mypage/saved-edit/SavedShortsCard'
+import SavedShortsTitleEditBtn from '@/features/mypage/saved-edit/SavedShortsTitleEditBtn'
 
 export default function SavedShortsPage() {
   return (
@@ -13,10 +14,8 @@ export default function SavedShortsPage() {
               <h1 className="text-center text-2xl font-black text-gray-900 uppercase lg:text-left">
                 Spring Boot 시작하기
               </h1>
-              <button className="flex items-center justify-center gap-2 rounded bg-black px-3 py-1.5 text-sm text-white transition-colors hover:bg-black/80">
-                {/* <Pencil strokeWidth={1.5} size={14} /> */}
-                수정
-              </button>
+              {/* 플레이리스트 타이틀 수정 버튼 */}
+              <SavedShortsTitleEditBtn />
             </div>
 
             {/* Preview Card */}
