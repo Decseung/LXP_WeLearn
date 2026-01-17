@@ -3,6 +3,7 @@
 import { MoreHorizontal } from 'lucide-react'
 import type { ShortsResponse } from '@/types/mypage-shorts'
 import ShortsCardThumbnail from './ShortsCardThumbnail'
+import { DEFAULT_IMAGES } from '@/constants/shortsImages'
 import { DropdownMenu, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import MyShortsDropdownMenu from '@/features/mypage/myshorts/MyShortsDropdownMenu'
 import ShortsStatusBadge from './ShortsStatusBadge'
@@ -31,7 +32,10 @@ export default function ShortsCard({
       }`}
     >
       {/* 썸네일 */}
-      <ShortsCardThumbnail thumbnailUrl={shorts.thumbnailUrl} shorts={shorts} />
+      <ShortsCardThumbnail
+        thumbnailUrl={shorts.thumbnailUrl || DEFAULT_IMAGES.THUMBNAIL}
+        shorts={shorts}
+      />
 
       {/* 콘텐츠 */}
       <div className="flex min-w-0 flex-1 flex-col p-2 lg:p-4">
