@@ -1,7 +1,5 @@
 import { Button } from '@/components/ui/Button'
-import SortIconButton from '@/components/ui/SortIconButton'
 import { X } from 'lucide-react'
-import { useSearchParams } from 'next/navigation'
 
 interface CommentModalHeaderProps {
   closeHandler: () => void
@@ -16,7 +14,6 @@ export default function CommentModalHeader({ closeHandler, totalCount }: Comment
       </h2>
 
       <div className="flex items-center gap-2">
-        <SortIconButton />
         <Button
           variant="ghost"
           className="rounded-full [&_svg]:h-auto! [&_svg]:w-auto!"
