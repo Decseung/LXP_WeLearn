@@ -11,7 +11,9 @@ export default function LikeShortsPage() {
         {/* ==================== Right Section - Shorts List ==================== */}
         <div className="order-2 flex-1 lg:order-2">
           {/* ==================== List Header (총 갯수 + 정렬) ==================== */}
-          <SortSection />
+          <div className="my-4 flex justify-end">
+            <SortSection />
+          </div>
           {/* ==================== Shorts List ==================== */}
           <LikeShortsCard />
         </div>
