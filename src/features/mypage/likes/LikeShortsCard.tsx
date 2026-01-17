@@ -18,6 +18,7 @@ export default function LikeShortsCard() {
               alt="Spring Boot 시작하기"
               fill
               className="object-cover"
+              sizes="(max-width: 640px) 112px, 144px"
             />
             <span className="absolute top-2 left-2 rounded-full border border-gray-400/20 bg-black/25 px-3 py-1 text-[10px] text-white">
               개발
@@ -67,6 +68,7 @@ export default function LikeShortsCard() {
               alt="Figma 오토 레이아웃 기초"
               fill
               className="object-cover"
+              sizes="(max-width: 640px) 112px, 144px"
             />
             <span className="absolute top-2 left-2 rounded-full border border-gray-400/20 bg-black/25 px-3 py-1 text-[10px] text-white">
               개발
@@ -114,6 +116,7 @@ export default function LikeShortsCard() {
               alt="React 상태 관리 30초 요약"
               fill
               className="object-cover"
+              sizes="(max-width: 640px) 112px, 144px"
             />
             <span className="absolute top-2 left-2 rounded-full border border-gray-400/20 bg-black/25 px-3 py-1 text-[10px] text-white">
               개발
@@ -161,6 +164,7 @@ export default function LikeShortsCard() {
               alt="CSS Grid 1분 이해"
               fill
               className="object-cover"
+              sizes="(max-width: 640px) 112px, 144px"
             />
             <span className="absolute top-2 left-2 rounded-full border border-gray-400/20 bg-black/25 px-3 py-1 text-[10px] text-white">
               개발
@@ -208,6 +212,7 @@ export default function LikeShortsCard() {
               alt="DB 인덱스는 왜 필요할까?"
               fill
               className="object-cover"
+              sizes="(max-width: 640px) 112px, 144px"
             />
             <span className="absolute top-2 left-2 rounded-full border border-gray-400/20 bg-black/25 px-3 py-1 text-[10px] text-white">
               개발
