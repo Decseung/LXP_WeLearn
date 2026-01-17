@@ -5,8 +5,13 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { DropdownMenu, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import LikeShortsDropdownMenu from '@/features/mypage/likes/LikeShortsDropdownMenu'
+import { toast } from 'react-toastify'
 
 export default function LikeShortsPage() {
+  const handleSortClick = () => {
+    toast.info('현재 서비스 준비중입니다')
+  }
+
   return (
     <div className="h-full w-full">
       <div className="flex flex-col gap-8 lg:flex-row">
@@ -23,7 +28,7 @@ export default function LikeShortsPage() {
               {/* 상단 카테고리 뱃지 */}
               <div className="absolute top-3 right-3 left-3 z-10 flex items-center justify-between">
                 <span className="inline-flex items-center rounded-full bg-black/55 px-3 py-1 text-[10px] font-medium text-white">
-                  category
+                  DOCKER
                 </span>
               </div>
 
@@ -41,13 +46,14 @@ export default function LikeShortsPage() {
               {/* 하단 정보 영역 */}
               <div className="absolute right-0 bottom-0 left-0 p-5">
                 <h3 className="mb-2 line-clamp-2 text-[18px] leading-snug font-semibold text-white">
-                  shortsTitle
+                  CI/CD? 처음 들으면 주문 같죠?
                 </h3>
                 <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-gray-200/90">
-                  description
+                  실수는 줄이고, 배포는 빠르게! 이 영상으로 CI/CD 개념, 웃으면서 한 번에
+                  정리해보시죠 ☕🚀
                 </p>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-200">nickName</span>
+                  <span className="text-sm font-medium text-gray-200">배포전문가</span>
                   <span className="rounded-full border border-white/25 px-3 py-1 text-[10px] text-gray-100">
                     #tag
                   </span>
@@ -74,7 +80,10 @@ export default function LikeShortsPage() {
           <div className="mb-4 flex items-center justify-between">
             <span className="text-sm text-gray-500">총 5개</span>
             <div className="relative">
-              <button className="flex items-center gap-1 rounded-md border border-gray-300 px-3 py-1.5 text-sm transition-colors hover:bg-gray-50">
+              <button
+                onClick={handleSortClick}
+                className="flex items-center gap-1 rounded-md border border-gray-300 px-3 py-1.5 text-sm transition-colors hover:bg-gray-50"
+              >
                 최신순
                 <ChevronDown strokeWidth={1.5} size={14} />
               </button>
@@ -101,11 +110,17 @@ export default function LikeShortsPage() {
               <div className="flex min-w-0 flex-1 flex-col p-2 lg:p-4">
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0 flex-1">
-                    <h3 className="pt-1 text-lg font-bold text-gray-900">shortsTitle</h3>
+                    <h3 className="pt-1 text-lg font-bold text-gray-900">
+                      CI/CD? 처음 들으면 주문 같죠?
+                    </h3>
                     <p className="mt-1.5 mb-4 text-sm text-gray-500">
-                      nickName · 조회수 100회 · createdAt
+                      배포전문가 · 조회수 100회 · createdAt
                     </p>
-                    <p className="mb-1 line-clamp-2 text-sm text-gray-700">description</p>
+                    <p className="mb-1 line-clamp-2 text-sm text-gray-700">
+                      {' '}
+                      실수는 줄이고, 배포는 빠르게! 이 영상으로 CI/CD 개념, 웃으면서 한 번에
+                      정리해보시죠 ☕🚀
+                    </p>
                   </div>
                   {/* 더보기 드롭다운 메뉴 */}
                   <DropdownMenu>
@@ -122,7 +137,7 @@ export default function LikeShortsPage() {
                 </div>
                 {/* 키워드 */}
                 <div className="mt-auto flex flex-wrap gap-2">
-                  <span className="px-1 py-1 text-xs text-gray-900">#tag</span>
+                  <span className="px-1 py-1 text-xs text-gray-900">#CI/CD #DOCKER</span>
                 </div>
               </div>
             </div>
