@@ -1,15 +1,10 @@
-import { ChevronDown, User } from 'lucide-react'
 import { useActionState, useEffect, useState } from 'react'
-import { CommentType } from '@/types/comment'
-import ReCommentInput from './ReCommentInput'
-import ReComment from './ReComment'
-import { timeAgo } from '@/utils/timeAgo'
-import { patchCommentAction } from '@/features/comment/action'
-import { Button } from '@/components/ui/Button'
+import { CommentType, ReplyCommentType } from '@/types/comment'
+import { getReplyAction, patchCommentAction } from '@/features/comment/action'
 import { toast } from 'react-toastify'
-import CommentDropDownMenu from '@/components/ui/CommentDropdownMenu'
 import { DeleteTarget } from './CommentsModal'
-import { AnimatePresence, motion } from 'framer-motion'
+
+import CommentComponent from './CommentComponents'
 
 interface CommentsProps {
   comments: CommentType[]
@@ -35,6 +30,7 @@ export default function Comment({
   const [openReply, setOpenReply] = useState<number | null>(null)
   const [openReplyInput, setOpenReplyInput] = useState<number | null>(null)
   const [editTarget, setEditTarget] = useState<EditTarget>(null)
+  const [replies, setReplies] = useState<ReplyCommentType[] | null | undefined>(null)
 
   // 댓글 수정 Action
   const [commentPatchState, commentPatchAction] = useActionState(patchCommentAction, {
@@ -42,7 +38,6 @@ export default function Comment({
     message: '',
     errors: {},
   })
-
   // 댓글 수정 성공시 토스트 ui
   useEffect(() => {
     if (commentPatchState.success) {
@@ -54,11 +49,26 @@ export default function Comment({
   }, [commentPatchState])
 
   useEffect(() => {
+    if (openReply !== null) {
+      fetchReplies(openReply)
+    }
+  }, [openReply, isReplyUpdate])
+
+  useEffect(() => {
     setEditTarget(null)
   }, [commentPatchState])
 
-  const handleReply = (id: number) => {
-    setOpenReply(openReply === id ? null : id)
+  const fetchReplies = async (commentId: number) => {
+    try {
+      setReplies(null) // 로딩 상태
+      const data = await getReplyAction({ success: false, data: [] }, commentId)
+      setReplies(data.data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+  const handleReply = (commentId: number) => {
+    setOpenReply((prev) => (prev === commentId ? null : commentId))
   }
 
   const handleReplyInput = (id: number) => {
@@ -68,133 +78,31 @@ export default function Comment({
 
   return (
     <>
-      {comments?.map((comment) => {
-        return (
-          <div className="border-b border-gray-200 py-8" key={comment.commentId}>
-            <div className="flex items-start justify-between">
-              <div className="flex flex-1 items-start gap-3">
-                {/* 프로필 이미지 */}
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-200 text-gray-600">
-                  {comment.writer.profileUrl ? (
-                    <img
-                      src={comment.writer.profileUrl}
-                      alt={comment.writer.name}
-                      className="h-8 w-8 rounded-full object-cover"
-                    />
-                  ) : (
-                    <User strokeWidth={1.5} size={20} className="text-gray-400" />
-                  )}
-                </div>
-
-                {/* 댓글 내용 */}
-                <div className="flex-1">
-                  <div className="mb-1 flex items-center gap-2">
-                    <span className="text-sm font-medium text-gray-900">
-                      {comment.writer.nickname}
-                    </span>
-                    <span className="text-xs text-gray-400">{timeAgo(comment.createdAt)}</span>
-                  </div>
-                  {editTarget?.mode === 'comment' ? (
-                    editTarget.id === comment.commentId ? (
-                      <form className="my-2 flex flex-col gap-2" action={commentPatchAction}>
-                        <input type="hidden" name="commentId" value={comment.commentId} />
-                        <input type="hidden" name="shortsId" value={shortsId} />
-                        <input
-                          type="text"
-                          name="comment"
-                          placeholder="답글을 입력하세요..."
-                          autoComplete="off"
-                          className="w-full flex-1 rounded-full border border-gray-300 px-3 py-2 text-sm no-underline focus:border-black focus:ring-1 focus:ring-black focus:outline-none"
-                          defaultValue={comment.content}
-                        />
-                        <div className="flex justify-end gap-1">
-                          <Button
-                            type="button"
-                            variant="outline"
-                            className="rounded-full"
-                            onClick={() => setEditTarget(null)}
-                          >
-                            취소
-                          </Button>
-                          <Button variant="accent" className="rounded-full" type="submit">
-                            등록
-                          </Button>
-                        </div>
-                      </form>
-                    ) : (
-                      ''
-                    )
-                  ) : (
-                    <p className="mb-2 text-sm leading-relaxed text-gray-700">{comment.content}</p>
-                  )}
-
-                  {/* 답글 토글 & 답글달기 */}
-                  <div className="flex items-center gap-4">
-                    <button
-                      className="flex items-center gap-1 text-xs text-gray-500 transition-colors hover:text-black"
-                      onClick={() => {
-                        handleReply(comment.commentId)
-                      }}
-                    >
-                      답글 {comment.replyCount}개
-                      <AnimatePresence>
-                        <motion.div
-                          animate={{
-                            rotate:
-                              openReply === comment.commentId && comment.replyCount > 0 ? 180 : 0,
-                          }}
-                          transition={{ duration: 0.25, ease: 'easeInOut' }}
-                        >
-                          <ChevronDown size={12} />
-                        </motion.div>
-                      </AnimatePresence>
-                    </button>
-                    <button
-                      className="text-xs text-gray-500 transition-colors hover:text-black"
-                      onClick={() => {
-                        handleReplyInput(comment.commentId)
-                      }}
-                    >
-                      답글달기
-                    </button>
-                  </div>
-                </div>
-              </div>
-              {/* 더보기 버튼 */}
-              {comment.isMine && (
-                <CommentDropDownMenu
-                  deleteTarget={deleteTarget}
-                  id={comment.commentId}
-                  setEditTarget={setEditTarget}
-                  setIsUpdate={setIsUpdate}
-                  mode="comment"
-                  setDeleteTarget={setDeleteTarget}
-                />
-              )}
-            </div>
-            <ReCommentInput
-              commentId={comment.commentId}
-              openReplyInput={openReplyInput}
-              setOpenReplyInput={setOpenReplyInput}
-              setIsReplyUpdate={setIsReplyUpdate}
-              setIsUpdate={setIsUpdate}
-            />
-            {comment.replyCount > 0 && (
-              <ReComment
-                editTarget={editTarget}
-                openReply={openReply}
-                commentId={comment.commentId}
-                isReplyUpdate={isReplyUpdate}
-                deleteTarget={deleteTarget}
-                setDeleteTarget={setDeleteTarget}
-                setEditTarget={setEditTarget}
-                setIsUpdate={setIsUpdate}
-                setIsReplyUpdate={setIsReplyUpdate}
-              />
-            )}
-          </div>
-        )
-      })}
+      {comments
+        ?.filter((comment) => {
+          return comment.content !== '삭제된 댓글입니다.'
+        })
+        .map((comment) => (
+          <CommentComponent
+            key={comment.commentId}
+            shortsId={shortsId}
+            comment={comment}
+            openReply={openReply}
+            deleteTarget={deleteTarget}
+            editTarget={editTarget}
+            openReplyInput={openReplyInput}
+            replies={replies}
+            isReplyUpdate={isReplyUpdate}
+            commentPatchAction={commentPatchAction}
+            handleReply={handleReply}
+            handleReplyInput={handleReplyInput}
+            setEditTarget={setEditTarget}
+            setDeleteTarget={setDeleteTarget}
+            setIsUpdate={setIsUpdate}
+            setOpenReplyInput={setOpenReplyInput}
+            setIsReplyUpdate={setIsReplyUpdate}
+          />
+        ))}
     </>
   )
 }

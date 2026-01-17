@@ -36,7 +36,11 @@ export default function ShortsItem({ shorts, userProfileUrl }: ShortsItemProps) 
 
         {/* 액션 버튼 - 하단 우측 정렬 */}
         <div className="pointer-events-auto mr-2 self-end">
-          <ShortsActionBar id={shorts.shortsId} />
+          <ShortsActionBar
+            id={shorts.shortsId}
+            likeCount={shorts.likeCount}
+            commentCount={shorts.commentCount}
+          />
         </div>
       </div>
     </div>
