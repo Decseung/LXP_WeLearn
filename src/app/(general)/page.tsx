@@ -14,13 +14,20 @@ export default async function Page() {
   const shortsList = popularShorts?.data?.content ?? []
   const categories = categoriesResponse?.data ?? []
 
+  // 초기 페이지네이션 데이터
+  const initialShortsData = popularShorts?.data ?? {
+    content: [],
+    totalPages: 0,
+    totalElements: 0,
+  }
+
   return (
     <div className="min-h-screen bg-white">
       <ShortsCarousel data={shortsList} />
 
       <PlaylistSection items={playlistGroup} />
 
-      <CategoryShortsSection shorts={shortsList} categories={categories} />
+      <CategoryShortsSection initialShorts={initialShortsData} categories={categories} />
     </div>
   )
 }

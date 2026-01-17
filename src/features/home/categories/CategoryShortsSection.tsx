@@ -1,36 +1,71 @@
 'use client'
 
-import React, { useState } from 'react'
-import { ShortsResponse } from '@/types/mypage-shorts'
+import React, { useState, useTransition } from 'react'
+import { PageShortsResponse } from '@/types/mypage-shorts'
 import CategoryShortsCard from '@/features/home/categories/CategoryShortsCard'
 import SortSection from './sort/Sort'
+import { getShortsAction, getShortsByCategoryAction } from '@/features/category.action'
 
 const ITEMS_PER_PAGE = 8
 
 interface CategoryShortsSectionProps {
-  shorts: ShortsResponse[]
+  initialShorts: PageShortsResponse
   categories: { id: number; name: string }[]
 }
 
-export default function CategoryShortsSection({ shorts, categories }: CategoryShortsSectionProps) {
+export default function CategoryShortsSection({
+  initialShorts,
+  categories,
+}: CategoryShortsSectionProps) {
   // 선택된 카테고리 ID (null = 전체)
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null)
   // 현재 페이지 번호
   const [currentPage, setCurrentPage] = useState(0)
+  // 숏츠 데이터
+  const [shortsData, setShortsData] = useState<PageShortsResponse>(initialShorts)
+  // 로딩 상태
+  const [isPending, startTransition] = useTransition()
 
-  // 카테고리 필터링
-  const filteredShorts =
-    selectedCategoryId === null ? shorts : shorts.filter((s) => s.categoryId === selectedCategoryId)
+  const displayedShorts = shortsData.content ?? []
+  const totalPages = shortsData.totalPages ?? 0
 
-  // 페이지네이션 계산
-  const totalPages = Math.ceil(filteredShorts.length / ITEMS_PER_PAGE)
-  const startIndex = currentPage * ITEMS_PER_PAGE
-  const displayedShorts = filteredShorts.slice(startIndex, startIndex + ITEMS_PER_PAGE)
+  // 데이터 fetch 함수 (Server Action 사용)
+  const fetchShorts = (categoryId: number | null, page: number) => {
+    startTransition(async () => {
+      try {
+        let response: PageShortsResponse | null
 
-  // 카테고리 변경 시 페이지 초기화
+        if (categoryId === null) {
+          // 전체 숏츠 조회
+          response = await getShortsAction({ page, size: ITEMS_PER_PAGE })
+        } else {
+          // 카테고리별 숏츠 조회
+          response = await getShortsByCategoryAction(categoryId, {
+            page,
+            size: ITEMS_PER_PAGE,
+          })
+        }
+
+        if (response) {
+          setShortsData(response)
+        }
+      } catch (error) {
+        console.error('숏츠 목록 조회 실패:', error)
+      }
+    })
+  }
+
+  // 카테고리 변경 핸들러
   const handleCategoryChange = (categoryId: number | null) => {
     setSelectedCategoryId(categoryId)
     setCurrentPage(0)
+    fetchShorts(categoryId, 0)
+  }
+
+  // 페이지 변경 핸들러
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+    fetchShorts(selectedCategoryId, page)
   }
 
   return (
@@ -72,21 +107,31 @@ export default function CategoryShortsSection({ shorts, categories }: CategorySh
       </div>
 
       {/* 숏츠 목록 */}
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-        {displayedShorts.map((shorts) => (
-          <CategoryShortsCard key={shorts.shortsId} shorts={shorts} />
-        ))}
+      <div className="relative">
+        {isPending && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/50">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-gray-900" />
+          </div>
+        )}
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+          {displayedShorts.map((shorts) => (
+            <CategoryShortsCard key={shorts.shortsId} shorts={shorts} />
+          ))}
+        </div>
       </div>
 
       {/* 페이지네이션 */}
-      {totalPages > 1 && (
+      {totalPages >= 1 && (
         <div className="mt-8 flex items-center justify-center gap-1">
           {Array.from({ length: totalPages }).map((_, idx) => (
             <button
               key={idx}
-              onClick={() => setCurrentPage(idx)}
+              onClick={() => handlePageChange(idx)}
+              disabled={isPending}
               className={`flex h-8 w-8 items-center justify-center rounded-md text-sm font-medium transition-colors ${
-                currentPage === idx ? 'bg-gray-900 text-white' : 'text-gray-600 hover:bg-gray-100'
+                currentPage === idx
+                  ? 'bg-gray-900 text-white'
+                  : 'text-gray-600 hover:bg-gray-100 disabled:opacity-50'
               }`}
               aria-label={`${idx + 1}번째 페이지`}
             >
