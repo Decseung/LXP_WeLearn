@@ -130,7 +130,7 @@ export default function ShortsFormLayout({
       setIsUploading(false)
       setUploadData(null)
     }
-  }, [presignedState, uploadData, router])
+  }, [presignedState, uploadData])
 
   // 비디오 소스 메모이제이션
   const videoSrc = useMemo(() => {
