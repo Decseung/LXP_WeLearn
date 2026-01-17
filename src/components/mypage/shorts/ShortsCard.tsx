@@ -1,11 +1,13 @@
 'use client'
 
 import { MoreHorizontal } from 'lucide-react'
-import type { ShortsResponse, ShortsStatus } from '@/types/mypage-shorts'
+import type { ShortsResponse } from '@/types/mypage-shorts'
 import ShortsCardThumbnail from './ShortsCardThumbnail'
+import { DEFAULT_IMAGES } from '@/constants/shortsImages'
 import { DropdownMenu, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import MyShortsDropdownMenu from '@/features/mypage/myshorts/MyShortsDropdownMenu'
 import ShortsStatusBadge from './ShortsStatusBadge'
+import { timeAgo } from '@/utils/timeAgo'
 
 interface ShortsCardProps {
   shorts: ShortsResponse
@@ -13,10 +15,6 @@ interface ShortsCardProps {
   onSelect?: () => void
   onToggleVisibility?: () => void
   onDelete?: () => void
-  viewCount?: number
-  durationSec?: number
-  createdAt?: string
-  status: ShortsStatus
 }
 
 export default function ShortsCard({
@@ -25,9 +23,6 @@ export default function ShortsCard({
   onSelect,
   onToggleVisibility,
   onDelete,
-  viewCount = 100,
-  createdAt = '1일 전',
-  status,
 }: ShortsCardProps) {
   return (
     <div
@@ -37,19 +32,22 @@ export default function ShortsCard({
       }`}
     >
       {/* 썸네일 */}
-      <ShortsCardThumbnail thumbnailUrl={shorts.thumbnailUrl} shorts={shorts} />
+      <ShortsCardThumbnail
+        thumbnailUrl={shorts.thumbnailUrl || DEFAULT_IMAGES.THUMBNAIL}
+        shorts={shorts}
+      />
 
       {/* 콘텐츠 */}
       <div className="flex min-w-0 flex-1 flex-col p-2 lg:p-4">
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0 flex-1">
-            {status && <ShortsStatusBadge status={status} />}
+            {shorts.status && <ShortsStatusBadge shortsStatus={shorts.status} />}
             <h3 className="pt-1 text-lg font-bold text-gray-900">{shorts.title}</h3>
             <p className="mt-1.5 mb-4 text-sm text-gray-500">
-              {shorts.uploader?.nickname ?? '숏터'} {' · '} 조회수 {viewCount.toLocaleString()}회
-              {' · '} {createdAt || '10일 전'}
+              {shorts.userNickname ?? '숏터'}
+              {shorts.createdAt && ` · ${timeAgo(shorts.createdAt)}`}
             </p>
-            <p className="mb-1 line-clamp-2 text-sm text-gray-700"> {shorts.description}</p>
+            <p className="mb-1 line-clamp-2 text-sm text-gray-700">{shorts.description}</p>
           </div>
 
           {/* 더보기 드롭다운 메뉴 */}
@@ -64,15 +62,14 @@ export default function ShortsCard({
             </DropdownMenuTrigger>
             <MyShortsDropdownMenu
               shortsId={shorts.shortsId!}
-              status={shorts.status}
+              shortsStatus={shorts.status}
               onToggleVisibility={onToggleVisibility}
               onDelete={onDelete}
             />
           </DropdownMenu>
         </div>
 
-        {/*  키워드 */}
-        <div className="mt-auto flex flex-wrap gap-2">
+        <div className="mt-auto flex flex-wrap items-center gap-2">
           {/* 키워드 표시 */}
           {shorts.keywords?.map((keyword: string, index: number) => (
             <span key={index} className="px-1 py-1 text-xs text-gray-900">

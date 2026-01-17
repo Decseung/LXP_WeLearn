@@ -13,6 +13,7 @@ import type { ShortsFormData, VideoPreviewData } from '@/features/register/types
 import { uploadShortsAction, UploadShortsPayload } from '../register.action'
 import { toast } from 'react-toastify'
 import { extractVideoDuration } from '@/utils/extractVideoDuration'
+import { useRouter } from 'next/navigation'
 
 interface ShortsFormLayoutProps {
   // 폼 데이터
@@ -22,7 +23,7 @@ interface ShortsFormLayoutProps {
   // 핸들러
   onFormChange: <K extends keyof ShortsFormData>(field: K, value: ShortsFormData[K]) => void
   onVideoChange: <K extends keyof VideoPreviewData>(field: K, value: VideoPreviewData[K]) => void
-  // onSubmit: () => void
+  onSubmit?: () => void
   onCancel: () => void
 
   // 상태
@@ -46,7 +47,7 @@ export default function ShortsFormLayout({
   videoData,
   onFormChange,
   onVideoChange,
-  // onSubmit,
+  onSubmit,
   onCancel,
   isSubmitting,
   isEditMode = false,
@@ -55,7 +56,10 @@ export default function ShortsFormLayout({
   isThumbnailDeleted = false,
   submitText = '등록하기',
 }: ShortsFormLayoutProps) {
+  const router = useRouter()
+
   // === 오른쪽 섹션 로직 (기존 ShortsFormRightSection) ===
+
   const { videoFile, isDragging: isVideoDragging } = videoData
   const [isThumbnailDragging, setIsThumbnailDragging] = useState(false)
   const isDragging = isVideoDragging || isThumbnailDragging
@@ -70,8 +74,8 @@ export default function ShortsFormLayout({
   useEffect(() => {
     if (state.success === true) {
       toast.success('업로드가 완료되었습니다.')
-    }
-    if (state.success === false && state.message) {
+      router.push('/mypage/myshorts')
+    } else if (state.success === false && state.message) {
       toast.error(state.message)
     }
   }, [state])
@@ -97,6 +101,13 @@ export default function ShortsFormLayout({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault() // 페이지 리로드 방지
 
+    // 수정 모드: onSubmit 핸들러 사용
+    if (isEditMode && onSubmit) {
+      onSubmit()
+      return
+    }
+
+    // 등록 모드: 기존 로직
     if (!videoData.videoFile) {
       toast.error('비디오 파일이 필요합니다.')
       return

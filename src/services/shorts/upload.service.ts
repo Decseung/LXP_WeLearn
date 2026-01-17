@@ -64,7 +64,6 @@ export const shortsUploadApi = {
       },
     })
     if (!res.ok) {
-      console.log('업로드 실패')
       throw new Error('S3 업로드 실패')
     }
   },
