@@ -4,7 +4,7 @@ import Image from 'next/image'
 import type { ShortsResponse } from '@/types/mypage-shorts'
 interface ShortsCardThumbnailProps {
   shorts: ShortsResponse
-  thumbnailUrl?: string
+  thumbnailUrl: string
   title?: string
 }
 
@@ -16,7 +16,7 @@ export default function ShortsCardThumbnail({
   return (
     <div className="relative h-48 w-28 shrink-0 overflow-hidden rounded-lg border-transparent bg-gray-200 sm:h-48 sm:w-36">
       <Image
-        src={thumbnailUrl || ''}
+        src={thumbnailUrl}
         alt={title}
         fill
         sizes="(min-width: 640px) 144px, 112px"
