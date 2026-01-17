@@ -8,7 +8,16 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'images.pexels.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'minji-test-3rd-lxp1.s3.ap-northeast-2.amazonaws.com',
+      },
     ],
+  },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '100mb', // 필요에 따라 2mb, 5mb, 50mb 등 가능
+    },
   },
 }
 

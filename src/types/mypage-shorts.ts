@@ -1,7 +1,17 @@
 // ============================================
 // 숏츠 상태
 // ============================================
-export type ShortsStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED'
+export type ShortsStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED' | null | undefined
+
+// ============================================
+// API 공통 응답 래퍼 // api 반환값에 대한 타입 정의
+// ============================================
+export interface ApiResponse<T> {
+  success: boolean
+  code: string
+  message: string
+  data: T
+}
 
 // ============================================
 // 업로더 정보
@@ -9,14 +19,14 @@ export type ShortsStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED'
 export interface UploaderDto {
   userId?: number
   nickname?: string
-  profileUrl?: string
+  profileImageUrl?: string
 }
 
 // ============================================
 // 카테고리 정보
 // ============================================
 export interface CategoryDto {
-  categoryId?: number
+  id?: number
   name?: string
 }
 
@@ -24,6 +34,22 @@ export interface CategoryDto {
 // 숏츠 응답 타입
 // ============================================
 export interface ShortsResponse {
+  // shortsId?: number
+  // title?: string
+  // description?: string
+  // videoUrl?: string
+  // thumbnailUrl?: string
+  // durationSec?: number
+  // keywords?: string[]
+  // status?: ShortsStatus
+  // viewCount?: number
+  // likeCount?: number
+  // commentCount?: number
+  // uploader?: UploaderDto
+  // category?: CategoryDto
+  // createdAt?: string
+  // updatedAt?: string
+
   shortsId?: number
   title?: string
   description?: string
@@ -31,9 +57,20 @@ export interface ShortsResponse {
   thumbnailUrl?: string
   durationSec?: number
   keywords?: string[]
-  status: ShortsStatus
-  uploader?: UploaderDto
-  category?: CategoryDto
+  status?: ShortsStatus
+  viewCount?: number
+  likeCount?: number
+  commentCount?: number
+
+  //  사용자 정보
+  userId?: number
+  userNickname?: string
+  userProfileUrl?: string | null
+
+  // 카테고리 정보
+  categoryId?: number
+  categoryName?: string
+
   createdAt?: string
   updatedAt?: string
 }
@@ -62,16 +99,6 @@ export interface ShortsUpdateRequest {
   keywords?: string[]
   status?: ShortsStatus
   thumbnailUrl?: string | null
-}
-
-// ============================================
-// API 공통 응답 래퍼
-// ============================================
-export interface ApiResponse<T> {
-  success: boolean
-  code: string
-  message: string
-  data: T
 }
 
 // ============================================

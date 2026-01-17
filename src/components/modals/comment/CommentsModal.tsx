@@ -6,11 +6,10 @@ import CommentModalHeader from './CommentsModalHeader'
 import Comment from './Comment'
 import CommentInput from './CommentInput'
 import useIsMobile from '@/hook/useIsMobile'
-import { useEffect, useState } from 'react'
-import { commentApi } from '@/services/comments/comments.service'
-import { CommentsResponse } from '@/types/comment'
-import { toast } from 'react-toastify'
+import { startTransition, useActionState, useEffect, useState } from 'react'
+import { CommentType } from '@/types/comment'
 import DeleteModal from '@/components/ui/DeleteModal'
+import { getCommentAction } from '@/features/comment/action'
 
 export type DeleteTarget = { mode: 'comment'; id: number } | { mode: 'reply'; id: number } | null
 
@@ -21,10 +20,15 @@ export default function CommentModal() {
   const [mounted, setMounted] = useState(false)
   const [shortsId, setShortsId] = useState<string>('')
   const [isUpdate, setIsUpdate] = useState(0)
-  const [comments, setComments] = useState<CommentsResponse | null>(null)
-  const [loading, setLoading] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState<DeleteTarget>(null)
   const [isReplyUpdate, setIsReplyUpdate] = useState(0)
+  const [comments, setComments] = useState<CommentType[] | []>()
+  const [CommentState, CommentAction] = useActionState(getCommentAction, {
+    success: false,
+    message: '',
+    errors: { content: '' },
+    data: [],
+  })
 
   // pathname에서 shortsId 추출
   // 스와이프로 shortsId가 변화하는것을 감지하여 shortsId에 넣어준다.
@@ -39,24 +43,6 @@ export default function CommentModal() {
   // 현재 모달이 열려 있는지 판단
   const isOpen = pathname.endsWith('/comments')
 
-  // 댓글 목록 불러오기
-  const fetchComments = async () => {
-    if (!shortsId) return
-    setLoading(true)
-
-    try {
-      const res = await commentApi.getComment(Number(shortsId))
-      setComments(res)
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(error.message)
-      }
-      toast.error('댓글 조회를 실패하였습니다.')
-    } finally {
-      setLoading(false)
-    }
-  }
-
   // 컴포넌트가 마운트되었는지 체크
   // mounted가 true가 되어야 fetchComments 실행
   useEffect(() => {
@@ -67,9 +53,16 @@ export default function CommentModal() {
   // mounted가 true이고, 모달이 열려 있으며, shortsId가 존재할 때 fetchComments 실행
   useEffect(() => {
     if (!mounted || !isOpen || !shortsId) return
-
-    fetchComments()
+    startTransition(() => {
+      CommentAction(Number(shortsId))
+    })
   }, [mounted, isOpen, shortsId, isUpdate])
+
+  useEffect(() => {
+    if (CommentState.success) {
+      setComments(CommentState.data ?? [])
+    }
+  }, [CommentState.success, CommentState.data])
 
   // 모달 닫기 함수
   // 모달을 닫으면 /shorts/{shortsId} 경로로 이동
@@ -97,13 +90,13 @@ export default function CommentModal() {
               } `}
             >
               {/* ==================== Modal Header ==================== */}
-              <CommentModalHeader closeHandler={handleClose} totalCount={comments?.data?.length} />
+              <CommentModalHeader closeHandler={handleClose} />
               {/* ==================== Comment List (댓글 목록 영역) ==================== */}
               <div className="flex-1 overflow-y-auto px-4">
                 {/* ==================== Comment Block 1 ==================== */}
-                {comments?.data?.length !== 0 ? (
+                {comments?.length !== 0 ? (
                   <Comment
-                    comments={comments?.data ?? []}
+                    comments={comments ?? []}
                     shortsId={shortsId}
                     setIsUpdate={setIsUpdate}
                     isReplyUpdate={isReplyUpdate}

@@ -1,13 +1,17 @@
-import { ShortsDetail } from '@/types/shorts'
 import ShortsPlayer from './ShortsPlayer'
 import ShortsCreateInfo from './ShortsCreateInfo'
 import ShortsActionBar from './ShortsActionBar'
+import { ShortsItemType } from '@/types/shorts'
+import { DEFAULT_IMAGES } from '@/constants/shortsImages'
 
 interface ShortsItemProps {
-  shorts: ShortsDetail
+  shorts: ShortsItemType
+  userProfileUrl?: string | null
 }
 
-export default function ShortsItem({ shorts }: ShortsItemProps) {
+export default function ShortsItem({ shorts, userProfileUrl }: ShortsItemProps) {
+  const profileUrl = userProfileUrl || shorts.userProfileUrl || DEFAULT_IMAGES.AVATAR
+
   return (
     <div className="relative h-dvh w-full overflow-hidden md:h-full">
       {/* 영상 플레이어  */}
@@ -18,9 +22,13 @@ export default function ShortsItem({ shorts }: ShortsItemProps) {
       {/* 오버레이 컨텐츠 */}
       <div className="pointer-events-none absolute inset-0 flex flex-col justify-end">
         {/* 업로더 정보  */}
-        <div className="pointer-events-auto w-full">
+        <div className="pointer-events-auto w-full bg-linear-to-t from-black/80 to-transparent">
           <ShortsCreateInfo
-            uploader={shorts.uploader}
+            uploader={{
+              userId: shorts.userId,
+              userNickname: shorts.userNickname,
+              userProfileUrl: profileUrl,
+            }}
             title={shorts.title}
             description={shorts.description}
           />
@@ -28,7 +36,11 @@ export default function ShortsItem({ shorts }: ShortsItemProps) {
 
         {/* 액션 버튼 - 하단 우측 정렬 */}
         <div className="pointer-events-auto mr-2 self-end">
-          <ShortsActionBar id={shorts.shortsId} />
+          <ShortsActionBar
+            id={shorts.shortsId}
+            likeCount={shorts.likeCount}
+            commentCount={shorts.commentCount}
+          />
         </div>
       </div>
     </div>

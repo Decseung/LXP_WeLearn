@@ -6,7 +6,8 @@ import {
   DropdownMenuTrigger,
 } from './dropdown-menu'
 import DeleteModal from './DeleteModal'
-import { DeleteTarget, EditTarget } from '../modals/comment/Comment'
+import { EditTarget } from '../modals/comment/Comment'
+import { DeleteTarget } from '../modals/comment/CommentsModal'
 
 interface CommentDropdownMenuProps {
   id: number

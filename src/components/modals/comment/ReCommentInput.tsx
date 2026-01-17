@@ -36,7 +36,7 @@ export default function ReCommentInput({
       setIsReplyUpdate((prev) => prev + 1)
       setIsUpdate((prev) => prev + 1)
       setOpenReplyInput(null)
-      toast.success('댓글 등록에 성공하였습니다.🚀')
+      toast.success('답글 등록에 성공하였습니다.🚀')
     } else if (replyPostState.success === false && replyPostState.message) {
       toast.error(replyPostState.message)
     }
@@ -65,7 +65,7 @@ export default function ReCommentInput({
                 {user?.profileUrl ? (
                   <img
                     src={user.profileUrl}
-                    alt={user.name}
+                    alt={user.nickName}
                     className="h-8 w-8 rounded-full object-cover"
                   />
                 ) : (

@@ -1,11 +1,11 @@
 export interface UserInfo {
   id: number | null
-  name: string
   profileUrl: string | null
   nickname?: string
 }
 
 export interface CommentType {
+  shortsId: number
   commentId: number
   content: string
   createdAt: string
@@ -14,7 +14,7 @@ export interface CommentType {
   writer: UserInfo
 }
 
-export interface ReplyCommetType {
+export interface ReplyCommentType {
   replyId: number
   parentId: number
   content: string
@@ -25,7 +25,10 @@ export interface ReplyCommetType {
 
 export interface ReplyCommentResponse {
   success: boolean
-  data: ReplyCommetType[]
+  code: string
+  message: string | null
+  request: string | null
+  data: ReplyCommentType[]
 }
 
 export interface CommentsResponse {

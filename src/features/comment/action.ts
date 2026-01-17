@@ -2,7 +2,7 @@
 
 import { commentApi } from '@/services/comments/comments.service'
 import { RecommentApi } from '@/services/comments/recomments.service'
-import { CommentType, ReplyCommetType } from '@/types/comment'
+import { CommentType, ReplyCommentType } from '@/types/comment'
 import { revalidatePath } from 'next/cache'
 
 export type CommentActionState = {
@@ -11,8 +11,7 @@ export type CommentActionState = {
   errors?: {
     content?: string
   }
-  data?: CommentType
-  timestamp?: number
+  data?: CommentType[]
 }
 
 export type ReplyActionState = {
@@ -21,7 +20,50 @@ export type ReplyActionState = {
   errors?: {
     content?: string
   }
-  data?: ReplyCommetType
+  data?: ReplyCommentType
+}
+
+export type GetCommentType = {
+  success: boolean
+  message?: string
+  errors?: {
+    content?: string
+  }
+  data?: CommentType[]
+}
+
+export type GetReplyType = {
+  success: boolean
+  message?: string
+  errors?: {
+    content?: string
+  }
+  data?: ReplyCommentType[]
+}
+
+export type GetReplyState = {
+  success: boolean
+  data: ReplyCommentType[]
+  message?: string
+}
+
+// 댓글 조회 액션
+export const getCommentAction = async (
+  prevState: CommentActionState,
+  id: number,
+): Promise<GetCommentType> => {
+  try {
+    const commentData = await commentApi.getComment(id)
+    return {
+      success: true,
+      data: commentData?.data,
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : '답글 조회실패',
+    }
+  }
 }
 
 // 댓글 등록 액션
@@ -34,11 +76,11 @@ export const postCommentAction = async (
 
   try {
     const res = await commentApi.postComment(shortsId, { content })
+
     revalidatePath(`/shorts/${shortsId}`)
     return {
       success: true,
       data: res.data,
-      timestamp: Date.now(), // 매번 다른 값을 보냄으로써 useEffect 실행 보장
     }
   } catch (error) {
     return {
@@ -65,12 +107,13 @@ export const patchCommentAction = async (
 
   try {
     const res = await commentApi.patchComment(commentId, { content })
+    console.log('-------액션')
+    console.log(res)
+    revalidatePath(`/shorts/${commentId}`)
     return {
       success: true,
-      data: res.data,
-      timestamp: Date.now(),
     }
-  } catch (error) {
+  } catch {
     return {
       success: false,
       message: '댓글 수정 중 오류가 발생했습니다.',
@@ -94,13 +137,37 @@ export const deleteCommentAction = async (
 
   try {
     const res = await commentApi.deleteComment(commentId)
+    revalidatePath(`/shorts/${commentId}`)
+
     return {
       success: true,
     }
   } catch (error) {
     return {
       success: false,
-      message: '댓글 삭제 중 오류가 발생하였습니다.',
+      errors: {
+        content: error instanceof Error ? error.message : '댓글 삭제 중 오류가 발생했습니다.',
+      },
+    }
+  }
+}
+
+// 대댓글 조회 액션
+export const getReplyAction = async (
+  prevState: GetReplyState,
+  id: number,
+): Promise<GetReplyState> => {
+  try {
+    const replyData = await RecommentApi.getReplyComment(id)
+    return {
+      success: true,
+      data: replyData.data,
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : '답글 조회실패',
+      data: [],
     }
   }
 }
@@ -121,6 +188,7 @@ export const postReplyAction = async (
   }
 
   const res = await RecommentApi.postReplyComment(commentId, { content })
+  revalidatePath(`shorts/${commentId}/comments`)
 
   return {
     success: true,
@@ -130,9 +198,9 @@ export const postReplyAction = async (
 
 // 대댓글 수정 액션
 export const patchReplyCommentAction = async (
-  prevState: CommentActionState,
+  prevState: GetReplyType,
   formData: FormData,
-): Promise<CommentActionState> => {
+): Promise<GetReplyType> => {
   const replyId = Number(formData.get('replyId') || 0)
   const content = formData.get('comment') as string
 
@@ -145,10 +213,9 @@ export const patchReplyCommentAction = async (
 
   try {
     const res = await RecommentApi.patchReplyComment(replyId, { content })
-    console.log(res)
     return {
       success: true,
-      data: res.data,
+      data: res?.data,
     }
   } catch (error) {
     return {
@@ -179,7 +246,9 @@ export const deleteReplyCommentAction = async (
   } catch (error) {
     return {
       success: false,
-      message: '댓글 삭제 중 오류가 발생하였습니다.',
+      errors: {
+        content: error instanceof Error ? error.message : '답글 삭제 중 오류가 발생하였습니다.',
+      },
     }
   }
 }

@@ -27,7 +27,6 @@ async function getAuthHeaders(customHeaders: HeadersInit = {}) {
   if (accessToken) {
     headers['Authorization'] = `Bearer ${accessToken}`
   }
-
   return headers
 }
 
@@ -92,24 +91,29 @@ export const api = {
   },
 
   async post<T>(endpoint: string, data?: unknown, options?: FetchOptions) {
+    console.log(endpoint)
     const res = await fetchWithAuth(`${baseUrl}${endpoint}`, {
       ...options,
       method: 'POST',
-      body: JSON.stringify(data || {}),
+      body: JSON.stringify(data),
     })
-    console.log('리스폰스', res)
     if (!res.ok) throw await handleError(res)
     return res.status === 204 ? ({} as T) : res.json()
   },
 
-  async patch<T>(endpoint: string, data?: unknown, options?: FetchOptions): Promise<T> {
+  async patch<T>(endpoint: string, data?: unknown, options?: FetchOptions) {
     const res = await fetchWithAuth(`${baseUrl}${endpoint}`, {
       ...options,
       method: 'PATCH',
-      body: JSON.stringify(data || {}),
+      body: JSON.stringify(data),
     })
+    console.log('--------유틸')
+    console.log(res)
+
     if (!res.ok) throw await handleError(res)
-    return res.json()
+
+    // ✅ PATCH 성공 + No Content 대응
+    return res.status === 204 ? ({} as T) : res.json()
   },
 
   async delete(endpoint: string, options?: FetchOptions): Promise<boolean> {
