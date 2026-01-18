@@ -1,6 +1,5 @@
-import { toast } from 'react-toastify'
 import { ShortsFormChangeHandler } from '@/features/register/types/shortsRegister'
-import useKeywordSearch from './useKeywordSearch'
+import useKeywordSearch, { KeywordSuggestion } from './useKeywordSearch'
 import useKeywordSelection from './useKeywordSelection'
 import useKeywordsNavigation from './useKeywordsNavigation'
 
@@ -31,15 +30,16 @@ export default function useKeywords({ keywords, keywordInput, onChange }: UseKey
   } = useKeywordsNavigation({
     itemCount: suggestions.length,
     onSelect: (index) => {
-      if (selectKeyword(suggestions[index])) {
+      // normalizedName을 저장
+      if (selectKeyword(suggestions[index].normalizedName)) {
         close()
       }
     },
   })
 
-  // 키워드 선택 핸들러
-  const handleSelectKeyword = (keyword: string) => {
-    if (selectKeyword(keyword)) {
+  // 키워드 선택 핸들러 (normalizedName 저장)
+  const handleSelectKeyword = (suggestion: KeywordSuggestion) => {
+    if (selectKeyword(suggestion.normalizedName)) {
       close()
     }
   }

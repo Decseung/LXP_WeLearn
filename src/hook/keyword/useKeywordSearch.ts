@@ -2,9 +2,14 @@ import { useState, useEffect, useRef } from 'react'
 import { getKeywordsAction } from '@/features/keyword.action'
 import { KeywordResponse } from '@/services/keyword/keyword.service'
 
+export interface KeywordSuggestion {
+  displayName: string
+  normalizedName: string
+}
+
 interface UseKeywordSearchParams {
   keywordInput: string // 사용자 입력값
-  keywords: string[] // 이미 선택된 키워드 목록
+  keywords: string[] // 이미 선택된 키워드 목록 (normalizedName 기준)
   isMaxReached: boolean // 최대 키워드 개수 도달 여부
 }
 
@@ -16,7 +21,7 @@ export default function useKeywordSearch({
   isMaxReached,
 }: UseKeywordSearchParams) {
   // 검색 결과 추천 키워드 목록
-  const [suggestions, setSuggestions] = useState<string[]>([])
+  const [suggestions, setSuggestions] = useState<KeywordSuggestion[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
   // 전체 키워드 캐시 (최초 1회 로드 후 재사용)
@@ -69,10 +74,14 @@ export default function useKeywordSearch({
         const query = keywordInput.trim().toLowerCase()
 
         // 로컬 필터링: 입력값을 포함하는 키워드 검색
+        // UI에는 displayName, 서버 전송용으로 normalizedName 사용
         const filtered = allKeywords
           .filter((item) => item.normalizedName.includes(query))
-          .map((item) => item.displayName)
-          .filter((name) => !keywords.includes(name)) // 이미 선택된 키워드 제외
+          .filter((item) => !keywords.includes(item.normalizedName)) // 이미 선택된 키워드 제외
+          .map((item) => ({
+            displayName: item.displayName,
+            normalizedName: item.normalizedName,
+          }))
 
         setSuggestions(filtered)
       } catch (error) {

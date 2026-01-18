@@ -1,14 +1,16 @@
 'use client'
 
+import { KeywordSuggestion } from '@/hook/keyword/useKeywordSearch'
+
 interface KeywordSuggestionsProps {
   isOpen: boolean
   isLoading: boolean
-  suggestions: string[]
+  suggestions: KeywordSuggestion[]
   activeIndex: number
   keywordInput: string
   listboxId: string
   getOptionId: (index: number) => string
-  onSelect: (keyword: string) => void
+  onSelect: (suggestion: KeywordSuggestion) => void
 }
 
 export default function KeywordSuggestions({
@@ -41,21 +43,21 @@ export default function KeywordSuggestions({
         role="listbox"
         className="absolute z-10 mt-1 max-h-48 w-full overflow-y-auto rounded-lg border border-gray-300 bg-white shadow-lg"
       >
-        {suggestions.map((keyword, index) => (
+        {suggestions.map((suggestion, index) => (
           <li
-            key={keyword}
+            key={suggestion.normalizedName}
             id={getOptionId(index)}
             role="option"
             aria-selected={index === activeIndex}
             onMouseDown={(e) => {
               e.preventDefault()
-              onSelect(keyword)
+              onSelect(suggestion)
             }}
             className={`cursor-pointer px-4 py-2 text-sm text-gray-700 ${
               index === activeIndex ? 'bg-gray-100' : 'hover:bg-gray-100'
             }`}
           >
-            {keyword}
+            {suggestion.displayName}
           </li>
         ))}
       </ul>

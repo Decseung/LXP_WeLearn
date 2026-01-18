@@ -4,6 +4,7 @@ import React, { useState, useTransition } from 'react'
 import { PageShortsResponse } from '@/types/mypage-shorts'
 import CategoryShortsCard from '@/features/home/categories/CategoryShortsCard'
 import { getShortsAction, getShortsByCategoryAction } from '@/features/category.action'
+import { CategoryResponse } from '@/services/category/category.service'
 import SortSection from '@/features/sort/SortSection'
 import { Youtube } from 'lucide-react'
 
@@ -11,7 +12,7 @@ const ITEMS_PER_PAGE = 8
 
 interface CategoryShortsSectionProps {
   initialShorts: PageShortsResponse
-  categories: { id: number; name: string }[]
+  categories: CategoryResponse[]
 }
 
 export default function CategoryShortsSection({
