@@ -19,7 +19,7 @@ function ShortsLikeButton({ initialLikeCount, initialIsLike, shortsId }: ShortsL
   const userData = localStorage.getItem('user')
   const sendLike = useDebounce(async (nextIsLike: boolean) => {
     if (!userData) {
-      toast.info('로그인 이후 이용 바랍니다.')
+      toast.info('로그인 이후 이용 해주세요.')
       return
     }
     try {

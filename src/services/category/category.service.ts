@@ -28,9 +28,13 @@ export const categoryApi = {
     categoryId: number,
     { page = 0, size = 8 }: PaginationParams = {},
   ): Promise<ApiResponse<PageShortsResponse>> => {
-    return api.get<ApiResponse<PageShortsResponse>>(`/api/v1/categories/${categoryId}/shorts`, {
-      cache: 'no-store',
-      params: { page, size, sort: 'createdAt,desc' },
-    })
+    const response = await api.get<ApiResponse<PageShortsResponse>>(
+      `/api/v1/categories/${categoryId}/shorts`,
+      {
+        cache: 'no-store',
+        params: { page, size, sort: 'createdAt,desc' },
+      },
+    )
+    return response
   },
 }
