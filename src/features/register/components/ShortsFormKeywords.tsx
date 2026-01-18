@@ -30,6 +30,7 @@ export default function ShortsFormKeywords({
     handleKeyDown,
     handleBlur,
     handleFocus,
+    getDisplayName,
   } = useKeywords({ keywords, keywordInput, onChange })
 
   const listboxId = 'keyword-listbox'
@@ -77,7 +78,11 @@ export default function ShortsFormKeywords({
         />
       </div>
       {/* 선택된 키워드 목록 */}
-      <KeywordList keywords={keywords} onRemove={handleRemoveKeyword} />
+      <KeywordList
+        keywords={keywords}
+        onRemove={handleRemoveKeyword}
+        getDisplayName={getDisplayName}
+      />
     </div>
   )
 }

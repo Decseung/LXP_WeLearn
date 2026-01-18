@@ -97,9 +97,19 @@ export default function useKeywordSearch({
     return () => clearTimeout(debounceTimer)
   }, [keywordInput, keywords, isMaxReached])
 
+  // normalizedName → displayName 매핑 함수
+  const getDisplayName = (normalizedName: string): string => {
+    const cached = keywordCacheRef.current
+    if (!cached) return normalizedName
+
+    const found = cached.find((item) => item.normalizedName === normalizedName)
+    return found?.displayName ?? normalizedName
+  }
+
   return {
     suggestions,
     isLoading,
     clearSuggestions: () => setSuggestions([]), // 추천 목록 초기화
+    getDisplayName, // displayName 조회 함수 추가
   }
 }
