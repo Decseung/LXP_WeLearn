@@ -109,7 +109,6 @@ export default function useKeywordSearch({
   return {
     suggestions,
     isLoading,
-    clearSuggestions: () => setSuggestions([]), // 추천 목록 초기화
-    getDisplayName, // displayName 조회 함수 추가
+    getDisplayName,
   }
 }

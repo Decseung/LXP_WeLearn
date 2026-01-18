@@ -52,7 +52,7 @@ export async function getShortsDetailList(startId: string): Promise<ShortsListPr
       return null
     }
 
-    const RANGE = 5
+    const RANGE = 10
 
     // 6: 슬라이싱 로직
     const startSlice = Math.max(startIndex - RANGE, 0)
