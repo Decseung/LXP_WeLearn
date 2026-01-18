@@ -18,7 +18,7 @@ export const categoryApi = {
   > => {
     const response = await api.get<ApiResponse<PageShortsResponse>>('/api/v1/shorts', {
       cache: 'no-store',
-      params: { page, size },
+      params: { page, size, sort: 'createdAt,desc' },
     })
     return response
   },
@@ -32,7 +32,7 @@ export const categoryApi = {
       `/api/v1/categories/${categoryId}/shorts`,
       {
         cache: 'no-store',
-        params: { page, size },
+        params: { page, size, sort: 'createdAt,desc' },
       },
     )
     return response
