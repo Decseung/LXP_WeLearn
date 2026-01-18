@@ -46,14 +46,18 @@ export default function useKeywordSearch({
       })
     }
 
+    // 중복 요청 방지 플래그 설정
     isFetchingRef.current = true
     try {
+      // 서버에서 전체 키워드 목록 조회
       const result = await getKeywordsAction()
+      // 성공 시 캐시에 저장하여 이후 요청에서 재사용
       if (result.success && result.data) {
         keywordCacheRef.current = result.data
       }
       return result.data
     } finally {
+      // 요청 완료 후 플래그 해제 (성공/실패 무관)
       isFetchingRef.current = false
     }
   }
