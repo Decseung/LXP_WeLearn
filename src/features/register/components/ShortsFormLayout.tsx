@@ -15,6 +15,7 @@ import { getPresignedUrlAction, confirmUploadAction } from '../register.action'
 import type { PresignedUrlResponse } from '@/services/shorts/upload.service'
 import { toast } from 'react-toastify'
 import { extractVideoDuration } from '@/utils/extractVideoDuration'
+import { validateShortsForm } from '../register.validation'
 
 interface ShortsFormLayoutProps {
   // 폼 데이터
@@ -159,19 +160,24 @@ export default function ShortsFormLayout({
       return
     }
 
-    // 등록 모드
-    if (!videoData.videoFile) {
-      toast.error('비디오 파일이 필요합니다.')
+    // 등록 모드: 유효성 검증
+    const validationResult = validateShortsForm(formData, videoData)
+    if (!validationResult.isValid) {
+      const firstError = validationResult.errors[0]
+      toast.error(firstError.message)
       return
     }
 
+    // 유효성 검증 통과 시 videoFile은 null이 아님
+    const videoFile = videoData.videoFile!
+
     setIsUploading(true)
 
-    const durationSec = await extractVideoDuration(videoData.videoFile)
+    const durationSec = await extractVideoDuration(videoFile)
 
     // 업로드할 파일 저장 (useEffect에서 사용)
     setUploadData({
-      videoFile: videoData.videoFile,
+      videoFile,
       thumbnailFile: formData.thumbnailFile ?? null,
     })
 
@@ -183,9 +189,9 @@ export default function ShortsFormLayout({
         categoryId: formData.categoryId || 0,
         keywords: formData.keywords,
         durationSec,
-        fileName: videoData.videoFile!.name,
-        fileSize: videoData.videoFile!.size,
-        contentType: videoData.videoFile!.type,
+        fileName: videoFile.name,
+        fileSize: videoFile.size,
+        contentType: videoFile.type,
       })
     })
   }

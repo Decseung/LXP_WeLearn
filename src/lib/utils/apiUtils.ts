@@ -119,7 +119,6 @@ export const api = {
 
     if (!res.ok) throw await handleError(res)
 
-    // ✅ PATCH 성공 + No Content 대응
     return res.status === 204 ? ({} as T) : res.json()
   },
 
