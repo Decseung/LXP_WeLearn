@@ -4,7 +4,7 @@ import { api } from '@/lib/utils/apiUtils'
 export interface UserResponse {
   userId?: number
   email: string
-  nickName: string
+  nickName?: string
   name?: string
   profileUrl?: string
   createdAt?: string
@@ -21,7 +21,7 @@ export interface UserResponseType {
 
 // 사용자 수정 요청 타입
 interface UserUpdateRequest {
-  nickName: string
+  nickName?: string
   profileUrl?: string
   name?: string
 }
