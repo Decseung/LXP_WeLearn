@@ -4,13 +4,15 @@ import React, { useState, useTransition } from 'react'
 import { PageShortsResponse } from '@/types/mypage-shorts'
 import CategoryShortsCard from '@/features/home/categories/CategoryShortsCard'
 import { getShortsAction, getShortsByCategoryAction } from '@/features/category.action'
+import { CategoryResponse } from '@/services/category/category.service'
 import SortSection from '@/features/sort/SortSection'
+import { Youtube } from 'lucide-react'
 
 const ITEMS_PER_PAGE = 8
 
 interface CategoryShortsSectionProps {
   initialShorts: PageShortsResponse
-  categories: { id: number; name: string }[]
+  categories: CategoryResponse[]
 }
 
 export default function CategoryShortsSection({
@@ -78,10 +80,10 @@ export default function CategoryShortsSection({
       </div>
 
       {/* 카테고리별 필터 */}
-      <div className="mb-6 flex flex-wrap items-center gap-2">
+      <div className="scrollbar-hide mb-6 flex items-center gap-2 overflow-x-auto md:flex-wrap md:overflow-x-visible">
         <button
           onClick={() => handleCategoryChange(null)}
-          className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
+          className={`shrink-0 rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
             selectedCategoryId === null
               ? 'border-gray-900 bg-gray-900 text-white'
               : 'border-gray-300 text-gray-600 hover:border-gray-400'
@@ -95,7 +97,7 @@ export default function CategoryShortsSection({
           <button
             key={category.id}
             onClick={() => handleCategoryChange(category.id)}
-            className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
+            className={`shrink-0 rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
               selectedCategoryId === category.id
                 ? 'border-gray-900 bg-gray-900 text-white'
                 : 'border-gray-300 text-gray-600 hover:border-gray-400'
@@ -107,17 +109,28 @@ export default function CategoryShortsSection({
       </div>
 
       {/* 숏츠 목록 */}
-      <div className="relative">
+      <div className="relative min-h-[400px]">
         {isPending && (
           <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/50">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-gray-900" />
           </div>
         )}
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-          {displayedShorts.map((shorts) => (
-            <CategoryShortsCard key={shorts.shortsId} shorts={shorts} />
-          ))}
-        </div>
+        {displayedShorts.length === 0 && !isPending ? (
+          <div className="flex min-h-[400px] flex-col items-center justify-center py-16 text-center">
+            <Youtube strokeWidth={1.5} className="mb-4 h-12 w-12 text-gray-300" />
+            <p className="text-gray-500">
+              {selectedCategoryId !== null
+                ? `${categories.find((c) => c.id === selectedCategoryId)?.name ?? '해당 카테고리'}에 대한 숏츠가 없습니다.`
+                : '등록된 숏츠가 없습니다.'}
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+            {displayedShorts.map((shorts) => (
+              <CategoryShortsCard key={shorts.shortsId} shorts={shorts} />
+            ))}
+          </div>
+        )}
       </div>
 
       {/* 페이지네이션 */}

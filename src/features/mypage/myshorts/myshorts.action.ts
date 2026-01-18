@@ -35,8 +35,14 @@ export async function updateShortsAction(
     categoryId: categoryId ? Number(categoryId) : undefined,
     status: status || undefined,
     keywords: keywords.length > 0 ? keywords : undefined,
-    // 썸네일: 빈 문자열이면 삭제, 값이 있으면 업데이트, 없으면 유지
-    thumbnailUrl: thumbnailUrl !== null ? thumbnailUrl : undefined,
+  }
+
+  // 썸네일 처리: FormData에 thumbnailUrl 키가 있는 경우에만 처리
+  // - 빈 문자열(''): 삭제 요청 → null로 전송
+  // - 값이 있는 경우: 업데이트 요청
+  // - FormData에 키가 없는 경우: 기존 유지 (payload에 포함하지 않음)
+  if (formData.has('thumbnailUrl')) {
+    payload.thumbnailUrl = thumbnailUrl === '' ? null : thumbnailUrl
   }
 
   try {
@@ -86,32 +92,33 @@ export async function deleteShortsAction(shortsId: number): Promise<ActionState>
 /**
  * 숏츠 공개/비공개 전환 액션
  */
-// export async function toggleShortsStatusAction(
-//   shortsId: number,
-//   currentStatus: ShortsUpdateRequest['status'],
-// ): Promise<ActionState<ShortsResponse>> {
-//   if (!shortsId || isNaN(shortsId)) {
-//     return {
-//       success: false,
-//       message: '유효하지 않은 숏츠 ID입니다.',
-//     }
-//   }
+export async function toggleShortsStatusAction(
+  shortsId: number,
+  currentStatus: ShortsUpdateRequest['status'],
+): Promise<ActionState<ShortsResponse>> {
+  if (!shortsId || isNaN(shortsId)) {
+    return {
+      success: false,
+      message: '유효하지 않은 숏츠 ID입니다.',
+    }
+  }
 
-//   try {
-//     const data = await myShortsApi.toggleShortsStatus(shortsId, currentStatus)
-//     revalidatePath('/mypage/myshorts')
+  try {
+    const newStatus = currentStatus === 'PUBLISHED' ? 'DRAFT' : 'PUBLISHED'
+    const response = await myShortsApi.updateShorts(shortsId, { status: newStatus })
+    revalidatePath('/mypage/myshorts')
 
-//     const statusText = data.status === 'PUBLISHED' ? '공개' : '비공개'
+    const statusText = response.data.status === 'PUBLISHED' ? '공개' : '비공개'
 
-//     return {
-//       success: true,
-//       message: `숏츠가 ${statusText}로 변경되었습니다.`,
-//       data,
-//     }
-//   } catch (error) {
-//     return {
-//       success: false,
-//       message: error instanceof Error ? error.message : '상태 변경 실패',
-//     }
-//   }
-// }
+    return {
+      success: true,
+      message: `숏츠가 ${statusText}로 변경되었습니다.`,
+      data: response.data,
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : '상태 변경 실패',
+    }
+  }
+}
