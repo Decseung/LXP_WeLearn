@@ -57,7 +57,9 @@ export default function ShortsFormKeywords({
           onFocus={handleFocus}
           className="bg-white focus:ring-black focus:outline-none"
           placeholder={
-            isMaxReached ? `최대 ${maxKeywords}개까지 선택 가능합니다.` : '키워드를 입력하세요.'
+            isMaxReached
+              ? `최대 ${maxKeywords}개까지 선택 가능합니다.`
+              : '키워드를 영문으로 입력하세요. 예) java'
           }
           disabled={isMaxReached}
         />
