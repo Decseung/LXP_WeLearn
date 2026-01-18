@@ -60,7 +60,7 @@ export default function ShortsFormKeywords({
           placeholder={
             isMaxReached
               ? `최대 ${maxKeywords}개까지 선택 가능합니다.`
-              : '키워드를 영문으로 입력하세요. 예) java'
+              : '키워드를 영문으로 입력하세요. 예) data'
           }
           disabled={isMaxReached}
         />
