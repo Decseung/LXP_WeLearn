@@ -4,7 +4,7 @@ import Image from 'next/image'
 import type { ShortsResponse } from '@/types/mypage-shorts'
 import { DEFAULT_IMAGES } from '@/constants/shortsImages'
 
-interface ShortsPreviewItemProps {
+interface ShortsPreviewCardProps {
   shorts: ShortsResponse | null
   userProfileUrl?: string | null
   videoRef?: React.RefObject<HTMLVideoElement | null>
@@ -12,13 +12,13 @@ interface ShortsPreviewItemProps {
   loop?: boolean
 }
 
-export function ShortsPreviewItem({
+export function ShortsPreviewCard({
   shorts,
   userProfileUrl,
   videoRef,
   onLoadedData,
   loop = true,
-}: ShortsPreviewItemProps) {
+}: ShortsPreviewCardProps) {
   // 빈 상태
   if (!shorts) {
     return (

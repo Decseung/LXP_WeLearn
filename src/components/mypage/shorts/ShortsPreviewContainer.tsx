@@ -1,8 +1,8 @@
 'use client'
 
 import type { ShortsResponse } from '@/types/mypage-shorts'
-import { ShortsPreviewItem } from './ShortsPreviewItem'
 import { useShortsAutoPlay } from '@/hook/mypage/useShortsAutoPlay'
+import { ShortsPreviewCard } from './ShortsPreviewItem'
 
 interface ShortsPreviewContainerProps {
   shorts?: ShortsResponse | null
@@ -22,7 +22,7 @@ export default function ShortsPreviewContainer({
   })
 
   return (
-    <ShortsPreviewItem
+    <ShortsPreviewCard
       shorts={shorts ?? null}
       videoRef={videoRef}
       onLoadedData={handleLoadedData}

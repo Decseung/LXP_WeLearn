@@ -1,6 +1,7 @@
 import React from 'react'
 import ShortsCarouselSwipe from './ShortsCarouselSwipe'
 import { ShortsItemType } from '@/types/shorts'
+import { ShortsListCard } from '@/types/shorts/shorts'
 
 export interface ShortsUploader {
   userId: number
@@ -28,7 +29,7 @@ export interface PageResponse<T> {
   empty: boolean
 }
 
-export default function ShortsCarousel({ data }: { data?: ShortsItemType[] }) {
+export default function ShortsCarousel({ data }: { data?: ShortsListCard[] }) {
   const items = data ?? []
   return (
     <section className="my-12 md:mt-5 md:mb-12">

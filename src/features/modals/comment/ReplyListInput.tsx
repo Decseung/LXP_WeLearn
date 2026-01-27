@@ -1,10 +1,10 @@
 import { Button } from '@/components/ui/Button'
-import { postReplyAction } from '@/features/comment/action'
 import { UserInfo } from '@/types/auth'
 import { AnimatePresence, motion } from 'framer-motion'
 import { User } from 'lucide-react'
 import { useActionState, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
+import { postReplyAction } from './action'
 
 interface ReCommnetInputProps {
   commentId: number
@@ -50,7 +50,7 @@ export default function ReCommentInput({
 
   return (
     <AnimatePresence initial={false}>
-      {openReplyInput === commentId ? (
+      {openReplyInput === commentId && (
         <motion.div
           key={commentId}
           initial={{ height: 0, opacity: 0 }}
@@ -107,8 +107,6 @@ export default function ReCommentInput({
             </div>
           </div>
         </motion.div>
-      ) : (
-        ''
       )}
     </AnimatePresence>
   )

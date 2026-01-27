@@ -3,6 +3,14 @@ import { ShortsStatus } from '../mypage-shorts'
 import { UserInfo } from '../user/user'
 import { Status } from './status'
 
+//------------- 업로더 ------------
+// 숏츠 업로더
+export interface ShortsUploader {
+  userId: number
+  userNickname: string
+  userProfileUrl: string | null
+}
+
 // ----------------- Request ---------------
 // 숏츠 업로드 / 수정 Request
 export interface ShortsReuqst {
@@ -27,12 +35,10 @@ export interface ShortsUploadCompleteRequest {
 // ----------------- Response ----------------
 /** 🔹 Shorts 최소 공통 Base */
 export interface ShortsBase {
-  shortsId: string | number
+  shortsId: number
   title: string
   description: string
   thumbnailUrl: string | null
-  category: Category
-  uploader: Omit<UserInfo, 'email'>
 }
 
 /* =========================
@@ -40,13 +46,22 @@ export interface ShortsBase {
  * 숏츠 목록 조회
  * ========================= */
 
-export interface ShortsListItem extends ShortsBase {
-  videoUrl: string
-  duration: number
-  viewCount: number
-  likeCount: number
-  keywords?: string[]
+export interface ShortsListCard extends ShortsBase {
+  cateogryId: number
+  categoryName: string
+  commentCount: number
   createdAt: string
+  durationSec: number
+  isLiked: boolean
+  keywords: string[]
+  likeCount: number
+  status: ShortsStatus
+  updatedAt: string
+  userId: number
+  userNickname: string
+  userProfileUrl: string | null
+  videoUrl: string
+  viewCount: number
 }
 
 /* =========================
@@ -54,7 +69,7 @@ export interface ShortsListItem extends ShortsBase {
  * 같은 카테고리 숏츠 목록 조회
  * ========================= */
 
-export interface CategoryShortsItem extends ShortsBase {
+export interface CategoryShortsCard extends ShortsBase {
   videoUrl: string
   durationSec: number
   status: ShortsStatus
@@ -65,7 +80,7 @@ export interface CategoryShortsItem extends ShortsBase {
  * 인기 목록 숏츠 조회
  * ========================= */
 
-export interface PopularShortsItem extends ShortsBase {
+export interface PopularShortsCard extends ShortsBase {
   videoUrl: string
   durationSec: number
   viewCount: number
@@ -101,7 +116,7 @@ export interface ShortsDetail {
  * 내 숏츠 목록 조회
  * ========================= */
 
-export interface MyShortsItem extends ShortsBase {
+export interface MyShortsCard extends ShortsBase {
   videoUrl: string
   duration: number | null
   status: Status

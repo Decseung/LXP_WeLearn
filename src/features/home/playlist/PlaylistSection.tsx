@@ -1,9 +1,13 @@
 import Image from 'next/image'
 import { Play } from 'lucide-react'
 import PlaylistButton from '@/features/home/playlist/PlaylistButton'
-import { PlaylistItem } from '../types/PlayListItem'
+import { PlayListCard } from '@/types/playlist/playlist'
 
-export default async function PlaylistSection({ items }: { items: PlaylistItem[] }) {
+interface PlayListContainerPorps {
+  items: PlayListCard[]
+}
+
+export default async function PlaylistSection({ items }: PlayListContainerPorps) {
   return (
     <section className="mb-12">
       <h2 className="mb-4 text-xl font-extrabold text-gray-900 uppercase">Knowledge Blocks</h2>

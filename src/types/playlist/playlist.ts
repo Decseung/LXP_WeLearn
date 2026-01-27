@@ -10,3 +10,15 @@ export interface PlaylistRequest {
   thumbnailUrl: string
   visibility: Visibility
 }
+
+// 임시 플레이 리스트 카드에 대한 정보
+export interface PlayListCard {
+  id: string
+  thumbnailUrl: string
+  title: string
+  shortsCount: number
+  category: string
+  progress?: number
+  viewCount: number
+  likeCount: number
+}

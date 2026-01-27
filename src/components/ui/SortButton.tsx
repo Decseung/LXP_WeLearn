@@ -3,7 +3,7 @@
 import { ChevronDown } from 'lucide-react'
 import { toast } from 'react-toastify'
 
-export default function SortSection() {
+export default function SortButton() {
   const handleSortClick = () => {
     toast.info('현재 서비스 준비중입니다')
   }
