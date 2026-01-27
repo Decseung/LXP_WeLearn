@@ -5,8 +5,8 @@ import { PageShortsResponse } from '@/types/mypage-shorts'
 import CategoryShortsCard from '@/features/home/categories/CategoryShortsCard'
 import { getShortsAction, getShortsByCategoryAction } from '@/features/category.action'
 import { CategoryResponse } from '@/services/category/category.service'
-import SortSection from '@/features/sort/SortSection'
 import { Youtube } from 'lucide-react'
+import SortButton from '@/components/ui/SortButton'
 
 const ITEMS_PER_PAGE = 8
 
@@ -76,7 +76,7 @@ export default function CategoryShortsSection({
         {/* 카테고리 타이틀 */}
         <h2 className="text-xl font-extrabold text-gray-900 uppercase">Categories</h2>
         {/* 정렬 */}
-        <SortSection />
+        <SortButton />
       </div>
 
       {/* 카테고리별 필터 */}
