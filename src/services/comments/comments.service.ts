@@ -14,7 +14,6 @@ export const commentApi = {
       `/api/v1/shorts/${id}/comments`,
       {
         cache: 'no-store',
-        auth: false,
       },
     )
     return response

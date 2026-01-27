@@ -50,7 +50,7 @@ export default function ReCommentInput({
 
   return (
     <AnimatePresence initial={false}>
-      {openReplyInput === commentId ? (
+      {openReplyInput === commentId && (
         <motion.div
           key={commentId}
           initial={{ height: 0, opacity: 0 }}
@@ -107,8 +107,6 @@ export default function ReCommentInput({
             </div>
           </div>
         </motion.div>
-      ) : (
-        ''
       )}
     </AnimatePresence>
   )
