@@ -81,7 +81,7 @@ export default function DeleteModal({
                   }
                 >
                   {deleteTarget.parentId !== null && (
-                    <input type="hidden" name="commentId" value={deleteTarget.parentId} />
+                    <input type="hidden" name="parentId" value={deleteTarget.parentId} />
                   )}
                   <input
                     type="hidden"
