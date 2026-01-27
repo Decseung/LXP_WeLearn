@@ -7,12 +7,12 @@ import { useKeyboardNavigation } from '@/hook/useKeyboardNavigation'
 import { getSafeIndex } from '@/lib/utils/getSafeIndex'
 import { useDragNavigation } from '@/hook/useDragNavigation'
 import { useScrollNavigation } from '@/hook/useScrollNavigation'
-import ShortsItem from './ShortsItem'
 import { usePathname, useRouter } from 'next/navigation'
-import { ShortsListItem } from '@/types/shorts/shorts'
+import ShortsCard from './ShortsCard'
+import { ShortsListCard } from '@/types/shorts/shorts'
 
 interface ShortsContainerProps {
-  shortsList: ShortsListItem[]
+  shortsList: ShortsListCard[]
   initialIndex: number
 }
 
@@ -165,7 +165,7 @@ export default function ShortsContainer({ shortsList, initialIndex }: ShortsCont
               }}
               className="h-full w-full cursor-grab overflow-y-hidden active:cursor-grabbing"
             >
-              <ShortsItem shorts={currentShorts} />
+              <ShortsCard shorts={currentShorts} />
             </motion.div>
           </AnimatePresence>
         </div>

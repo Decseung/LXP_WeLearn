@@ -2,14 +2,14 @@ import ShortsPlayer from './ShortsPlayer'
 import ShortsCreateInfo from './ShortsCreateInfo'
 import ShortsActionBar from './ShortsActionBar'
 import { DEFAULT_IMAGES } from '@/constants/shortsImages'
-import { ShortsListItem } from '@/types/shorts/shorts'
+import { ShortsListCard } from '@/types/shorts/shorts'
 
-interface ShortsItemProps {
-  shorts: ShortsListItem
+interface ShortsCardProps {
+  shorts: ShortsListCard
   userProfileUrl?: string | null
 }
 
-export default function ShortsItem({ shorts, userProfileUrl }: ShortsItemProps) {
+export default function ShortsCard({ shorts, userProfileUrl }: ShortsCardProps) {
   const profileUrl = userProfileUrl || shorts.userProfileUrl || DEFAULT_IMAGES.AVATAR
 
   return (

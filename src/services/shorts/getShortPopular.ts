@@ -3,11 +3,11 @@
 import { PageResponse } from '@/features/home/ShortsCarousel/ShortsCarousel'
 import { api } from '@/lib/utils/apiUtils'
 import type { ApiResponse } from '@/types/mypage-shorts'
-import { ShortsItemType } from '@/types/shorts'
+import { ShortsListCard } from '@/types/shorts/shorts'
 
 export async function getShortPopular({ page = 0, size = 8 } = {}) {
   try {
-    const popularShorts = await api.get<ApiResponse<PageResponse<ShortsItemType>>>(
+    const popularShorts = await api.get<ApiResponse<PageResponse<ShortsListCard>>>(
       '/api/v1/shorts',
       {
         cache: 'no-store', // 항상 최신 데이터

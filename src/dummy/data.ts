@@ -1,7 +1,14 @@
-import { ShortsItem } from '@/features/home/types/shortsItem'
-import { PlaylistItem } from '@/features/home/types/PlayListItem'
+import { PlayListCard } from '@/types/playlist/playlist'
 
-export const shortsItems: ShortsItem[] = [
+interface ShortsItemsDummy {
+  id: string
+  thumbnail: string
+  title: string
+  viewCount: string
+  duration: string
+}
+
+export const shortsItems: ShortsItemsDummy[] = [
   {
     id: '1',
     thumbnail: '',
@@ -169,7 +176,7 @@ export const user = {
   profileImageUrl: '/images/favicon_shortudy.png',
 }
 
-export const playlistGroup: PlaylistItem[] = [
+export const playlistGroup: PlayListCard[] = [
   {
     id: '1',
     shortsCount: 12,

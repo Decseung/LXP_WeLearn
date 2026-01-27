@@ -46,7 +46,7 @@ export interface ShortsBase {
  * 숏츠 목록 조회
  * ========================= */
 
-export interface ShortsListItem extends ShortsBase {
+export interface ShortsListCard extends ShortsBase {
   cateogryId: number
   categoryName: string
   commentCount: number
@@ -69,7 +69,7 @@ export interface ShortsListItem extends ShortsBase {
  * 같은 카테고리 숏츠 목록 조회
  * ========================= */
 
-export interface CategoryShortsItem extends ShortsBase {
+export interface CategoryShortsCard extends ShortsBase {
   videoUrl: string
   durationSec: number
   status: ShortsStatus
@@ -80,7 +80,7 @@ export interface CategoryShortsItem extends ShortsBase {
  * 인기 목록 숏츠 조회
  * ========================= */
 
-export interface PopularShortsItem extends ShortsBase {
+export interface PopularShortsCard extends ShortsBase {
   videoUrl: string
   durationSec: number
   viewCount: number
@@ -116,7 +116,7 @@ export interface ShortsDetail {
  * 내 숏츠 목록 조회
  * ========================= */
 
-export interface MyShortsItem extends ShortsBase {
+export interface MyShortsCard extends ShortsBase {
   videoUrl: string
   duration: number | null
   status: Status
