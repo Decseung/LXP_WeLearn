@@ -1,11 +1,11 @@
 'use client'
 
 import { SHORTS_STATUS_CONFIG } from '@/constants/shortsCardBadge'
-import type { ShortsStatus } from '@/types/mypage-shorts'
+import { ShortsVisibility } from '@/types/shorts/status'
 import { cn } from '@/utils/cnUtils'
 
 interface ShortsStatusBadgeProps {
-  shortsStatus: ShortsStatus | null | undefined
+  shortsStatus: ShortsVisibility | null | undefined
   className?: string
 }
 

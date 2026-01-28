@@ -2,8 +2,8 @@ import { notFound } from 'next/navigation'
 import { myShortsApi } from '@/services/mypage/myshorts.service'
 import { getCategoriesAction } from '@/features/category.action'
 import ShortsFormContainer from '@/features/shortsform/components/ShortsFormContainer'
-import type { ShortsResponse } from '@/types/mypage-shorts'
 import type { ShortsEditInitialData, CategoryOption } from '@/features/shortsform/types/shortsForm'
+import { ShortsBase } from '@/types/shorts/shorts'
 
 interface EditShortsPageProps {
   params: Promise<{ id: string }>
@@ -12,7 +12,7 @@ interface EditShortsPageProps {
 /**
  * 서버 응답 데이터를 폼 초기 데이터로 변환
  */
-function transformToEditInitialData(shortsData: ShortsResponse): ShortsEditInitialData {
+function transformToEditInitialData(shortsData: ShortsBase): ShortsEditInitialData {
   return {
     formData: {
       title: shortsData.title || '',

@@ -1,14 +1,18 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+<<<<<<< HEAD:src/features/shortsform/register.action.ts
+=======
+
+>>>>>>> origin/develop:src/features/register/register.action.ts
 import { ActionState } from '@/types/action/action'
 import {
-  shortsUploadApi,
-  type PresignedUrlRequest,
-  type PresignedUrlResponse,
-  type ConfirmUploadRequest,
-  type ConfirmUploadResponse,
-} from '@/services/shorts/upload.service'
+  ConfirmUploadRequest,
+  ConfirmUploadResponse,
+  PresignedUrlRequest,
+  PresignedUrlResponse,
+} from '@/types/shorts/shorts'
+import { shortsUploadApi } from '@/services/shorts/upload.service'
 
 /**
  * 1단계: Presigned URL 발급 (Server Action for useActionState)

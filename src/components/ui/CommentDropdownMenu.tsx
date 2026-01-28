@@ -11,6 +11,7 @@ import { EditTarget } from '@/features/modals/comment/CommentList'
 interface CommentDropdownMenuProps {
   id: number
   mode: 'comment' | 'reply'
+  parentId: number | null
   deleteTarget: DeleteTarget
   setEditTarget: React.Dispatch<React.SetStateAction<EditTarget>>
   setIsUpdate: React.Dispatch<React.SetStateAction<number>>
@@ -22,6 +23,7 @@ export default function CommentDropDownMenu({
   id,
   mode,
   deleteTarget,
+  parentId,
   setEditTarget,
   setIsUpdate,
   setIsReplyUpdate,
@@ -50,7 +52,7 @@ export default function CommentDropDownMenu({
             <hr className="w-full" />
             <DropdownMenuItem
               className="w-full cursor-pointer justify-center gap-4 p-1 text-red-600"
-              onClick={() => setDeleteTarget({ mode, id })}
+              onClick={() => setDeleteTarget({ mode, id, parentId })}
             >
               <Trash2 color="#fb2c36" />
               <span className="text-red-600">삭제</span>
