@@ -16,7 +16,9 @@ export default function useKeywordSelection({ keywords, onChange }: UseKeywordSe
       return false
     }
 
-    if (!keywords.includes(keyword)) {
+    // 대소문자 무시하고 중복 체크
+    const isDuplicate = keywords.some((k) => k.toLowerCase() === keyword.toLowerCase())
+    if (!isDuplicate) {
       onChange('keywords', [...keywords, keyword])
       onChange('keywordInput', '')
       return true
