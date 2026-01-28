@@ -1,8 +1,10 @@
 import { notFound } from 'next/navigation'
 import { myShortsApi } from '@/services/mypage/myshorts.service'
-import type { ShortsEditInitialData } from '@/features/register/types/shortsEdit'
-import ShortsFormContainerEdit from '@/features/register/components/ShortsFormContainerEdit'
+import { getCategoriesAction } from '@/features/category.action'
+import ShortsFormContainer from '@/features/shortsform/components/ShortsFormContainer'
+import type { ShortsEditInitialData } from '@/types/shorts/shortsForm'
 import { ShortsBase } from '@/types/shorts/shorts'
+import { Category } from '@/types/category/category'
 
 interface EditShortsPageProps {
   params: Promise<{ id: string }>
@@ -17,7 +19,7 @@ function transformToEditInitialData(shortsData: ShortsBase): ShortsEditInitialDa
       title: shortsData.title || '',
       description: shortsData.description || '',
       isPublic: shortsData.status === 'PUBLISHED',
-      categoryId: shortsData.categoryId || null,
+      categoryId: shortsData.categoryId ?? null,
       keywords: shortsData.keywords || [],
       keywordInput: '',
       thumbnail: null,
@@ -33,6 +35,7 @@ function transformToEditInitialData(shortsData: ShortsBase): ShortsEditInitialDa
 }
 
 export default async function EditShortsPage({ params }: EditShortsPageProps) {
+  // id 검증
   const { id } = await params
   const shortsId = Number(id)
 
@@ -41,13 +44,27 @@ export default async function EditShortsPage({ params }: EditShortsPageProps) {
   }
 
   try {
-    const shortsData = await myShortsApi.getShorts(shortsId)
+    const [shortsData, categoriesResponse] = await Promise.all([
+      myShortsApi.getShorts(shortsId),
+      getCategoriesAction(),
+    ])
+
     const initialData = transformToEditInitialData(shortsData)
+    const categories: Category[] =
+      categoriesResponse.data?.map((cat) => ({
+        id: cat.id,
+        name: cat.name,
+      })) ?? []
 
     return (
       <div className="h-full w-full max-w-7xl">
         <div className="px-4 py-6 sm:px-6 sm:py-8">
-          <ShortsFormContainerEdit shortsId={shortsId} initialData={initialData} />
+          <ShortsFormContainer
+            categories={categories}
+            mode="edit"
+            initialData={initialData}
+            shortsId={shortsId}
+          />
         </div>
       </div>
     )

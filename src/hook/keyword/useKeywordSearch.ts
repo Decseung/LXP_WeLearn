@@ -79,7 +79,11 @@ export default function useKeywordSearch({
             (item) =>
               item.normalizedName.includes(query) || item.displayName.toLowerCase().includes(query),
           )
-          .filter((item) => !keywords.includes(item.normalizedName)) // 이미 선택된 키워드 제외
+          // 이미 선택된 키워드 제외 (대소문자 무시)
+          .filter(
+            (item) =>
+              !keywords.some((k) => k.toLowerCase() === item.normalizedName.toLowerCase()),
+          )
           .map((item) => ({
             displayName: item.displayName,
             normalizedName: item.normalizedName,
