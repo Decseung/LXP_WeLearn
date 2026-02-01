@@ -8,6 +8,7 @@ import { Category } from '@/types/category/category'
 import { PageResponse, ShortsBase } from '@/types/shorts/shorts'
 import SortButton from '@/components/ui/SortButton'
 import { LucideTvMinimalPlay } from 'lucide-react'
+import { buildCategoryQuery } from '@/utils/searchParams'
 
 interface CategoryShortsSectionProps {
   shortsData: PageResponse<ShortsBase[]>
@@ -30,15 +31,8 @@ export default function CategoryShortsSection({
 
   // URL 업데이트 (서버 컴포넌트 재렌더링 트리거)
   const updateQuery = (categoryId: number | null, page: number) => {
-    const params = new URLSearchParams()
-    if (categoryId !== null) {
-      params.set('category', String(categoryId))
-    }
-    if (page > 0) {
-      params.set('page', String(page))
-    }
     startTransition(() => {
-      router.push(`?${params.toString()}`, { scroll: false })
+      router.push(`?${buildCategoryQuery(categoryId, page)}`, { scroll: false })
     })
   }
 

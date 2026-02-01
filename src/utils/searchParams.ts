@@ -15,3 +15,17 @@ export function parsePageNumber(raw: string | null | undefined): number {
   const parsed = Number(raw)
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : 0
 }
+
+/**
+ * 카테고리/페이지 쿼리 스트링 생성
+ */
+export function buildCategoryQuery(categoryId: number | null, page: number): string {
+  const params = new URLSearchParams()
+  if (categoryId !== null) {
+    params.set('category', String(categoryId))
+  }
+  if (page > 0) {
+    params.set('page', String(page))
+  }
+  return params.toString()
+}
