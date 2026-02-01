@@ -14,8 +14,10 @@ import { useAuth } from '@/shared/store/auth/auth.store'
 
 export default function HeaderDropdown() {
   const router = useRouter()
-  const userData = useAuth((state) => state.auth)
+  const { auth, isLogin, hasHydrated } = useAuth()
   const authLogout = useAuth((state) => state.logout)
+
+  if (!hasHydrated) return null
 
   const handleLogout = async () => {
     // 1. 서버 액션 직접 실행
@@ -34,10 +36,9 @@ export default function HeaderDropdown() {
     }
   }
 
-  console.log(userData)
   return (
     <>
-      {userData && (
+      {auth && isLogin ? (
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
             <div
@@ -45,12 +46,12 @@ export default function HeaderDropdown() {
               aria-label="프로필"
             >
               {/* 유저 프로필 영역 */}
-              {userData?.profileUrl ? (
+              {auth?.profileUrl ? (
                 <div
                   className="cursor-pointer rounded-full border-gray-100 transition-colors hover:border-gray-600"
                   aria-label="프로필 이미지"
                 >
-                  <img src={userData?.profileUrl} alt="user-profile-image" />
+                  <img src={auth?.profileUrl} alt="user-profile-image" />
                 </div>
               ) : (
                 <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-gray-200">
@@ -61,12 +62,12 @@ export default function HeaderDropdown() {
           </DropdownMenuTrigger>
 
           <DropdownMenuContent align="end" className="flex flex-col gap-2 pt-5 pr-10 pb-3 pl-8">
-            {userData?.profileUrl && (
+            {auth?.profileUrl && (
               <div
                 className="cursor-pointer rounded-full border-gray-100 transition-colors hover:border-gray-600"
                 aria-label="프로필 이미지"
               >
-                <img src={userData?.profileUrl} alt="user-profile-image" />
+                <img src={auth?.profileUrl} alt="user-profile-image" />
               </div>
             )}
 
@@ -75,10 +76,10 @@ export default function HeaderDropdown() {
                 <User strokeWidth={1.5} size={20} />
               </div>
               <div className="flex flex-col justify-center">
-                {userData && (
+                {auth && (
                   <>
-                    <div className="pb-1 text-sm font-bold">{userData.nickName}</div>
-                    <div className="text-xs text-gray-600">{userData.email}</div>
+                    <div className="pb-1 text-sm font-bold">{auth.nickName}</div>
+                    <div className="text-xs text-gray-600">{auth.email}</div>
                   </>
                 )}
               </div>
@@ -118,6 +119,8 @@ export default function HeaderDropdown() {
             </button>
           </DropdownMenuContent>
         </DropdownMenu>
+      ) : (
+        ''
       )}
     </>
   )

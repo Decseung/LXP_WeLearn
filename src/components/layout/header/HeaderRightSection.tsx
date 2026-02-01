@@ -10,12 +10,6 @@ interface HeaderRightSectionProps {
 
 export default function HeaderRightSection({ isLogined }: HeaderRightSectionProps) {
   const userData = useAuth((state) => state.auth)
-  useEffect(() => {
-    if (!isLogined) {
-      localStorage.removeItem('user')
-      return
-    }
-  }, [isLogined])
 
   return (
     <div className="flex items-center gap-1 md:gap-3">
