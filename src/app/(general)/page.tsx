@@ -5,6 +5,7 @@ import { categoryApi } from '@/services/category/category.service'
 import CategoryShortsSection from '@/features/home/categories/CategoryShortsSection'
 import ShortsCarousel from '@/features/home/ShortsCarousel/ShortsCarousel'
 
+// 명세서에 pageSize가 20개 응답으로 기록되어 있으므로 확인 필요
 const ITEMS_PER_PAGE = 8
 
 type PageProps = {
