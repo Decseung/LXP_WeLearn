@@ -2,7 +2,7 @@
 export const ITEMS_PER_PAGE = 8
 
 /**
- * 카테고리 ID 파싱: 'all'이 아니고 유효한 숫자일 때만 변환, 그 외는 null (전체 카테고리)
+ * 카테고리 ID 파싱: all이 아니고 유효한 숫자일 때만 변환, 그 외는 null (전체 카테고리)
  */
 export function parseCategoryId(raw: string | null | undefined): number | null {
   return raw && raw !== 'all' && Number.isFinite(Number(raw)) ? Number(raw) : null
