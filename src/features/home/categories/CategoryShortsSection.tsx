@@ -5,12 +5,18 @@ import CategoryShortsCard from '@/features/home/categories/CategoryShortsCard'
 import Pagination from '@/components/ui/Pagination'
 import { Category } from '@/types/category/category'
 import { PageResponse, ShortsBase } from '@/types/shorts/shorts'
-import SortButton from '@/components/ui/SortButton'
+import SortButton, { SortOption } from '@/components/ui/SortButton'
 import { LucideTvMinimalPlay } from 'lucide-react'
 import { getShortsAction, getShortsByCategoryAction } from '@/features/category.action'
 
 /** 페이지당 아이템 수 */
 const DEFAULT_PAGE_SIZE = 8
+
+/** 정렬 옵션 - API sort 파라미터 변환 */
+const SORT_PARAMS: Record<SortOption, string> = {
+  latest: 'createdAt,desc',
+  popular: 'viewCount,desc', // 백엔드에서 정렬 기준을 받아야 함
+}
 
 interface CategoryShortsSectionProps {
   initialShortsData: PageResponse<ShortsBase[]>
@@ -25,18 +31,23 @@ export default function CategoryShortsSection({
   const [shortsData, setShortsData] = useState(initialShortsData)
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null)
   const [currentPage, setCurrentPage] = useState(0)
+  const [currentSort, setCurrentSort] = useState<SortOption>('latest')
 
   const displayedShorts = shortsData?.content ?? []
   const totalPages = shortsData?.totalPages ?? 0
 
+  // 데이터 fetch 공통 함수
+  const fetchShorts = async (categoryId: number | null, page: number, sort: SortOption) => {
+    const params = { page, size: DEFAULT_PAGE_SIZE, sort: SORT_PARAMS[sort] }
+    return categoryId === null
+      ? await getShortsAction(params)
+      : await getShortsByCategoryAction(categoryId, params)
+  }
+
   // 카테고리 변경 핸들러
   const handleCategoryChange = (categoryId: number | null) => {
     startTransition(async () => {
-      const data =
-        categoryId === null
-          ? await getShortsAction({ page: 0, size: DEFAULT_PAGE_SIZE })
-          : await getShortsByCategoryAction(categoryId, { page: 0, size: DEFAULT_PAGE_SIZE })
-
+      const data = await fetchShorts(categoryId, 0, currentSort)
       if (data) {
         setShortsData(data)
         setSelectedCategoryId(categoryId)
@@ -48,14 +59,23 @@ export default function CategoryShortsSection({
   // 페이지 변경 핸들러
   const handlePageChange = (page: number) => {
     startTransition(async () => {
-      const data =
-        selectedCategoryId === null
-          ? await getShortsAction({ page, size: DEFAULT_PAGE_SIZE })
-          : await getShortsByCategoryAction(selectedCategoryId, { page, size: DEFAULT_PAGE_SIZE })
-
+      const data = await fetchShorts(selectedCategoryId, page, currentSort)
       if (data) {
         setShortsData(data)
         setCurrentPage(page)
+      }
+    })
+  }
+
+  // 정렬 변경 핸들러
+  const handleSortChange = (sort: SortOption) => {
+    startTransition(async () => {
+      const data = await fetchShorts(selectedCategoryId, 0, sort)
+      // 상태 업데이트
+      if (data) {
+        setShortsData(data)
+        setCurrentSort(sort)
+        setCurrentPage(0)
       }
     })
   }
@@ -71,7 +91,11 @@ export default function CategoryShortsSection({
           </span>
         </div>
         {/* 정렬 */}
-        <SortButton />
+        <SortButton
+          currentSort={currentSort}
+          onSortChange={handleSortChange}
+          disabled={isPending}
+        />
       </div>
 
       {/* 카테고리별 필터 */}

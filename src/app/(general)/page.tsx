@@ -10,9 +10,13 @@ export default async function Page() {
   // api 호출 (초기 로드: 전체 숏츠)
   const [popularShorts, categoryShortsResponse, categoriesResponse] = await Promise.all([
     getShortPopular(),
-    categoryApi.getAllShorts(), // 기본값 size=8 사용
-    categoryApi.getAll(),
+    categoryApi.getAllShorts(), // 기본값 size=8 사용 (전체 숏츠 목록)
+    categoryApi.getAllCategoryId(), // 카테고리 요소 목록
   ])
+
+  // console.log('인기목록:', popularShorts)
+  // console.log('카테고리 목록 응답:', categoriesResponse)
+  // console.log('카테고리숏츠응답:', categoryShortsResponse)
 
   // 인기 숏츠 (캐러셀용)
   const shortsList: ShortsBase[] = popularShorts?.data?.content ?? []
@@ -33,10 +37,7 @@ export default async function Page() {
 
       <PlaylistSection items={playlistGroup} />
 
-      <CategoryShortsSection
-        initialShortsData={initialShortsData}
-        categories={categories}
-      />
+      <CategoryShortsSection initialShortsData={initialShortsData} categories={categories} />
     </div>
   )
 }
