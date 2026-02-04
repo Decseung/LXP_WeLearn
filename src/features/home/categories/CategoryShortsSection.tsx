@@ -7,7 +7,8 @@ import { Category } from '@/types/category/category'
 import { PageResponse, ShortsBase } from '@/types/shorts/shorts'
 import SortButton, { SortOption } from '@/components/ui/SortButton'
 import { LucideTvMinimalPlay } from 'lucide-react'
-import { getShortsAction, getShortsByCategoryAction } from '@/features/category.action'
+import { clientApi } from '@/lib/utils/clientApiUtils'
+import { ApiResponse } from '@/types/api/api'
 
 /** 페이지당 아이템 수 */
 const DEFAULT_PAGE_SIZE = 8
@@ -38,13 +39,23 @@ export default function CategoryShortsSection({
 
   // 데이터 fetch 공통 함수
   const fetchShorts = async (categoryId: number | null, page: number, sort: SortOption) => {
-    const params = { page, size: DEFAULT_PAGE_SIZE, sort: SORT_PARAMS[sort] }
-    const response =
-      categoryId === null
-        ? await getShortsAction(params)
-        : await getShortsByCategoryAction(categoryId, params)
+    const params: Record<string, string | number> = {
+      page,
+      size: DEFAULT_PAGE_SIZE,
+      sort: SORT_PARAMS[sort],
+    }
+    if (categoryId !== null) {
+      params.categoryId = categoryId
+    }
 
-    return response
+    const response = await clientApi.get<ApiResponse<PageResponse<ShortsBase[]>>>(
+      '/api/v1/shorts',
+      {
+        params,
+      },
+    )
+
+    return response.data ?? null
   }
 
   // 카테고리 변경 핸들러
