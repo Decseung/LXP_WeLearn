@@ -1,5 +1,10 @@
 import { ApiResponse } from '@/types/api/api'
-import { PlaylistBase, PlaylistItem, PlaylistShorts } from '@/types/playlist/playlist'
+import {
+  PlaylistBase,
+  PlaylistItem,
+  PlaylistRequest,
+  PlaylistShorts,
+} from '@/types/playlist/playlist'
 import { PageRequest } from '@/types/shorts/shorts'
 import { cookies } from 'next/headers'
 
@@ -22,18 +27,46 @@ export const PlaylistApi = {
     return data.data
   },
 
-  addShortsPlaylist: async (shortsId: number): Promise<ApiResponse<PlaylistShorts>> => {
+  createPlaylist: async (content: PlaylistRequest) => {
     const cookieStore = await cookies()
     const accessToken = cookieStore.get('accessToken')?.value
-    const response = await fetch(`${baseUrl}/api/playlists/${shortsId}/items`, {
+
+    const response = await fetch(`${baseUrl}/api/playlists`, {
+      method: 'POST',
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
+      body: JSON.stringify(FormData),
+    })
+
+    if (!response.ok) {
+      throw new Error('플레이리스트 생성 실패')
+    }
+
+    const data = await response.json()
+
+    return data
+  },
+
+  addShortsPlaylist: async (
+    shortsId: number,
+    playlistId: number,
+  ): Promise<ApiResponse<PlaylistShorts>> => {
+    const cookieStore = await cookies()
+    const accessToken = cookieStore.get('accessToken')?.value
+
+    const response = await fetch(`${baseUrl}/api/playlists/${playlistId}/items`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({ shortsId }),
     })
 
     if (!response.ok) {
       throw new Error('숏츠 저장 실패')
     }
+
     const data = await response.json()
 
     return data.data

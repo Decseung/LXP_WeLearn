@@ -20,7 +20,7 @@ export default function PlaylistModal({ initialPlaylistData }: PlaylistModalProp
   const params = useParams()
   const isMobile = useIsMobile()
   const [mounted, setMounted] = useState(false)
-  const [shortsId, setShortsId] = useState<number>()
+  const [shortsId, setShortsId] = useState<number>(0)
 
   useEffect(() => {
     const match = pathname.match(/\/shorts\/([^\/]+)/)
@@ -32,7 +32,6 @@ export default function PlaylistModal({ initialPlaylistData }: PlaylistModalProp
   useEffect(() => {
     setMounted(true)
   }, [])
-  const id = params.id as string
 
   const isOpen = pathname.endsWith('/playlist')
 
@@ -65,7 +64,7 @@ export default function PlaylistModal({ initialPlaylistData }: PlaylistModalProp
             {/* 저장 리스트 모달 */}
             {activeTab === 'save' && (
               <>
-                <PlaylistModalHeader id={id} />
+                <PlaylistModalHeader shortsId={shortsId} />
                 {/* 플레이리스트 목록 */}
                 <Playlist list={initialPlaylistData} shortsId={shortsId} />
 
@@ -76,7 +75,7 @@ export default function PlaylistModal({ initialPlaylistData }: PlaylistModalProp
 
             {/* 플레이리스트 생성 모달 */}
             {activeTab === 'create' && (
-              <CreatePlaylistForm handleActiveTab={handleActiveTab} id={id} />
+              <CreatePlaylistForm handleActiveTab={handleActiveTab} shortsId={shortsId} />
             )}
           </div>
         </motion.aside>

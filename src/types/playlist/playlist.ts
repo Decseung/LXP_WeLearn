@@ -11,7 +11,7 @@ export type Visibility = 'PUBLIC' | 'PRIVATE'
 export interface PlaylistRequest {
   title: string
   description: string
-  thumbnailUrl: string
+  thumbnailUrl: string | null
   visibility: Visibility
 }
 
@@ -76,5 +76,5 @@ export interface PlaylistShorts {
 interface PlaylistUploader {
   memberId: number
   nickname: string
-  name: string
+  profileImageUrl: string
 }
