@@ -3,12 +3,12 @@
 import { useRef } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
-import { LikedShorts } from '@/types/shorts/shorts'
+import { ShortsBase } from '@/types/shorts/shorts'
 import LikedShortsCard from './LikedShortsCard'
 import { Button } from '@/components/ui/Button'
 
 interface LikedShortsListProps {
-  shorts: LikedShorts[]
+  shorts: ShortsBase[]
 }
 
 export default function LikedShortsList({ shorts }: LikedShortsListProps) {
@@ -57,14 +57,17 @@ export default function LikedShortsList({ shorts }: LikedShortsListProps) {
       </div>
 
       <div ref={scrollRef} className="scrollbar-hide flex gap-4 overflow-x-auto pb-4">
-        {shorts.map((Shorts) => (
+        {shorts.map((shorts) => (
           <LikedShortsCard
-            key={Shorts.id}
-            shortsId={Shorts.id}
-            categoryName={Shorts.category}
-            thumbnailUrl={Shorts.thumbnailUrl}
-            title={Shorts.title}
-            nickname={Shorts.nickname}
+            key={shorts.shortsId}
+            shortsId={shorts.shortsId}
+            videoUrl={shorts.videoUrl}
+            categoryName={shorts.categoryName}
+            thumbnailUrl={shorts.thumbnailUrl}
+            title={shorts.title}
+            description={shorts.description}
+            userNickname={shorts.userNickname}
+            keywords={shorts.keywords}
           />
         ))}
       </div>
