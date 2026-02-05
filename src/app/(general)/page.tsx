@@ -7,10 +7,11 @@ import ShortsCarousel from '@/features/home/ShortsCarousel/ShortsCarousel'
 import { ShortsBase } from '@/types/shorts/shorts'
 
 export default async function Page() {
+  // api 호출 (초기 로드: 전체 숏츠)
   const [popularShorts, categoryShortsResponse, categoriesResponse] = await Promise.all([
-    getShortPopular(), // 1. 인기 숏츠 (캐러셀용)
-    categoryApi.getAllShorts(), // 3. 카테고리 탐색 섹션 초기 데이터
-    categoryApi.getAll(), // 카테고리 목록
+    getShortPopular(),
+    categoryApi.getAllShorts({ sort: 'createdAt,desc' }), // 전체 숏츠 목록(최신순 기본값)
+    categoryApi.getAllCategoryId(), // 카테고리 항목 목록
   ])
 
   // 인기 숏츠 (캐러셀용)
@@ -32,7 +33,7 @@ export default async function Page() {
 
       <PlaylistSection items={playlistGroup} />
 
-      <CategoryShortsSection initialShorts={initialShortsData} categories={categories} />
+      <CategoryShortsSection initialShortsData={initialShortsData} categories={categories} />
     </div>
   )
 }
