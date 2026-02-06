@@ -1,17 +1,16 @@
 'use client'
 
-import Link from 'next/link'
-import ShortsPlaylistCard from './ShortsPlaylistCard'
 import Pagination from '@/components/ui/Pagination'
+import ShortsPlaylistCard from './ShortsPlaylistCard'
 
 interface ShortsPlaylist {
-  id: string
-  visibility: 'public' | 'draft'
+  id: number
   shortsCount: number
   thumbnailUrl: string
   title: string
-  category: string
-  progress: number
+  description: string
+  categoryName: string
+  visibility: 'PUBLIC' | 'PRIVATE'
 }
 
 interface ShortsPlaylistProps {
@@ -37,16 +36,16 @@ export default function ShortsPlaylist({
 
       <div className="mb-10 grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-3 md:grid-cols-4">
         {playlists.map((playlist) => (
-          <Link key={playlist.id} href={`/mypage/saved/${playlist.id}`}>
-            <ShortsPlaylistCard
-              visibility={playlist.visibility}
-              shortsCount={playlist.shortsCount}
-              thumbnailUrl={playlist.thumbnailUrl}
-              title={playlist.title}
-              category={playlist.category}
-              progress={playlist.progress}
-            />
-          </Link>
+          <ShortsPlaylistCard
+            key={playlist.id}
+            id={playlist.id}
+            visibility={playlist.visibility}
+            shortsCount={playlist.shortsCount}
+            thumbnailUrl={playlist.thumbnailUrl}
+            title={playlist.title}
+            description={playlist.description}
+            categoryName={playlist.categoryName}
+          />
         ))}
       </div>
       <Pagination
