@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import Pagination from '@/components/ui/Pagination'
 import ShortsPlaylistCard from './ShortsPlaylistCard'
 
@@ -37,16 +36,16 @@ export default function ShortsPlaylist({
 
       <div className="mb-10 grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-3 md:grid-cols-4">
         {playlists.map((playlist) => (
-          <Link key={playlist.id} href={`/mypage/saved/${playlist.id}`}>
-            <ShortsPlaylistCard
-              visibility={playlist.visibility}
-              shortsCount={playlist.shortsCount}
-              thumbnailUrl={playlist.thumbnailUrl}
-              title={playlist.title}
-              description={playlist.description}
-              categoryName={playlist.categoryName}
-            />
-          </Link>
+          <ShortsPlaylistCard
+            key={playlist.id}
+            id={playlist.id}
+            visibility={playlist.visibility}
+            shortsCount={playlist.shortsCount}
+            thumbnailUrl={playlist.thumbnailUrl}
+            title={playlist.title}
+            description={playlist.description}
+            categoryName={playlist.categoryName}
+          />
         ))}
       </div>
       <Pagination

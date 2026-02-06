@@ -3,8 +3,8 @@
 import { useRef } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
-import ShortsPlaylistCard from './DashboardPlaylistCard'
 import { Button } from '@/components/ui/Button'
+import DashboardPlaylistCard from './DashboardPlaylistCard'
 
 interface ShortsPlaylist {
   id: number
@@ -67,15 +67,15 @@ export default function DashboardPlaylists({ playlists }: DashboardPlaylistsProp
 
       <div ref={scrollRef} className="scrollbar-hide flex gap-4 overflow-x-auto pb-4">
         {playlists.map((playlist) => (
-          <Link key={playlist.id} href={`/mypage/saved/${playlist.id}`} className="block w-56 shrink-0">
-            <ShortsPlaylistCard
-              shortsCount={playlist.shortsCount}
-              thumbnailUrl={playlist.thumbnailUrl}
-              title={playlist.title}
-              description={playlist.description}
-              categoryName={playlist.categoryName}
-            />
-          </Link>
+          <DashboardPlaylistCard
+            key={playlist.id}
+            id={playlist.id}
+            shortsCount={playlist.shortsCount}
+            thumbnailUrl={playlist.thumbnailUrl}
+            title={playlist.title}
+            description={playlist.description}
+            categoryName={playlist.categoryName}
+          />
         ))}
       </div>
     </section>
