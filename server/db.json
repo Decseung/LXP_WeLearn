@@ -532,6 +532,8 @@
       "title": "Spring Boot 완전 정복",
       "description": "Spring Boot 입문부터 실전까지 다루는 플레이리스트입니다.",
       "visibility": "PRIVATE",
+      "categoryId": 1,
+      "categoryName": "프로그래밍",
       "thumbnailUrl": "https://images.pexels.com/photos/303383/pexels-photo-303383.jpeg",
       "shortsCount": 12,
       "owner": {
@@ -547,6 +549,8 @@
       "title": "React 상태 관리 모음",
       "description": "React 상태 관리 라이브러리 비교 및 활용법",
       "visibility": "PUBLIC",
+      "categoryId": 2,
+      "categoryName": "웹 개발",
       "thumbnailUrl": "https://images.pexels.com/photos/35383162/pexels-photo-35383162.jpeg",
       "shortsCount": 8,
       "owner": {
@@ -562,6 +566,8 @@
       "title": "CSS 레이아웃 마스터",
       "description": "Flexbox와 Grid를 활용한 레이아웃 완벽 정리",
       "visibility": "PUBLIC",
+      "categoryId": 1,
+      "categoryName": "프로그래밍",
       "thumbnailUrl": "https://images.pexels.com/photos/2182863/pexels-photo-2182863.jpeg",
       "shortsCount": 5,
       "owner": {
@@ -577,6 +583,8 @@
       "title": "데이터베이스 기초부터 실전까지",
       "description": "SQL 기초와 인덱스 최적화 학습 자료",
       "visibility": "PUBLIC",
+      "categoryId": 1,
+      "categoryName": "프로그래밍",
       "thumbnailUrl": "https://images.pexels.com/photos/5483075/pexels-photo-5483075.jpeg",
       "shortsCount": 15,
       "owner": {
@@ -592,6 +600,8 @@
       "title": "Vue vs React 비교 분석",
       "description": "두 프레임워크의 장단점과 선택 기준 정리",
       "visibility": "PUBLIC",
+      "categoryId": 1,
+      "categoryName": "프로그래밍",
       "thumbnailUrl": "https://images.pexels.com/photos/270488/pexels-photo-270488.jpeg",
       "shortsCount": 7,
       "owner": {
@@ -605,8 +615,10 @@
     {
       "id": 6,
       "title": "REST API 완벽 가이드",
-      "description": "RESTful API 설계 원칙과 구현 방법",
+      "description": "",
       "visibility": "PUBLIC",
+      "categoryId": 1,
+      "categoryName": "프로그래밍",
       "thumbnailUrl": "https://images.pexels.com/photos/1089438/pexels-photo-1089438.jpeg",
       "shortsCount": 10,
       "owner": {
@@ -620,8 +632,10 @@
     {
       "id": 7,
       "title": "Figma 디자인 시스템",
-      "description": "Figma를 활용한 디자인 시스템 구축 가이드",
+      "description": "",
       "visibility": "PUBLIC",
+      "categoryId": 3,
+      "categoryName": "모바일",
       "thumbnailUrl": "https://images.pexels.com/photos/35008891/pexels-photo-35008891.jpeg",
       "shortsCount": 6,
       "owner": {
@@ -637,6 +651,8 @@
       "title": "알고리즘 정복하기",
       "description": "코딩 테스트 대비 알고리즘 문제 풀이 모음",
       "visibility": "PUBLIC",
+      "categoryId": 3,
+      "categoryName": "모바일",
       "thumbnailUrl": "https://images.pexels.com/photos/35308304/pexels-photo-35308304.jpeg",
       "shortsCount": 9,
       "owner": {
@@ -654,6 +670,8 @@
       "title": "Spring Boot 완전 정복",
       "description": "Spring Boot 입문부터 실전까지 다루는 플레이리스트입니다.",
       "visibility": "PUBLIC",
+      "categoryId": 1,
+      "categoryName": "프로그래밍",
       "thumbnailUrl": "https://images.pexels.com/photos/303383/pexels-photo-303383.jpeg",
       "shortsCount": 12,
       "owner": {
@@ -669,6 +687,8 @@
       "title": "CSS 레이아웃 마스터",
       "description": "Flexbox와 Grid를 활용한 레이아웃 완벽 정리",
       "visibility": "PUBLIC",
+      "categoryId": 1,
+      "categoryName": "프로그래밍",
       "thumbnailUrl": "https://images.pexels.com/photos/2182863/pexels-photo-2182863.jpeg",
       "shortsCount": 5,
       "owner": {
@@ -684,6 +704,8 @@
       "title": "데이터베이스 기초부터 실전까지",
       "description": "SQL 기초와 인덱스 최적화 학습 자료",
       "visibility": "PUBLIC",
+      "categoryId": 1,
+      "categoryName": "프로그래밍",
       "thumbnailUrl": "https://images.pexels.com/photos/5483075/pexels-photo-5483075.jpeg",
       "shortsCount": 15,
       "owner": {
@@ -699,6 +721,8 @@
       "title": "Vue vs React 비교 분석",
       "description": "두 프레임워크의 장단점과 선택 기준 정리",
       "visibility": "PUBLIC",
+      "categoryId": 1,
+      "categoryName": "프로그래밍",
       "thumbnailUrl": "https://images.pexels.com/photos/270488/pexels-photo-270488.jpeg",
       "shortsCount": 7,
       "owner": {

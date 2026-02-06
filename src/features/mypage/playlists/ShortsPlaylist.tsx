@@ -1,17 +1,17 @@
 'use client'
 
 import Link from 'next/link'
-import ShortsPlaylistCard from './ShortsPlaylistCard'
 import Pagination from '@/components/ui/Pagination'
+import ShortsPlaylistCard from './ShortsPlaylistCard'
 
 interface ShortsPlaylist {
-  id: string
-  visibility: 'public' | 'draft'
+  id: number
   shortsCount: number
   thumbnailUrl: string
   title: string
-  category: string
-  progress: number
+  description: string
+  categoryName: string
+  visibility: 'PUBLIC' | 'PRIVATE'
 }
 
 interface ShortsPlaylistProps {
@@ -43,8 +43,8 @@ export default function ShortsPlaylist({
               shortsCount={playlist.shortsCount}
               thumbnailUrl={playlist.thumbnailUrl}
               title={playlist.title}
-              category={playlist.category}
-              progress={playlist.progress}
+              description={playlist.description}
+              categoryName={playlist.categoryName}
             />
           </Link>
         ))}

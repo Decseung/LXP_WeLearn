@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useVideoPreview } from '@/hook/useVideoPreview'
 
-interface LikedShortsCardProps {
+interface DashboardLikedCardProps {
   shortsId: number
   videoUrl: string
   thumbnailUrl: string | null
@@ -14,7 +14,7 @@ interface LikedShortsCardProps {
   keywords: string[]
 }
 
-export default function LikedShortsCard({
+export default function DashboardLikedCard({
   shortsId,
   videoUrl,
   title,
@@ -22,7 +22,7 @@ export default function LikedShortsCard({
   categoryName,
   userNickname,
   keywords,
-}: LikedShortsCardProps) {
+}: DashboardLikedCardProps) {
   const { videoRef, handleMouseEnter, handleMouseLeave, handleLoadedData } = useVideoPreview({
     videoUrl,
   })

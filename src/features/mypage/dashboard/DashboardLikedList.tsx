@@ -4,14 +4,14 @@ import { useRef } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { ShortsBase } from '@/types/shorts/shorts'
-import LikedShortsCard from './LikedShortsCard'
 import { Button } from '@/components/ui/Button'
+import DashboardLikedCard from './DashboardLikedCard'
 
-interface LikedShortsListProps {
+interface DashboardLikedListProps {
   shorts: ShortsBase[]
 }
 
-export default function LikedShortsList({ shorts }: LikedShortsListProps) {
+export default function DashboardLikedList({ shorts }: DashboardLikedListProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
 
   const handleScroll = (direction: 'prev' | 'next') => {
@@ -58,7 +58,7 @@ export default function LikedShortsList({ shorts }: LikedShortsListProps) {
 
       <div ref={scrollRef} className="scrollbar-hide flex gap-4 overflow-x-auto pb-4">
         {shorts.map((shorts) => (
-          <LikedShortsCard
+          <DashboardLikedCard
             key={shorts.shortsId}
             shortsId={shorts.shortsId}
             videoUrl={shorts.videoUrl}
