@@ -1,12 +1,11 @@
 'use client'
 
 import { DropdownMenu, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import SavedShortsDropdownMenu from '@/features/mypage/saved-edit/SavedShortsDropdownMenu'
 import { MoreHorizontal, Tally2 } from 'lucide-react'
+import MyPlaylistDropdownMenu from './MyPlaylistDropdownMenu'
 
-export default function SavedShortsCard() {
+export default function MyPlaylistCard() {
   return (
-    <div>
       <div className="space-y-6">
         {/* ==================== Playlist Shorts Card 1 ==================== */}
         <div className="group flex cursor-pointer gap-4 rounded-lg border border-gray-200 bg-white p-4 transition-shadow hover:shadow-md">
@@ -52,7 +51,7 @@ export default function SavedShortsCard() {
                     <MoreHorizontal size={18} className="text-black" />
                   </button>
                 </DropdownMenuTrigger>
-                <SavedShortsDropdownMenu />
+                <MyPlaylistDropdownMenu />
               </DropdownMenu>
             </div>
             {/* 키워드 */}
@@ -99,7 +98,7 @@ export default function SavedShortsCard() {
                     <MoreHorizontal size={18} className="text-black" />
                   </button>
                 </DropdownMenuTrigger>
-                <SavedShortsDropdownMenu />
+                <MyPlaylistDropdownMenu />
               </DropdownMenu>
             </div>
             <div className="mt-auto flex flex-wrap gap-2">
@@ -149,7 +148,7 @@ export default function SavedShortsCard() {
                     <MoreHorizontal size={18} className="text-black" />
                   </button>
                 </DropdownMenuTrigger>
-                <SavedShortsDropdownMenu />
+                <MyPlaylistDropdownMenu />
               </DropdownMenu>
             </div>
             <div className="mt-auto flex flex-wrap gap-2">
@@ -199,7 +198,7 @@ export default function SavedShortsCard() {
                     <MoreHorizontal size={18} className="text-black" />
                   </button>
                 </DropdownMenuTrigger>
-                <SavedShortsDropdownMenu />
+                <MyPlaylistDropdownMenu />
               </DropdownMenu>
             </div>
             <div className="mt-auto flex flex-wrap gap-2">
@@ -249,7 +248,7 @@ export default function SavedShortsCard() {
                     <MoreHorizontal size={18} className="text-black" />
                   </button>
                 </DropdownMenuTrigger>
-                <SavedShortsDropdownMenu />
+                <MyPlaylistDropdownMenu />
               </DropdownMenu>
             </div>
             <div className="mt-auto flex flex-wrap gap-2">
@@ -261,6 +260,5 @@ export default function SavedShortsCard() {
           </div>
         </div>
       </div>
-    </div>
   )
 }

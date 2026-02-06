@@ -2,7 +2,7 @@ import { Play } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-interface ShortsPlaylistCardProps {
+export interface MyPlaylistCardProps {
   id: number
   thumbnailUrl: string
   title: string
@@ -12,7 +12,7 @@ interface ShortsPlaylistCardProps {
   shortsCount: number
 }
 
-export default function ShortsPlaylistCard({
+export default function MyPlaylistCard({
   id,
   thumbnailUrl,
   title,
@@ -20,11 +20,11 @@ export default function ShortsPlaylistCard({
   categoryName,
   visibility,
   shortsCount,
-}: ShortsPlaylistCardProps) {
+}: MyPlaylistCardProps) {
   const badgeLabel = visibility === 'PUBLIC' ? '공개' : '비공개'
 
   return (
-    <Link key={id} href={`/mypage/playlists/${id}`}>
+    <Link key={id} href={`/mypage/myplaylists/${id}`}>
       <div className="group cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:drop-shadow-lg">
         <div className="relative mb-2 aspect-9/14 pt-2">
           {/* 스택 효과 - 카드 상단에 쌓인 레이어 */}
@@ -46,16 +46,6 @@ export default function ShortsPlaylistCard({
             </div>
 
             <Image src={thumbnailUrl} alt={title} fill className="object-cover" sizes="224px" />
-
-            <div className="absolute right-2 bottom-3 left-2 z-10">
-              {/* 프로그레스바 */}
-              {/* <div className="mt-2 h-1 w-full rounded-full bg-gray-500/50">
-              <div
-                className="h-full rounded-full bg-green-500"
-                style={{ width: `${progress}%` }}
-              ></div>
-            </div> */}
-            </div>
           </div>
 
           {/* 카드 밖 콘텐츠 */}

@@ -54,7 +54,7 @@ export default function DashboardPlaylists({ playlists }: DashboardPlaylistsProp
           >
             <ChevronRight strokeWidth={1.5} size={16} />
           </button>
-          <Link href="/mypage/playlists">
+          <Link href="/mypage/myplaylists">
             <Button
               variant="outline"
               className="rounded-md border border-gray-300 px-3 py-1.5 text-sm transition-colors hover:bg-gray-50"
