@@ -39,7 +39,7 @@ export default function DashboardPlaylists({ playlists }: DashboardPlaylistsProp
   return (
     <section className="mb-12">
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-xl font-extrabold text-gray-900 uppercase">My Shorts Playlists</h2>
+        <h2 className="text-xl font-extrabold text-gray-900 uppercase">My Created Playlists</h2>
 
         <div className="flex items-center gap-2">
           <button
