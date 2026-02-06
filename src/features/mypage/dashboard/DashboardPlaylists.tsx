@@ -65,7 +65,7 @@ export default function DashboardPlaylists({ playlists }: DashboardPlaylistsProp
         </div>
       </div>
 
-      <div ref={scrollRef} className="scrollbar-hide flex gap-4 overflow-x-auto pb-4">
+      <div ref={scrollRef} className="scrollbar-hide flex gap-4 overflow-x-auto pt-1 pb-4">
         {playlists.map((playlist) => (
           <DashboardPlaylistCard
             key={playlist.id}
