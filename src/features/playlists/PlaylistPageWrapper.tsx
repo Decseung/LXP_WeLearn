@@ -22,7 +22,6 @@ export default function PlaylistPageWrapper({
   onPageChange = () => {},
 }: PlaylistPageWrapperProps) {
   const pathname = usePathname()
-
   const isMyPage = pathname.includes('/myplaylists')
 
   return (

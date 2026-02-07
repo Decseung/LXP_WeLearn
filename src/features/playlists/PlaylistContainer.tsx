@@ -13,14 +13,20 @@ export default function PlaylistContainer({ playlistItem }: PlaylistContainerPro
     playlistItem.item?.shorts ?? null,
   )
   console.log(shortsList)
-  const [selectedShorts, setSelectedShorts] = useState()
+  const [selectedShorts, setSelectedShorts] = useState<PlaylistShorts | null>(
+    playlistItem.item?.shorts[0] || null,
+  )
+
+  const handlePreview = (shorts: PlaylistShorts) => {
+    setSelectedShorts(shorts)
+  }
   return (
     <>
       {/* ==================== Left Section - Fixed Preview (모바일에서 먼저 노출) ==================== */}
       <div className="order-1">
         <div className="flex flex-col gap-6 py-8 md:py-0 lg:sticky lg:top-24">
           {/* Page Header (플레이리스트 제목 + 수정 버튼) */}
-          <PlaylistPreview playlistItem={playlistItem} />
+          <PlaylistPreview playlistItem={playlistItem} selectedShorts={selectedShorts} />
         </div>
       </div>
 
@@ -32,7 +38,7 @@ export default function PlaylistContainer({ playlistItem }: PlaylistContainerPro
         </div>
 
         {/* ==================== Playlist Shorts List (드래그 가능) ==================== */}
-        <PlaylistCard />
+        <PlaylistCard shortsList={shortsList} handlePreview={handlePreview} />
       </div>
     </>
   )

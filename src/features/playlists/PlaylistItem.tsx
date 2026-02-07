@@ -2,7 +2,7 @@ import { Play } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-export interface MyPlaylistCardProps {
+export interface PlaylistItemProps {
   id: number
   thumbnailUrl: string
   title: string
@@ -20,7 +20,7 @@ export default function PlaylistItem({
   categoryName,
   visibility,
   shortsCount,
-}: MyPlaylistCardProps) {
+}: PlaylistItemProps) {
   const badgeLabel = visibility === 'PUBLIC' ? '공개' : '비공개'
 
   return (

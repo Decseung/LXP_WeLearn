@@ -88,6 +88,7 @@ export interface PlaylistShorts {
   status: ShortsVisibility
   uploader: PlaylistUploader
   category: Category
+  keywords: string[]
 }
 
 interface PlaylistUploader {

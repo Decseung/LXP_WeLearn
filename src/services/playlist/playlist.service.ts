@@ -1,9 +1,10 @@
 import { ApiResponse } from '@/types/api/api'
 import {
   PlaylistBase,
-  PlaylistItem,
+  Playlist,
   PlaylistRequest,
   PlaylistShorts,
+  PlayListCard,
 } from '@/types/playlist/playlist'
 import { PageRequest } from '@/types/shorts/shorts'
 import { cookies } from 'next/headers'
@@ -14,7 +15,7 @@ export const PlaylistApi = {
   getUserPlaylist: async ({
     page,
     size,
-  }: PageRequest): Promise<ApiResponse<PlaylistBase<PlaylistItem[]>>> => {
+  }: PageRequest): Promise<ApiResponse<PlaylistBase<PlayListCard[]>>> => {
     const params = new URLSearchParams({
       page: String(page),
       size: String(size),
@@ -31,7 +32,7 @@ export const PlaylistApi = {
   },
 
   // 플레이리스트 상세 조회
-  getPlaylistItem: async (playlistId: number): Promise<ApiResponse<PlaylistItem>> => {
+  getPlaylistItem: async (playlistId: number): Promise<ApiResponse<Playlist>> => {
     const response = await fetch(`${baseUrl}/api/playlist/${playlistId}`)
 
     if (!response.ok) {
