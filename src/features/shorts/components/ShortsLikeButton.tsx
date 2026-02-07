@@ -1,6 +1,6 @@
 'use client'
 
-import { useDebounce } from '@/hook/useDebounce'
+import { useThrottle } from '@/hook/useThrottle'
 import { clientApi } from '@/lib/utils/clientApiUtils'
 import { useAuth } from '@/shared/store/auth/auth.store'
 import { ApiResponse } from '@/types/api/api'
@@ -20,7 +20,7 @@ function ShortsLikeButton({ initialLikeCount, initialIsLike, shortsId }: ShortsL
   const [likeCount, setLikeCount] = useState(initialLikeCount)
   const isLoggedIn = useAuth((state) => state.isLogin)
 
-  const sendLike = useDebounce(async (nextIsLike: boolean) => {
+  const sendLike = useThrottle(async (nextIsLike: boolean) => {
     try {
       const response = await clientApi.post<ApiResponse<ResponseLike>>(
         `/api/v1/shorts/${shortsId}/likes`,
@@ -43,10 +43,6 @@ function ShortsLikeButton({ initialLikeCount, initialIsLike, shortsId }: ShortsL
       return
     }
     const nextIsLike = !isLike
-
-    // optimistic update
-    setIsLike(nextIsLike)
-    setLikeCount((prev) => (nextIsLike ? prev + 1 : prev - 1))
 
     // 서버에는 "최종 상태" 전달
     sendLike(nextIsLike)
