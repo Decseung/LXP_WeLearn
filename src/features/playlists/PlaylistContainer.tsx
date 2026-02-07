@@ -1,63 +1,39 @@
 'use client'
-
-import Pagination from '@/components/ui/Pagination'
-import PlaylistItem from './PlaylistItem'
-import { usePathname } from 'next/navigation'
-import { PlayListCard } from '@/types/playlist/playlist'
-import Link from 'next/link'
+import { Playlist, PlaylistShorts } from '@/types/playlist/playlist'
+import PlaylistCard from './PlaylistCard'
+import PlaylistPreview from './PlaylistPreview'
+import PlaylistRightHeader from './PlaylistRightHeader'
+import { useState } from 'react'
 
 interface PlaylistContainerProps {
-  initialPlaylists: PlayListCard[]
-  totalPages?: number
-  currentPage?: number
-  isPending?: boolean
-  onPageChange?: (page: number) => void
+  playlistItem: Playlist
 }
-
-export default function PlaylistContainer({
-  initialPlaylists,
-  totalPages = 1,
-  currentPage = 0,
-  isPending = false,
-  onPageChange = () => {},
-}: PlaylistContainerProps) {
-  const pathname = usePathname()
-
-  const isMyPage = pathname.includes('/myplaylists')
-
+export default function PlaylistContainer({ playlistItem }: PlaylistContainerProps) {
+  const [shortsList, setShortsList] = useState<PlaylistShorts[] | null>(
+    playlistItem.item?.shorts ?? null,
+  )
+  console.log(shortsList)
+  const [selectedShorts, setSelectedShorts] = useState()
   return (
-    <section>
-      <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-xl font-extrabold text-gray-900 uppercase">
-          {isMyPage ? 'My Playlists' : 'Playlists'}
-        </h2>
+    <>
+      {/* ==================== Left Section - Fixed Preview (모바일에서 먼저 노출) ==================== */}
+      <div className="order-1">
+        <div className="flex flex-col gap-6 py-8 md:py-0 lg:sticky lg:top-24">
+          {/* Page Header (플레이리스트 제목 + 수정 버튼) */}
+          <PlaylistPreview playlistItem={playlistItem} />
+        </div>
       </div>
 
-      <div className="mb-10 grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-3 md:grid-cols-4">
-        {initialPlaylists.map((playlist) => (
-          <Link
-            href={isMyPage ? `/mypage/myplaylists/${playlist.id}` : `/playlists/${playlist.id}`}
-            key={playlist.id}
-          >
-            <PlaylistItem
-              id={playlist.id}
-              visibility={playlist.visibility}
-              shortsCount={playlist.shortsCount}
-              thumbnailUrl={playlist.thumbnailUrl}
-              title={playlist.title}
-              description={playlist.description}
-              categoryName={playlist.categoryName}
-            />
-          </Link>
-        ))}
+      {/* ==================== Right Section - Playlist Shorts List ==================== */}
+      <div className="order-2 flex-1 lg:order-2">
+        {/* ==================== List Header (총 갯수) ==================== */}
+        <div className="mb-4 flex items-center justify-between">
+          <PlaylistRightHeader totalCount={playlistItem.itemCount} />
+        </div>
+
+        {/* ==================== Playlist Shorts List (드래그 가능) ==================== */}
+        <PlaylistCard />
       </div>
-      <Pagination
-        totalPages={totalPages}
-        currentPage={currentPage}
-        isPending={isPending}
-        onPageChange={onPageChange}
-        showPrevNext
-      />
-    </section>
+    </>
   )
 }

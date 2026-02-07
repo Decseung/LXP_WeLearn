@@ -1,7 +1,6 @@
 import { Category } from '../category/category'
 import { Pageable } from '../shorts/shorts'
 import { ShortsVisibility } from '../shorts/status'
-import { UserInfo } from '../user/user'
 
 export type Visibility = 'PUBLIC' | 'PRIVATE'
 
@@ -29,18 +28,24 @@ export interface PlayListCard {
   visibility: Visibility
 }
 
+export interface PlaylistOwner {
+  id: number
+  nickname: string
+  profileUrl: string
+}
+
 /**
  * 내 플레이 리스트 요청시
  * /api/v1/playlists/me
  */
-export interface PlaylistItem {
+export interface Playlist {
   id: number
   title: string
   description: string
   thumbnailUrl: string
   visibility: Visibility
   itemCount: number
-  owner: Omit<UserInfo, 'email'>
+  owner: PlaylistOwner
   createdAt: string
   updatedAt: string
   item?: PlaylistItems
