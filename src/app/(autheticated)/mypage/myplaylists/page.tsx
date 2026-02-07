@@ -1,13 +1,13 @@
-import ShortsPlaylist from '@/features/mypage/playlists/ShortsPlaylist'
+import MyPlaylist from '@/features/mypage/myplaylists/list/MyPlaylist'
 
-export default async function PlaylistsPage() {
+export default async function MyPlaylistsPage() {
   const [shortsPlaylists] = await Promise.all([
     fetch('http://localhost:4000/shortsPlaylists').then((res) => res.json()), // Mock server
   ])
 
   return (
     <div>
-      <ShortsPlaylist playlists={shortsPlaylists} />
+      <MyPlaylist playlists={shortsPlaylists} />
     </div>
   )
 }

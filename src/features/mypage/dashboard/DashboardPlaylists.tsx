@@ -39,7 +39,7 @@ export default function DashboardPlaylists({ playlists }: DashboardPlaylistsProp
   return (
     <section className="mb-12">
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-xl font-extrabold text-gray-900 uppercase">My Shorts Playlists</h2>
+        <h2 className="text-xl font-extrabold text-gray-900 uppercase">My Created Playlists</h2>
 
         <div className="flex items-center gap-2">
           <button
@@ -54,7 +54,7 @@ export default function DashboardPlaylists({ playlists }: DashboardPlaylistsProp
           >
             <ChevronRight strokeWidth={1.5} size={16} />
           </button>
-          <Link href="/mypage/playlists">
+          <Link href="/mypage/myplaylists">
             <Button
               variant="outline"
               className="rounded-md border border-gray-300 px-3 py-1.5 text-sm transition-colors hover:bg-gray-50"
@@ -65,7 +65,7 @@ export default function DashboardPlaylists({ playlists }: DashboardPlaylistsProp
         </div>
       </div>
 
-      <div ref={scrollRef} className="scrollbar-hide flex gap-4 overflow-x-auto pb-4">
+      <div ref={scrollRef} className="scrollbar-hide flex gap-4 overflow-x-auto pt-1 pb-4">
         {playlists.map((playlist) => (
           <DashboardPlaylistCard
             key={playlist.id}

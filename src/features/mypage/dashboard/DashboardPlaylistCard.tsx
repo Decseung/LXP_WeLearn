@@ -18,7 +18,7 @@ export default function DashboardPlaylistCard({
   shortsCount,
 }: DashboardPlaylistCardProps) {
   return (
-    <Link key={id} href={`/mypage/playlists/${id}`} className="block w-56 shrink-0">
+    <Link key={id} href={`/mypage/myplaylists/${id}`} className="block w-56 shrink-0">
       <article className="group cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:drop-shadow-lg">
         <div className="relative mb-2 aspect-9/16 pt-2">
           {/* 스택 효과 - 카드 상단에 쌓인 레이어 */}

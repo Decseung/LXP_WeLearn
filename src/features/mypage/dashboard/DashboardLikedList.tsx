@@ -56,7 +56,7 @@ export default function DashboardLikedList({ shorts }: DashboardLikedListProps) 
         </div>
       </div>
 
-      <div ref={scrollRef} className="scrollbar-hide flex gap-4 overflow-x-auto pb-4">
+      <div ref={scrollRef} className="scrollbar-hide flex gap-4 overflow-x-auto pt-1 pb-4">
         {shorts.map((shorts) => (
           <DashboardLikedCard
             key={shorts.shortsId}
