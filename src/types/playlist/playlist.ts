@@ -17,7 +17,7 @@ export interface PlaylistRequest {
 
 // 임시 플레이 리스트 카드에 대한 정보
 export interface PlayListCard {
-  id: string
+  id: number
   thumbnailUrl: string
   title: string
   shortsCount: number
@@ -26,6 +26,7 @@ export interface PlayListCard {
   viewCount: number
   likeCount: number
   description: string
+  visibility: Visibility
 }
 
 /**
@@ -33,7 +34,7 @@ export interface PlayListCard {
  * /api/v1/playlists/me
  */
 export interface PlaylistItem {
-  playlistId: number
+  id: number
   title: string
   description: string
   thumbnailUrl: string
@@ -42,6 +43,7 @@ export interface PlaylistItem {
   owner: Omit<UserInfo, 'email'>
   createdAt: string
   updatedAt: string
+  item?: PlaylistItems
 }
 
 // 플레이리스트 기본 틀
@@ -50,6 +52,15 @@ export interface PlaylistBase<T = unknown> {
   pageable: Pageable
   totalPages: number
   totalElements: number
+}
+
+// 플레이리스트 조회 시
+// 안에 아이템
+export interface PlaylistItems {
+  itemId: number
+  position: number
+  shorts: PlaylistShorts[]
+  addedAt: string
 }
 
 // 숏츠 추가시
