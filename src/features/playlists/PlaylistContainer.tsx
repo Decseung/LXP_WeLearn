@@ -1,12 +1,12 @@
 'use client'
-import { Playlist, PlaylistShorts } from '@/types/playlist/playlist'
+import { PlaylistInfo, PlaylistShorts } from '@/types/playlist/playlist'
 import PlaylistCard from './PlaylistCard'
 import PlaylistPreview from './PlaylistPreview'
 import PlaylistRightHeader from './PlaylistRightHeader'
 import { useState } from 'react'
 
 interface PlaylistContainerProps {
-  playlistItem: Playlist
+  playlistItem: PlaylistInfo
 }
 export default function PlaylistContainer({ playlistItem }: PlaylistContainerProps) {
   const [shortsList, setShortsList] = useState<PlaylistShorts[] | null>(
@@ -34,7 +34,7 @@ export default function PlaylistContainer({ playlistItem }: PlaylistContainerPro
       <div className="order-2 flex-1 lg:order-2">
         {/* ==================== List Header (총 갯수) ==================== */}
         <div className="mb-4 flex items-center justify-between">
-          <PlaylistRightHeader totalCount={playlistItem.itemCount} />
+          <PlaylistRightHeader totalCount={playlistItem.itemsCount} />
         </div>
 
         {/* ==================== Playlist Shorts List (드래그 가능) ==================== */}

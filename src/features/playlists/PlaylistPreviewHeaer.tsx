@@ -1,12 +1,12 @@
 'use client'
 import { Button } from '@/components/ui/Button'
 import { useAuth } from '@/shared/store/auth/auth.store'
-import { Playlist } from '@/types/playlist/playlist'
+import { PlaylistInfo } from '@/types/playlist/playlist'
 import { SquarePen, X } from 'lucide-react'
 import { useState } from 'react'
 
 interface PlaylistPreviewHeaderProps {
-  playlistItem: Playlist
+  playlistItem: PlaylistInfo
 }
 
 export default function PlaylistPreviewHeader({ playlistItem }: PlaylistPreviewHeaderProps) {
@@ -25,18 +25,18 @@ export default function PlaylistPreviewHeader({ playlistItem }: PlaylistPreviewH
   }
 
   return (
-    <form className="w-full max-w-xl">
+    <form className="relative flex h-30 w-90 flex-col">
       <input type="hidden" name="playlistId" value={playlistItem.id} />
 
-      {editMode ? (
-        <div className="flex flex-col gap-4 rounded-xl border border-gray-50 bg-gray-50 p-5">
-          <div className="flex flex-col gap-3">
-            <div className="relative">
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center gap-2">
+          {editMode ? (
+            <div className="relative flex w-full items-center">
               <input
                 name="title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full rounded-lg bg-white px-3 py-2.5 pr-9 text-sm font-normal text-gray-900 transition-colors outline-none placeholder:text-gray-400 focus:bg-white focus:ring-2 focus:ring-black"
+                className="w-full border-b border-gray-200 bg-transparent py-0 pr-6 text-xl font-semibold tracking-tight text-gray-900 transition-colors outline-none focus:border-gray-900"
                 placeholder="제목을 입력하세요"
                 autoFocus
               />
@@ -44,54 +44,67 @@ export default function PlaylistPreviewHeader({ playlistItem }: PlaylistPreviewH
                 <button
                   type="button"
                   onClick={() => setTitle('')}
-                  className="absolute top-1/2 right-2 -translate-y-1/2 rounded-full p-0.5 text-gray-400 transition-colors hover:bg-gray-200 hover:text-gray-600"
+                  className="absolute right-0 text-gray-400 hover:text-gray-700"
                 >
                   <X className="size-4" />
                 </button>
               )}
             </div>
-
-            <textarea
-              name="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              rows={3}
-              className="w-full resize-none rounded-lg bg-white px-3 py-2.5 text-sm text-gray-700 transition-colors outline-none placeholder:text-gray-400 focus:bg-white focus:ring-2 focus:ring-black"
-              placeholder="설명을 입력하세요"
-            />
-          </div>
-          <div className="flex items-center justify-end gap-2">
-            <Button type="button" variant="outline" size="sm" onClick={handleCancel}>
-              {/* <X className="size-4" /> */}
-              닫기
-            </Button>
-            <Button type="submit" variant="accent" size="sm">
-              {/* <Check className="size-4" /> */}
-              수정
-            </Button>
-          </div>
-        </div>
-      ) : (
-        <div className="group flex items-start justify-between gap-4">
-          <div className="flex flex-col gap-1">
-            <h1 className="text-2xl font-black text-gray-900 uppercase">{title}</h1>
-            {playlistItem.description && (
-              <p className="text-sm leading-relaxed text-gray-500">{description}</p>
-            )}
-          </div>
-          {isOwner && (
+          ) : (
+            <h1 className="text-center text-xl font-semibold tracking-tight text-gray-900 lg:text-left">
+              {title}
+            </h1>
+          )}
+          {isOwner && !editMode && (
             <Button
               type="button"
               variant="ghost"
               size="icon-sm"
-              className="rounded-full"
+              className="shrink-0 text-gray-400 hover:text-gray-700"
               onClick={() => setEditMode(true)}
             >
-              <SquarePen className="size-4" />
+              <SquarePen className="size-3.5" />
             </Button>
           )}
         </div>
-      )}
+
+        {editMode ? (
+          <div className="relative flex w-full items-center">
+            <textarea
+              name="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full resize-none border-b border-gray-200 bg-transparent py-0 pr-6 text-sm leading-relaxed text-gray-900 transition-colors outline-none focus:border-gray-900"
+              placeholder="설명을 입력하세요"
+              rows={1}
+            />
+            {description && (
+              <button
+                type="button"
+                onClick={() => setDescription('')}
+                className="absolute top-0 right-0 text-gray-400 hover:text-gray-700"
+              >
+                <X className="size-4" />
+              </button>
+            )}
+          </div>
+        ) : (
+          playlistItem.description && (
+            <p className="line-clamp-2 text-sm leading-relaxed text-gray-500">{description}</p>
+          )
+        )}
+
+        {editMode && (
+          <div className="flex gap-1.5 self-end">
+            <Button type="button" variant="outline" size="sm" onClick={handleCancel}>
+              닫기
+            </Button>
+            <Button type="submit" variant="accent" size="sm">
+              수정
+            </Button>
+          </div>
+        )}
+      </div>
     </form>
   )
 }

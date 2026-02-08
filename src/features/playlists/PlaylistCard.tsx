@@ -13,8 +13,13 @@ interface PlaylistCardProps {
 
 export default function PlaylistCard({ shortsList, handlePreview }: PlaylistCardProps) {
   if (!shortsList || shortsList.length === 0) {
-    return <div className="text-sm text-gray-500">영상이 없습니다.</div>
+    return (
+      <div className="flex h-full w-full items-center justify-center text-xl text-gray-500">
+        영상이 없습니다.
+      </div>
+    )
   }
+  console.log(shortsList)
 
   return (
     <div className="space-y-6">

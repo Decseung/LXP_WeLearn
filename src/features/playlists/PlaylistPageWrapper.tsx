@@ -3,11 +3,11 @@
 import Pagination from '@/components/ui/Pagination'
 import PlaylistItem from './PlaylistItem'
 import { usePathname } from 'next/navigation'
-import { PlayListCard } from '@/types/playlist/playlist'
+import { PlaylistInfo } from '@/types/playlist/playlist'
 import Link from 'next/link'
 
 interface PlaylistPageWrapperProps {
-  initialPlaylists: PlayListCard[]
+  initialPlaylists: PlaylistInfo[]
   totalPages?: number
   currentPage?: number
   isPending?: boolean
@@ -25,7 +25,7 @@ export default function PlaylistPageWrapper({
   const isMyPage = pathname.includes('/myplaylists')
 
   return (
-    <section>
+    <section className="flex h-full flex-col">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-xl font-extrabold text-gray-900 uppercase">
           {isMyPage ? 'My Playlists' : 'Playlists'}
@@ -41,11 +41,10 @@ export default function PlaylistPageWrapper({
             <PlaylistItem
               id={playlist.id}
               visibility={playlist.visibility}
-              shortsCount={playlist.shortsCount}
+              shortsCount={playlist.itemsCount}
               thumbnailUrl={playlist.thumbnailUrl}
               title={playlist.title}
               description={playlist.description}
-              categoryName={playlist.categoryName}
             />
           </Link>
         ))}

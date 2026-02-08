@@ -1,26 +1,25 @@
 import { ApiResponse } from '@/types/api/api'
 import {
   PlaylistBase,
-  Playlist,
   PlaylistRequest,
   PlaylistShorts,
-  PlayListCard,
+  PlaylistInfo,
 } from '@/types/playlist/playlist'
 import { PageRequest } from '@/types/shorts/shorts'
 import { cookies } from 'next/headers'
 
-const baseUrl = 'https://995dcec8-b9b9-4ce1-b734-d1a7806c16ea.mock.pstmn.io'
+const baseUrl = 'http://localhost:4000'
 export const PlaylistApi = {
   // 유저 개인 플레이 리스트 조회
   getUserPlaylist: async ({
     page,
     size,
-  }: PageRequest): Promise<ApiResponse<PlaylistBase<PlayListCard[]>>> => {
+  }: PageRequest): Promise<ApiResponse<PlaylistBase<PlaylistInfo[]>>> => {
     const params = new URLSearchParams({
       page: String(page),
       size: String(size),
     })
-    const response = await fetch(`${baseUrl}/api/playlists/me?${params}`, {
+    const response = await fetch(`${baseUrl}/api/v1/playlists/me?${params}`, {
       cache: 'no-store',
     })
 
@@ -28,13 +27,13 @@ export const PlaylistApi = {
     if (!response.ok) {
       throw new Error('request failed')
     }
-    return data.data
+    return data
   },
 
   // 플레이리스트 상세 조회
-  getPlaylistItem: async (playlistId: number): Promise<ApiResponse<Playlist>> => {
-    const response = await fetch(`${baseUrl}/api/playlist/${playlistId}`)
-
+  getPlaylistItem: async (playlistId: number): Promise<ApiResponse<PlaylistInfo>> => {
+    const response = await fetch(`${baseUrl}/api/v1/playlists/${playlistId}`)
+    console.log(playlistId)
     if (!response.ok) {
       throw new Error('플레이리스트 불러오기 실패')
     }
@@ -47,9 +46,10 @@ export const PlaylistApi = {
     const cookieStore = await cookies()
     const accessToken = cookieStore.get('accessToken')?.value
 
-    const response = await fetch(`${baseUrl}/api/playlists`, {
+    const response = await fetch(`${baseUrl}/api/v1/playlists`, {
       method: 'POST',
       headers: {
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(content),
@@ -71,9 +71,10 @@ export const PlaylistApi = {
     const cookieStore = await cookies()
     const accessToken = cookieStore.get('accessToken')?.value
 
-    const response = await fetch(`${baseUrl}/api/playlists/${playlistId}/items`, {
+    const response = await fetch(`${baseUrl}/api/v1/playlists/${playlistId}/items`, {
       method: 'POST',
       headers: {
+        'Content-type': 'application/json',
         Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify({ shortsId }),

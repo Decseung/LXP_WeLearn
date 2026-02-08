@@ -1,23 +1,20 @@
 import { Play } from 'lucide-react'
 import Image from 'next/image'
-import Link from 'next/link'
 
 export interface PlaylistItemProps {
   id: number
   thumbnailUrl: string
   title: string
   description: string
-  categoryName: string
+  categoryName?: string
   visibility: 'PUBLIC' | 'PRIVATE'
   shortsCount: number
 }
 
 export default function PlaylistItem({
-  id,
   thumbnailUrl,
   title,
   description,
-  categoryName,
   visibility,
   shortsCount,
 }: PlaylistItemProps) {
@@ -51,9 +48,7 @@ export default function PlaylistItem({
         {/* 카드 밖 콘텐츠 */}
         <div className="my-4">
           <p className="line-clamp-1 truncate pb-2 text-xs font-medium">{description}</p>
-          <p className="text-xs text-gray-500">
-            {categoryName} · {shortsCount}개
-          </p>
+          <p className="text-xs text-gray-500">{shortsCount}개</p>
         </div>
       </div>
     </div>

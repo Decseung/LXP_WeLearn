@@ -38,13 +38,13 @@ export interface PlaylistOwner {
  * 내 플레이 리스트 요청시
  * /api/v1/playlists/me
  */
-export interface Playlist {
+export interface PlaylistInfo {
   id: number
   title: string
   description: string
   thumbnailUrl: string
   visibility: Visibility
-  itemCount: number
+  itemsCount: number
   owner: PlaylistOwner
   createdAt: string
   updatedAt: string
