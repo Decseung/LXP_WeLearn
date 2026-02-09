@@ -104,7 +104,7 @@ export default function ShortsFormContainer({
             body: file,
             headers: { 'Content-Type': file.type },
           })
-          if (!res.ok) throw new Error('S3 업로드 실패')
+          if (!res.ok) throw new Error('영상 업로드에 실패했씁니다. 다시 시도해주세요.')
         }
 
         // 영상 업로드
