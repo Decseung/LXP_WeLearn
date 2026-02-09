@@ -5,10 +5,10 @@ import PlaylistPreview from './PlaylistPreview'
 import PlaylistRightHeader from './PlaylistRightHeader'
 import { useState } from 'react'
 
-interface PlaylistContainerProps {
+interface PlaylistDetailContainerProps {
   playlistItem: PlaylistInfo
 }
-export default function PlaylistContainer({ playlistItem }: PlaylistContainerProps) {
+export default function PlaylistDetailContainer({ playlistItem }: PlaylistDetailContainerProps) {
   const shortsList = playlistItem.items ?? null
 
   const [selectedShorts, setSelectedShorts] = useState<PlaylistItems | null>(
