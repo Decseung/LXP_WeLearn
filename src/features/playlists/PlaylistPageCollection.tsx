@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 import { PlaylistInfo } from '@/types/playlist/playlist'
 import Link from 'next/link'
 
-interface PlaylistPageWrapperProps {
+interface PlaylistPageCollectionProps {
   initialPlaylists: PlaylistInfo[]
   totalPages?: number
   currentPage?: number
@@ -14,13 +14,13 @@ interface PlaylistPageWrapperProps {
   onPageChange?: (page: number) => void
 }
 
-export default function PlaylistPageWrapper({
+export default function PlaylistPageCollection({
   initialPlaylists,
   totalPages = 1,
   currentPage = 0,
   isPending = false,
   onPageChange = () => {},
-}: PlaylistPageWrapperProps) {
+}: PlaylistPageCollectionProps) {
   const pathname = usePathname()
   const isMyPage = pathname.includes('/myplaylists')
 
