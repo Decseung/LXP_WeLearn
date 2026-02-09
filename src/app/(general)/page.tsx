@@ -12,7 +12,7 @@ export default async function Page() {
       getShortPopular(),
       categoryApi.getAllShorts({ sort: 'createdAt,desc' }), // 전체 숏츠 목록(최신순 기본값)
       categoryApi.getAllCategoryId(), // 카테고리 항목 목록
-      fetch('http://localhost:4000/playlists').then((res) => res.json()), // Mock server >> api 연동 필요
+      fetch('http://localhost:4000/api/v1/playlists/public').then((res) => res.json()), // Mock server >> api 연동 필요
     ])
 
   // 인기 숏츠 (캐러셀용)
@@ -32,7 +32,7 @@ export default async function Page() {
     <div className="min-h-screen bg-white">
       <ShortsCarousel data={shortsList} />
 
-      <PlaylistSection items={playlistResponse} />
+      <PlaylistSection items={playlistResponse.data.content} />
 
       <CategoryShortsSection initialShortsData={initialShortsData} categories={categories} />
     </div>

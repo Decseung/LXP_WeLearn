@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-
+  console.log(id)
   const playlistId = Number(id)
 
   if (!playlistId || Number.isNaN(playlistId)) {
