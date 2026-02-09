@@ -1,4 +1,4 @@
-import PlaylistDetailContainer from '@/features/playlists/PlaylistdetailContainer'
+import PlaylistDetailContainer from '@/features/playlists/PlaylistDetailContainer'
 import { PlaylistApi } from '@/services/playlist/playlist.service'
 
 interface PlaylistsItemPageProps {

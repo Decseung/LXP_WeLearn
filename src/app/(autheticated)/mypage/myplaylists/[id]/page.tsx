@@ -1,4 +1,4 @@
-import PlaylistDetailContainer from '@/features/playlists/PlaylistdetailContainer'
+import PlaylistDetailContainer from '@/features/playlists/PlaylistDetailContainer'
 import { clientApi } from '@/lib/utils/clientApiUtils'
 import { ApiResponse } from '@/types/api/api'
 import { PlaylistInfo } from '@/types/playlist/playlist'
