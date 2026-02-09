@@ -6,10 +6,11 @@ import {
   PlaylistShorts,
   PlaylistInfo,
   PlayListCard,
+  PatchPlaylistMeta,
 } from '@/types/playlist/playlist'
 import { PageRequest } from '@/types/shorts/shorts'
 
-export const PlaylistApi = {
+export const playlistApi = {
   /**
    * ================
    * Get 요청
@@ -80,6 +81,16 @@ export const PlaylistApi = {
     const response = await api.post(`/api/v1/playlists/${playlistId}/items`, { shortsId: shortsId })
 
     return response
+  },
+
+  /**
+   * ================
+   * PATCH
+   * ================
+   */
+
+  patchPlaylistInfo: async (data: PatchPlaylistMeta, playlistId: number) => {
+    await api.patch(`/api/v1/playlists/${playlistId}`)
   },
 
   /**

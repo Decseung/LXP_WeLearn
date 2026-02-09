@@ -7,16 +7,10 @@ import {
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu'
 import { useAuth } from '@/shared/store/auth/auth.store'
-import { PlaylistOwner } from '@/types/playlist/playlist'
 import { FolderPlus, Siren, Trash2 } from 'lucide-react'
 import { toast } from 'react-toastify'
 
-interface LikeShortsDropdownMenuProps {
-  playlistOwner: PlaylistOwner
-}
-
-export default function LikeShortsDropdownMenu({ playlistOwner }: LikeShortsDropdownMenuProps) {
-  console.log(playlistOwner)
+export default function LikeShortsDropdownMenu() {
   const userData = useAuth((state) => state.auth)
   const handleSaveToPlaylist = () => {
     toast.info('현재 서비스 준비중입니다')
@@ -35,12 +29,10 @@ export default function LikeShortsDropdownMenu({ playlistOwner }: LikeShortsDrop
       <DropdownMenuGroup>
         {/* 재생목록에 저장 */}
 
-        {playlistOwner.id !== userData?.userId && (
-          <DropdownMenuItem className="cursor-pointer" onSelect={handleSaveToPlaylist}>
-            <FolderPlus size={16} />
-            재생목록에 저장
-          </DropdownMenuItem>
-        )}
+        <DropdownMenuItem className="cursor-pointer" onSelect={handleSaveToPlaylist}>
+          <FolderPlus size={16} />
+          재생목록에 저장
+        </DropdownMenuItem>
 
         {/* 공유 */}
         <DropdownMenuItem className="cursor-pointer" onSelect={handleShare}>

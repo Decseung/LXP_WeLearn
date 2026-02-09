@@ -5,6 +5,7 @@ import LikeShortsDropdownMenu from '@/features/mypage/likes/LikeShortsDropdownMe
 import { PlaylistItems, PlaylistOwner } from '@/types/playlist/playlist'
 import { MoreHorizontal } from 'lucide-react'
 import Image from 'next/image'
+import PlaylistDropdownMenu from './PlaylistDropdownMenu'
 
 interface PlaylistCardProps {
   shortsList: PlaylistItems[] | null
@@ -73,7 +74,7 @@ export default function PlaylistCard({
                     <MoreHorizontal size={18} />
                   </button>
                 </DropdownMenuTrigger>
-                <LikeShortsDropdownMenu playlistOwner={playlistOwner} />
+                <PlaylistDropdownMenu />
               </DropdownMenu>
             </div>
 

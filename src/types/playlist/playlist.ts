@@ -115,8 +115,9 @@ export interface PlaylistShorts {
   keywords: string[]
 }
 
-interface PlaylistUploader {
-  memberId: number
-  nickname: string
-  profileImageUrl: string
+export interface PatchPlaylistMeta {
+  title?: string
+  description?: string
+  thumbnailShortsId?: number
+  visibility?: Visibility
 }
