@@ -4,9 +4,9 @@ import { useRef } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/Button'
-import DashboardPlaylistCard from './DashboardPlaylistCard'
 import EmptyState from './EmptyState'
 import { PlaylistInfo } from '@/types/playlist/playlist'
+import PlaylistItem from '@/features/playlists/PlaylistItem'
 
 interface DashboardPlaylistsProps {
   playlists: PlaylistInfo[]
@@ -60,16 +60,23 @@ export default function DashboardPlaylists({ playlists }: DashboardPlaylistsProp
       {playlists.length === 0 ? (
         <EmptyState type="saved" />
       ) : (
-        <div ref={scrollRef} className="scrollbar-hide flex gap-4 overflow-x-auto pt-1 pb-4">
+        <div ref={scrollRef} className="scrollbar-hide flex gap-5 overflow-x-auto pt-1 pb-4">
           {playlists.map((playlist) => (
-            <DashboardPlaylistCard
+            <Link
               key={playlist.id}
-              id={playlist.id}
-              shortsCount={playlist.shortsCount}
-              thumbnailUrl={playlist.thumbnailUrl}
-              title={playlist.title}
-              description={playlist.description}
-            />
+              href={`/mypage/myplaylists/${playlist.id}`}
+              className="group block w-70 shrink-0"
+            >
+              <PlaylistItem
+                id={playlist.id}
+                shortsCount={playlist.shortsCount}
+                thumbnailUrl={playlist.thumbnailUrl}
+                title={playlist.title}
+                description={playlist.description}
+                visibility={playlist.visibility}
+                showBadge
+              />
+            </Link>
           ))}
         </div>
       )}
