@@ -60,6 +60,7 @@ export default function PlaylistDetailContainer({ playlistItem }: PlaylistDetail
 
         {/* ==================== Playlist Shorts List (드래그 가능) ==================== */}
         <PlaylistCard
+          playlistId={playlistItem.id}
           editMode={editMode}
           shortsList={shortsList}
           handlePreview={handlePreview}

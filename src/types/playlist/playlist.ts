@@ -125,9 +125,6 @@ export interface PlaylistMetaDataResponse {
   owner: PlaylistOwner
   createdAt: string
   updatedAt: string
-  category: Category
-  keywords: string[]
-  viewCount: number
 }
 
 export interface PatchPlaylistMeta {
@@ -135,4 +132,9 @@ export interface PatchPlaylistMeta {
   description?: string
   thumbnailShortsId?: number
   visibility?: Visibility
+}
+
+export interface ReorderPlaylist {
+  shortsId: number
+  newIndex: number
 }

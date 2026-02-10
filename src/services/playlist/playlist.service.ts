@@ -8,15 +8,12 @@ import {
   PlayListCard,
   PatchPlaylistMeta,
   PlaylistMetaDataResponse,
+  ReorderPlaylist,
 } from '@/types/playlist/playlist'
 import { PageRequest } from '@/types/shorts/shorts'
 
 export const playlistApi = {
-  /**
-   * ================
-   * Get 요청
-   * ================
-   */
+  // * GET
 
   // 유저 개인 플레이 리스트 조회
   getUserPlaylist: async ({
@@ -64,11 +61,7 @@ export const playlistApi = {
     return response
   },
 
-  /**
-   * =================
-   * POST 요청
-   * =================
-   */
+  // * POST
 
   createPlaylist: async (content: PlaylistRequest) => {
     const response = await api.post('/api/v1/playlists', content)
@@ -85,11 +78,7 @@ export const playlistApi = {
     return response
   },
 
-  /**
-   * ================
-   * PATCH
-   * ================
-   */
+  // * PATCH
 
   patchPlaylistInfo: async (
     data: PatchPlaylistMeta,
@@ -98,11 +87,14 @@ export const playlistApi = {
     return await api.patch(`/api/v1/playlists/${playlistId}`, data)
   },
 
-  /**
-   * ================
-   * Delete
-   * ================
-   */
+  updateShortsOrder: async (
+    data: ReorderPlaylist,
+    playlistId: string,
+  ): Promise<ApiResponse<PlaylistInfo>> => {
+    return await api.patch(`/api/v1/playlists/${playlistId}/items/reorder`, data)
+  },
+
+  // * DELETE
 
   deleteShortsInPlaylist: async (shortsId: number, playlistId: number) => {
     const response = await api.delete(`/api/v1/playlists/${playlistId}/items/${shortsId}`)
