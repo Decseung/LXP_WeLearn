@@ -28,7 +28,7 @@ export default function PlaylistPreviewHeader({ playlistItem }: PlaylistPreviewH
   useEffect(() => {
     if (patchPlaylistMetaState.success && patchPlaylistMetaState.data) {
       setEditMode(false)
-      toast.success('플레이리스트 정보가 정상적으로 업데이트되었습니다.')
+      toast.success('플레이리스트 정보가 업데이트되었습니다.')
     }
     if (!patchPlaylistMetaState.success && patchPlaylistMetaState.message) {
       toast.error(patchPlaylistMetaState.message)
