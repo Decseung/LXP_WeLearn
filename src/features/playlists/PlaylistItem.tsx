@@ -9,6 +9,7 @@ export interface PlaylistItemProps {
   categoryName?: string
   visibility: 'PUBLIC' | 'PRIVATE'
   shortsCount: number
+  showBadge?: boolean
 }
 
 export default function PlaylistItem({
@@ -17,6 +18,7 @@ export default function PlaylistItem({
   description,
   visibility,
   shortsCount,
+  showBadge,
 }: PlaylistItemProps) {
   const badgeLabel = visibility === 'PUBLIC' ? '공개' : '비공개'
 

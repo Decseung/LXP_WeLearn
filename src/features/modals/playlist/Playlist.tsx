@@ -25,6 +25,7 @@ export default function Playlist({ list, shortsId, handleActiveTab }: PlaylistPr
       toast.error(error.message || '숏츠 저장 실패')
     }
   }
+
   return (
     <div className="h-full overflow-y-auto px-6 py-4">
       {list.content.length > 0 ? (

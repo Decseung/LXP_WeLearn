@@ -7,6 +7,7 @@ import {
   PlaylistInfo,
   PlayListCard,
   PatchPlaylistMeta,
+  PlaylistMetaDataResponse,
 } from '@/types/playlist/playlist'
 import { PageRequest } from '@/types/shorts/shorts'
 
@@ -89,8 +90,11 @@ export const playlistApi = {
    * ================
    */
 
-  patchPlaylistInfo: async (data: PatchPlaylistMeta, playlistId: number) => {
-    await api.patch(`/api/v1/playlists/${playlistId}`)
+  patchPlaylistInfo: async (
+    data: PatchPlaylistMeta,
+    playlistId: string,
+  ): Promise<ApiResponse<PlaylistMetaDataResponse>> => {
+    return await api.patch(`/api/v1/playlists/${playlistId}`, data)
   },
 
   /**

@@ -107,12 +107,24 @@ export interface PlaylistShorts {
   status: ShortsVisibility
   // API 연동시 삭제 예정
   // PlaylistShorts에 uploader: PlaylistUploader로 변경
-  userId: number
-  userNickname: string
-  userPorfileUrl: string
+  uploader: PlaylistOwner
   // 여기까지 api 들어오면 수정
   category: Category
   keywords: string[]
+  createdAt: string
+  viewCount: number
+}
+
+export interface PlaylistMetaDataResponse {
+  id: number
+  title: string
+  description: string
+  visibility: Visibility
+  thumbnailUrl: string
+  shortsCount: number
+  owner: PlaylistOwner
+  createdAt: string
+  updatedAt: string
 }
 
 export interface PatchPlaylistMeta {
