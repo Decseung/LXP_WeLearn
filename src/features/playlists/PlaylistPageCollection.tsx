@@ -3,11 +3,11 @@
 import Pagination from '@/components/ui/Pagination'
 import PlaylistItem from './PlaylistItem'
 import { usePathname } from 'next/navigation'
-import { PlaylistInfo } from '@/types/playlist/playlist'
+import { PlayListCard, PlaylistInfo } from '@/types/playlist/playlist'
 import Link from 'next/link'
 
 interface PlaylistPageCollectionProps {
-  initialPlaylists: PlaylistInfo[]
+  initialPlaylists: (PlayListCard | PlaylistInfo)[]
   totalPages?: number
   currentPage?: number
   isPending?: boolean
@@ -26,9 +26,9 @@ export default function PlaylistPageCollection({
 
   return (
     <section className="flex h-full flex-col">
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mt-18 mb-12 flex items-center justify-between md:mt-0">
         <h2 className="text-xl font-extrabold text-gray-900 uppercase">
-          {isMyPage ? 'My Playlists' : 'Playlists'}
+          {isMyPage ? 'My Created Playlists' : 'Playlists'}
         </h2>
       </div>
 
@@ -45,6 +45,7 @@ export default function PlaylistPageCollection({
               thumbnailUrl={playlist.thumbnailUrl}
               title={playlist.title}
               description={playlist.description}
+              showBadge={isMyPage}
             />
           </Link>
         ))}
