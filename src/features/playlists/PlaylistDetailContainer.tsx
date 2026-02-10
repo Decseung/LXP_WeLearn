@@ -14,7 +14,6 @@ export default function PlaylistDetailContainer({ playlistItem }: PlaylistDetail
   const [selectedShorts, setSelectedShorts] = useState<PlaylistItems | null>(
     playlistItem.items?.[0] ?? null,
   )
-  console.log(selectedShorts)
   const handlePreview = (shorts: PlaylistItems) => {
     setSelectedShorts(shorts)
   }
@@ -40,6 +39,7 @@ export default function PlaylistDetailContainer({ playlistItem }: PlaylistDetail
           shortsList={shortsList}
           handlePreview={handlePreview}
           playlistOwner={playlistItem.owner}
+          selectedShorts={selectedShorts}
         />
       </div>
     </>

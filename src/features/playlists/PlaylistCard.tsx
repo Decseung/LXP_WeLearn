@@ -1,22 +1,24 @@
 'use client'
 
 import { DropdownMenu, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import LikeShortsDropdownMenu from '@/features/mypage/likes/LikeShortsDropdownMenu'
 import { PlaylistItems, PlaylistOwner } from '@/types/playlist/playlist'
 import { MoreHorizontal } from 'lucide-react'
 import Image from 'next/image'
 import PlaylistDropdownMenu from './PlaylistDropdownMenu'
+import { timeAgo } from '@/utils/timeAgo'
 
 interface PlaylistCardProps {
   shortsList: PlaylistItems[] | null
   handlePreview: (shorts: PlaylistItems) => void
   playlistOwner: PlaylistOwner
+  selectedShorts: PlaylistItems | null
 }
 
 export default function PlaylistCard({
   shortsList,
   handlePreview,
   playlistOwner,
+  selectedShorts,
 }: PlaylistCardProps) {
   console.log(shortsList)
   if (!shortsList || shortsList.length === 0) {
@@ -33,7 +35,7 @@ export default function PlaylistCard({
         <div
           onClick={() => handlePreview(short)}
           key={short.itemId}
-          className="flex cursor-pointer gap-4 rounded-lg border border-gray-200 bg-white p-4 transition-shadow hover:shadow-md"
+          className={`flex cursor-pointer gap-4 rounded-lg border bg-white p-4 transition-shadow hover:shadow-md ${selectedShorts?.itemId === short.itemId ? 'border-green-500 ring-1 ring-green-500' : 'rounded-lg border-gray-200'}`}
         >
           <div className="relative h-48 w-28 shrink-0 overflow-hidden rounded-lg bg-gray-200 sm:w-36">
             <Image
@@ -57,7 +59,10 @@ export default function PlaylistCard({
                   {short.shorts.title}
                 </h3>
 
-                <p className="mt-1.5 mb-4 text-sm text-gray-500">{short.shorts.userNickname}</p>
+                <p className="mt-1.5 mb-4 text-sm text-gray-500">
+                  {short.shorts.uploader.nickname} · 조회수 {short.shorts.viewCount}회 ·
+                  {timeAgo(short.shorts.createdAt)}
+                </p>
 
                 <p className="mb-1 line-clamp-2 text-sm text-gray-700">
                   {short.shorts.description}
@@ -80,11 +85,11 @@ export default function PlaylistCard({
 
             {/* 태그 */}
             <div className="mt-auto flex flex-wrap gap-2">
-              {/* {short.tags?.map((tag) => (
+              {short.shorts.keywords?.map((tag) => (
                 <span key={tag} className="px-1 py-1 text-xs text-gray-900">
                   #{tag}
                 </span>
-              ))} */}
+              ))}
             </div>
           </div>
         </div>
