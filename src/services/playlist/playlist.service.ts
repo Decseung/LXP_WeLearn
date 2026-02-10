@@ -60,6 +60,7 @@ export const playlistApi = {
     const response = await api.get<ApiResponse<PlaylistBase<PlayListCard[]>>>(
       `/api/v1/playlists/public?${params}`,
     )
+
     return response
   },
 
