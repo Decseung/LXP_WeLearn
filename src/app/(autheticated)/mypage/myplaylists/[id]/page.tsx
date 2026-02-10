@@ -12,6 +12,7 @@ export default async function MyPlaylistsPage({ params }: MyPlaylistsPageProps) 
   const { id } = await params
   // const playlistItem = await clientApi.get<ApiResponse<PlaylistInfo>>(`/api/playlists/${id}`)
   const playlistItem = await playlistApi.getPlaylistItem(Number(id))
+
   return (
     <div className="h-full w-full">
       <div className="flex flex-col gap-8 lg:flex-row">

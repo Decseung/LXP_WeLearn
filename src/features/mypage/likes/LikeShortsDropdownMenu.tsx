@@ -7,7 +7,6 @@ import {
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu'
 import { useAuth } from '@/shared/store/auth/auth.store'
-import { PlaylistOwner } from '@/types/playlist/playlist'
 import { FolderPlus, Siren, Trash2 } from 'lucide-react'
 import { toast } from 'react-toastify'
 

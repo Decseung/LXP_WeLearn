@@ -3,7 +3,9 @@ import { Button } from '@/components/ui/Button'
 import { useAuth } from '@/shared/store/auth/auth.store'
 import { PlaylistInfo } from '@/types/playlist/playlist'
 import { SquarePen, X } from 'lucide-react'
-import { useState } from 'react'
+import { useActionState, useEffect, useState } from 'react'
+import { patchPlaylistInfo } from './action'
+import { toast } from 'react-toastify'
 
 interface PlaylistPreviewHeaderProps {
   playlistItem: PlaylistInfo
@@ -11,12 +13,27 @@ interface PlaylistPreviewHeaderProps {
 
 export default function PlaylistPreviewHeader({ playlistItem }: PlaylistPreviewHeaderProps) {
   const userData = useAuth((state) => state.auth)
-  const test = userData?.userId === playlistItem.owner.id
-  const isOwner = true
+  const isOwner = userData?.userId === playlistItem.owner.id
 
   const [editMode, setEditMode] = useState(false)
   const [title, setTitle] = useState(playlistItem.title)
   const [description, setDescription] = useState(playlistItem.description ?? '')
+
+  const [patchPlaylistMetaState, patchPlaylistaction] = useActionState(patchPlaylistInfo, {
+    success: false,
+    data: {},
+    message: '',
+  })
+
+  useEffect(() => {
+    if (patchPlaylistMetaState.success && patchPlaylistMetaState.data) {
+      setEditMode(false)
+      toast.success('플레이리스트 정보가 업데이트되었습니다.')
+    }
+    if (!patchPlaylistMetaState.success && patchPlaylistMetaState.message) {
+      toast.error(patchPlaylistMetaState.message)
+    }
+  }, [patchPlaylistMetaState])
 
   function handleCancel() {
     setTitle(playlistItem.title)
@@ -25,7 +42,7 @@ export default function PlaylistPreviewHeader({ playlistItem }: PlaylistPreviewH
   }
 
   return (
-    <form className="relative flex h-30 w-90 flex-col">
+    <form className="relative flex h-30 w-90 flex-col" action={patchPlaylistaction}>
       <input type="hidden" name="playlistId" value={playlistItem.id} />
 
       <div className="flex flex-col gap-3">
