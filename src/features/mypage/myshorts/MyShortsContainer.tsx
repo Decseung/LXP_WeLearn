@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 import MyShortsCreateButton from './MyShortsCreateButton'
 import ShortsCard from '@/components/mypage/shorts/ShortsCard'
 import ShortsPreviewContainer from '@/components/mypage/shorts/ShortsPreviewContainer'
-import { deleteShortsAction, toggleShortsStatusAction } from './myshorts.action'
+import { deleteShortsAction, toggleShortsVisibilityAction } from './myshorts.action'
 import { ShortsBase } from '@/types/shorts/shorts'
 import ShortsListHeader from '@/components/mypage/shorts/ShortsListHeader'
 import EmptyState from '../EmptyState'
@@ -27,9 +27,12 @@ export default function MyShortsContainer({ initialShorts, totalCount }: MyShort
   }
 
   // 숏츠 공개/비공개 전환 핸들러
-  const handleToggleVisibility = async (shortsId: number, currentStatus: ShortsBase['status']) => {
+  const handleToggleVisibility = async (
+    shortsId: number,
+    currentStatus: ShortsBase['visibility'],
+  ) => {
     try {
-      const result = await toggleShortsStatusAction(shortsId, currentStatus)
+      const result = await toggleShortsVisibilityAction(shortsId, currentStatus)
 
       if (result.success && result.data) {
         toast.success(result.message)
@@ -111,7 +114,9 @@ export default function MyShortsContainer({ initialShorts, totalCount }: MyShort
                   shorts={shorts}
                   isSelected={selectedShorts?.shortsId === shorts.shortsId}
                   onSelect={() => handleSelectShorts(shorts)}
-                  onToggleVisibility={() => handleToggleVisibility(shorts.shortsId!, shorts.status)}
+                  onToggleVisibility={() =>
+                    handleToggleVisibility(shorts.shortsId!, shorts.visibility)
+                  }
                   onDelete={() => handleDelete(shorts.shortsId!)}
                 />
               ))

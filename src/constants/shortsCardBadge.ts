@@ -21,4 +21,14 @@ export const SHORTS_STATUS_CONFIG = {
     label: '거부됨',
     bgColor: 'bg-red-600',
   },
+  PUBLIC: {
+    icon: Globe,
+    label: '공개',
+    bgColor: 'bg-green-500',
+  },
+  PRIVATE: {
+    icon: Lock,
+    label: '비공개',
+    bgColor: 'bg-gray-700',
+  },
 } as const

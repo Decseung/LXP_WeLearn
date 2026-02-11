@@ -18,7 +18,7 @@ export interface ShortsRequest {
   fileName?: string
   contentType?: string
   durationSec?: number
-  status?: ShortsStatus
+  visibility?: ShortsVisibility
   thumbnailUrl?: string | null
 }
 

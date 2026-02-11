@@ -21,7 +21,7 @@ export default function ShortsFormBasicInfo({
   categories,
   onChange,
 }: ShortsFormBasicInfoProps) {
-  const { title, description, isPublic, categoryId } = formData
+  const { title, description, categoryId } = formData
   const selectValue = categoryId?.toString() ?? ''
 
   return (
