@@ -9,7 +9,10 @@ import { useDragNavigation } from '@/hook/useDragNavigation'
 import { useScrollNavigation } from '@/hook/useScrollNavigation'
 import { usePathname, useRouter } from 'next/navigation'
 import ShortsCard from './ShortsCard'
-import { ShortsBase } from '@/types/shorts/shorts'
+import { PageResponse, ShortsBase } from '@/types/shorts/shorts'
+import { clientApi } from '@/lib/utils/clientApiUtils'
+import { getShortsDetailList } from '@/services/shorts/getShortsDetailList'
+import { ApiResponse } from '@/types/api/api'
 
 interface ShortsContainerProps {
   shortsList: ShortsBase[]
@@ -22,12 +25,13 @@ type SlideDirection = 'up' | 'down' | null
 export default function ShortsContainer({ shortsList, initialIndex }: ShortsContainerProps) {
   const safeInitialIndex = getSafeIndex(initialIndex, shortsList.length)
   const [currentIndex, setCurrentIndex] = useState(safeInitialIndex)
+  const [list, setList] = useState<ShortsBase[]>(shortsList)
   const [slideDirection, setSlideDirection] = useState<SlideDirection>(null)
   const [isAnimating, setIsAnimating] = useState(false)
+  const [isFetching, setIsFetching] = useState(false)
   const pathname = usePathname()
   const router = useRouter()
-  console.log(shortsList)
-  const currentShorts = shortsList[currentIndex] ?? null
+  const currentShorts = list[currentIndex] ?? null
   const hasPrev = currentIndex > 0
   const hasNext = currentIndex < shortsList.length - 1
 
@@ -41,28 +45,30 @@ export default function ShortsContainer({ shortsList, initialIndex }: ShortsCont
   }, [currentShorts?.shortsId])
 
   // // 무한 스크롤
-  // const fetchMore = useCallback(async () => {
-  //   if (isFetching) return
+  const fetchMore = useCallback(async () => {
+    if (isFetching) return
 
-  //   setIsFetching(true)
+    setIsFetching(true)
 
-  //   const lastId = list[list.length - 1]?.shortsId
-  //   const res = await getShortsDetailList(String(lastId))
+    const lastId = list[list.length - 1]?.shortsId
+    const res = await clientApi.get<ApiResponse<PageResponse<ShortsBase[]>>>(
+      `/api/v1/shorts/${lastId}`,
+    )
 
-  //   if (res?.shortsList?.length) {
-  //     setList((prev) => [...prev, ...res.shortsList])
-  //   }
+    if (res.data.content) {
+      setList((prev) => [...prev, ...res.data.content])
+    }
 
-  //   setIsFetching(false)
-  // }, [list, isFetching])
+    setIsFetching(false)
+  }, [list, isFetching])
 
-  // useEffect(() => {
-  //   const remain = list.length - currentIndex - 1
+  useEffect(() => {
+    const remain = list.length - currentIndex - 1
 
-  //   if (remain <= 2) {
-  //     fetchMore()
-  //   }
-  // }, [currentIndex, list.length, fetchMore])
+    if (remain <= 2) {
+      fetchMore()
+    }
+  }, [currentIndex, list.length, fetchMore])
 
   /**
    * 이전/다음 숏폼으로 이동

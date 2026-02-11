@@ -2,6 +2,9 @@ import { notFound } from 'next/navigation'
 import ShortsContainer from '@/features/shorts/components/ShortsContainer'
 import { playlistApi } from '@/services/playlist/playlist.service'
 import { getShortsDetailList } from '@/services/shorts/getShortsDetailList'
+import { ShortsBase } from '@/types/shorts/shorts'
+import { PlaylistItems } from '@/types/playlist/playlist'
+import { mapPlaylistShortsToShortsBase } from '@/lib/utils/playlistToShorts'
 
 interface ShortDetailPageProps {
   params: Promise<{ id: string }>
@@ -9,7 +12,7 @@ interface ShortDetailPageProps {
 }
 
 interface ShortsData {
-  shortsList: any[] // 실제 데이터 타입으로 바꾸세요
+  shortsList: ShortsBase[]
   initialIndex: number
 }
 
@@ -17,25 +20,32 @@ export default async function ShortformDetailPage({ params, searchParams }: Shor
   const { id } = await params
   const sp = await searchParams
   const { request, playlistId } = sp || {}
-  const isPlaylist = request === 'playlists' && playlistId ? true : false
+
+  const isPlaylist = request === 'playlists' && !!playlistId
 
   let data: ShortsData | null = null
 
   if (isPlaylist) {
-    // axios-style response는 data 안에 실제 데이터가 있음
     const res = await playlistApi.getPlaylistItem(Number(playlistId))
+
+    const playlistItems = res.data.items ?? []
+
+    const shortsList = mapPlaylistShortsToShortsBase(playlistItems)
+
     data = {
-      shortsList: res.data.items ?? [], // API 실제 필드명에 맞게 수정
+      shortsList,
       initialIndex: 0,
     }
   } else {
     const res = await getShortsDetailList(id)
+
     data = {
-      shortsList: res?.shortsList ?? [], // API 실제 필드명에 맞게 수정
-      initialIndex: 0,
+      shortsList: res?.shortsList ?? [],
+      initialIndex: res?.initialIndex ?? 0,
     }
   }
 
+  // ✅ Empty guard
   if (!data || data.shortsList.length === 0) {
     notFound()
   }
