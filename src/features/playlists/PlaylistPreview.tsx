@@ -1,11 +1,10 @@
-import { Play } from 'lucide-react'
+import { Eye, Heart, Play } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { PlaylistInfo, PlaylistItems } from '@/types/playlist/playlist'
 import { useShortsAutoPlay } from '@/hook/mypage/useShortsAutoPlay'
 import PlaylistPreviewHeader from './PlaylistPreviewHeader'
 import { DEFAULT_IMAGES } from '@/constants/shortsImages'
-import { timeAgo } from '@/utils/timeAgo'
 
 interface PlaylistPreviewProps {
   playlistItem: PlaylistInfo
@@ -15,7 +14,7 @@ export default function PlaylistPreview({ playlistItem, selectedShorts }: Playli
   const { videoRef, handleLoadedData } = useShortsAutoPlay({
     enabled: Boolean(selectedShorts?.shorts.videoUrl),
   })
-  console.log(playlistItem)
+
   return (
     <div className="order-1 w-full lg:order-1 lg:shrink-0 lg:px-5">
       <div className="flex flex-col gap-6 py-8 md:py-0 lg:sticky lg:top-24">
@@ -92,16 +91,16 @@ export default function PlaylistPreview({ playlistItem, selectedShorts }: Playli
             )}
 
             <div className="flex items-center justify-between">
-              <div>
-                {selectedShorts?.shorts.viewCount !== undefined && (
-                  <span className="py-1 text-[10px] text-gray-100">
-                    조회수 {selectedShorts.shorts.viewCount} 회
+              <div className="flex justify-center gap-3">
+                {selectedShorts?.shorts.likeCount !== undefined && (
+                  <span className="flex items-center gap-1 py-1 text-[10px] text-gray-100">
+                    <Heart size={12} /> {selectedShorts?.shorts.likeCount}
                   </span>
                 )}
 
                 {selectedShorts?.shorts.viewCount !== undefined && (
-                  <span className="py-1 text-[10px] text-gray-100">
-                    · {timeAgo(selectedShorts.shorts.createdAt)}
+                  <span className="flex items-center gap-1 py-1 text-[10px] text-gray-100">
+                    <Eye size={12} /> {selectedShorts?.shorts.viewCount}
                   </span>
                 )}
               </div>
@@ -116,7 +115,7 @@ export default function PlaylistPreview({ playlistItem, selectedShorts }: Playli
         </div>
 
         {/* 재생 버튼 */}
-        <Link href="/mypage/likes" className="group w-full md:w-[360px]">
+        <Link href="/mypage/likes" className="group w-full md:w-90">
           <button className="flex w-full items-center justify-center gap-2 rounded-full bg-black py-5 text-lg font-medium text-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-gray-100 hover:shadow-lg">
             <Play
               strokeWidth={1.5}

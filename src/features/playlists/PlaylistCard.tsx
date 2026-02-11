@@ -26,6 +26,7 @@ interface PlaylistCardProps {
   handlePreview: (shorts: PlaylistItems) => void
   playlistOwner: PlaylistOwner
   selectedShorts: PlaylistItems | null
+  setSelectedShorts: (value: PlaylistItems | null) => void
 }
 
 export default function PlaylistCard({
@@ -35,6 +36,7 @@ export default function PlaylistCard({
   handlePreview,
   playlistOwner,
   selectedShorts,
+  setSelectedShorts,
 }: PlaylistCardProps) {
   const [items, setItems] = useState(shortsList ?? [])
   if (!items || items.length === 0) {
@@ -75,10 +77,14 @@ export default function PlaylistCard({
             <SortablePlaylistItem
               key={short.itemId}
               short={short}
+              items={items}
               editMode={editMode}
               handlePreview={handlePreview}
               selectedShorts={selectedShorts}
               playlistOwner={playlistOwner}
+              playlistId={playlistId}
+              setItems={setItems}
+              setSelectedShorts={setSelectedShorts}
             />
           ))}
         </div>
@@ -90,15 +96,23 @@ export default function PlaylistCard({
 function SortablePlaylistItem({
   short,
   editMode,
-  handlePreview,
   selectedShorts,
   playlistOwner,
+  playlistId,
+  items,
+  handlePreview,
+  setItems,
+  setSelectedShorts,
 }: {
   short: PlaylistItems
   editMode: boolean
-  handlePreview: (shorts: PlaylistItems) => void
   selectedShorts: PlaylistItems | null
   playlistOwner: PlaylistOwner
+  playlistId: number
+  items: PlaylistItems[] | null
+  handlePreview: (shorts: PlaylistItems) => void
+  setItems: (value: PlaylistItems[] | ((prev: PlaylistItems[]) => PlaylistItems[])) => void
+  setSelectedShorts: (value: PlaylistItems | null) => void
 }) {
   const { setNodeRef, transform, transition, attributes, listeners, isDragging } = useSortable({
     id: short.itemId,
@@ -167,7 +181,15 @@ function SortablePlaylistItem({
                 <MoreHorizontal size={18} />
               </button>
             </DropdownMenuTrigger>
-            <PlaylistDropdownMenu playlistOwner={playlistOwner} />
+            <PlaylistDropdownMenu
+              items={items}
+              playlistOwner={playlistOwner}
+              playlistId={playlistId}
+              short={short}
+              selectedShorts={selectedShorts}
+              setItems={setItems}
+              setSelectedShorts={setSelectedShorts}
+            />
           </DropdownMenu>
         </div>
 

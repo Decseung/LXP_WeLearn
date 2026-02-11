@@ -37,7 +37,9 @@ export const playlistApi = {
 
   // 플레이리스트 상세 조회
   getPlaylistItem: async (playlistId: number): Promise<ApiResponse<PlaylistInfo>> => {
-    const response = await api.get<ApiResponse<PlaylistInfo>>(`/api/v1/playlists/${playlistId}`)
+    const response = await api.get<ApiResponse<PlaylistInfo>>(`/api/v1/playlists/${playlistId}`, {
+      cache: 'no-store',
+    })
 
     return response
   },
@@ -56,6 +58,7 @@ export const playlistApi = {
 
     const response = await api.get<ApiResponse<PlaylistBase<PlayListCard[]>>>(
       `/api/v1/playlists/public?${params}`,
+      { cache: 'no-store' },
     )
 
     return response
@@ -64,7 +67,7 @@ export const playlistApi = {
   // * POST
 
   createPlaylist: async (content: PlaylistRequest) => {
-    const response = await api.post('/api/v1/playlists', content)
+    const response = await api.post('/api/v1/playlists', content, { cache: 'no-store' })
 
     return response
   },
@@ -95,8 +98,9 @@ export const playlistApi = {
   },
 
   // * DELETE
-
   deleteShortsInPlaylist: async (shortsId: number, playlistId: number) => {
-    const response = await api.delete(`/api/v1/playlists/${playlistId}/items/${shortsId}`)
+    const response = await api.delete(`/api/v1/playlists/${playlistId}/items/${shortsId}`, {
+      cache: 'no-store',
+    })
   },
 }

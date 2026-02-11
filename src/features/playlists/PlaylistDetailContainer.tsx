@@ -66,6 +66,7 @@ export default function PlaylistDetailContainer({ playlistItem }: PlaylistDetail
           handlePreview={handlePreview}
           selectedShorts={selectedShorts}
           playlistOwner={playlistItem.owner}
+          setSelectedShorts={setSelectedShorts}
         />
       </div>
     </>

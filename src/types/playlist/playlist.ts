@@ -113,6 +113,7 @@ export interface PlaylistShorts {
   keywords: string[]
   createdAt: string
   viewCount: number
+  likeCount: number
 }
 
 export interface PlaylistMetaDataResponse {
