@@ -3,7 +3,7 @@ import { toast } from 'react-toastify'
 import { getReplyAction, patchCommentAction } from './action'
 import { CommentsResponse } from '@/types/comments/comments'
 import { DeleteTarget } from './CommentsModalContainer'
-import { ChevronDown, User } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import { timeAgo } from '@/utils/timeAgo'
 import { AnimatePresence, motion } from 'framer-motion'
 import CommentDropDownMenu from '@/components/ui/CommentDropdownMenu'
@@ -11,6 +11,8 @@ import ReplyListInput from './ReplyListInput'
 import ReplyList from './ReplyList'
 import EditCommentForm from './EditCommentForm'
 import { ReplyCommentsResponse } from '@/types/replies/replies'
+import { DEFAULT_IMAGES } from '@/constants/shortsImages'
+import Image from 'next/image'
 
 interface CommentsListProps {
   comments: CommentsResponse[]
@@ -100,15 +102,21 @@ export default function CommentList({
             <div className="flex items-start justify-between">
               <div className="flex flex-1 items-start gap-3">
                 {/* 프로필 이미지 */}
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-200 text-gray-600">
-                  {comment.writer.profileImageUrl !== null ? (
-                    <img
+                <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-200 text-gray-600">
+                  {comment.writer.profileImageUrl ? (
+                    <Image
                       src={comment.writer.profileImageUrl}
                       alt={comment.writer.nickname}
                       className="h-8 w-8 rounded-full object-cover"
                     />
                   ) : (
-                    <User strokeWidth={1.5} size={20} className="text-gray-400" />
+                    <Image
+                      src={DEFAULT_IMAGES.AVATAR}
+                      alt="user-profile-image"
+                      fill
+                      className="rounded-full object-cover"
+                      unoptimized
+                    />
                   )}
                 </div>
 
