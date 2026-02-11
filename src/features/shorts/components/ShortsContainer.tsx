@@ -14,6 +14,7 @@ import { ShortsBase } from '@/types/shorts/shorts'
 interface ShortsContainerProps {
   shortsList: ShortsBase[]
   initialIndex: number
+  isPlaylist: boolean
 }
 
 type SlideDirection = 'up' | 'down' | null
@@ -25,7 +26,7 @@ export default function ShortsContainer({ shortsList, initialIndex }: ShortsCont
   const [isAnimating, setIsAnimating] = useState(false)
   const pathname = usePathname()
   const router = useRouter()
-
+  console.log(shortsList)
   const currentShorts = shortsList[currentIndex] ?? null
   const hasPrev = currentIndex > 0
   const hasNext = currentIndex < shortsList.length - 1
