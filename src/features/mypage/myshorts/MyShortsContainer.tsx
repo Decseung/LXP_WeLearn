@@ -115,9 +115,9 @@ export default function MyShortsContainer({ initialShorts, totalCount }: MyShort
                   isSelected={selectedShorts?.shortsId === shorts.shortsId}
                   onSelect={() => handleSelectShorts(shorts)}
                   onToggleVisibility={() =>
-                    handleToggleVisibility(shorts.shortsId!, shorts.visibility)
+                    handleToggleVisibility(shorts.shortsId, shorts.visibility)
                   }
-                  onDelete={() => handleDelete(shorts.shortsId!)}
+                  onDelete={() => handleDelete(shorts.shortsId)}
                 />
               ))
             ) : (
