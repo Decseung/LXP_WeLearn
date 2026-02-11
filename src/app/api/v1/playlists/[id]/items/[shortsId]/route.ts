@@ -10,8 +10,6 @@ export async function DELETE(
   try {
     await playlistApi.deleteShortsInPlaylist(Number(shortsId), Number(id))
 
-    // 단일 태그라도 배열로 감싸서 안전하게
-
     return NextResponse.json({
       success: true,
     })

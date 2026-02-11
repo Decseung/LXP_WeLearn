@@ -137,7 +137,6 @@ export const api = {
       ...options,
       method: 'DELETE',
     })
-    console.log(res)
     if (!res.ok) throw await handleError(res)
     return true
   },

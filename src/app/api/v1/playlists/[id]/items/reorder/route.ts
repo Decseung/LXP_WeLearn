@@ -9,7 +9,7 @@ export async function PATCH(req: Request) {
 
   try {
     const res = await playlistApi.updateShortsOrder(data, playlistId)
-    revalidatePath(`playlist/${playlistId}`)
+    revalidatePath(`playlists/${playlistId}`)
     revalidatePath(`mypage/myplaylists/${playlistId}`)
     return NextResponse.json({
       success: true,
