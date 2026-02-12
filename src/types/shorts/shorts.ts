@@ -42,6 +42,7 @@ export interface ShortsBase {
   userNickname: string
   userProfileUrl: string | null
   status: ShortsStatus
+  shortsStatusDescription?: string | null
   visibility: ShortsVisibility
 
   isLiked: boolean
@@ -125,6 +126,7 @@ export interface ShortsUploadStatus {
   uploadedAt: string
   completedAt?: string
   errorMessage?: string | null
+  shortsStatusDescription?: string | null
 }
 
 /* =========================
@@ -132,21 +134,8 @@ export interface ShortsUploadStatus {
  * 숏츠 추천 목록 조회
  * ========================= */
 
-export interface ShortsRecommendation {
-  shortsId: number
-  title: string
-  thumbnailUrl: string
-  uploaderNickname: string
-  categoryName: string
-  viewCount: number
-  likeCount: number
-  keywords: string[]
-  durationSec: number
-  similarity: number
-}
-
 export interface ShortsRecommendationPage {
-  recommendations: ShortsRecommendation[]
+  recommendations: { shorts: ShortsBase }[]
   pageInfo: {
     offset: number
     limit: number

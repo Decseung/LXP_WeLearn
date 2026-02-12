@@ -17,4 +17,5 @@ export interface CommentsResponse {
   replyCount: number
   isMine: boolean
   commentId: number
+  isReported: boolean
 }
