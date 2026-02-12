@@ -185,6 +185,7 @@ export default function CommentList({
                 setEditTarget={setEditTarget}
                 mode="comment"
                 setDeleteTarget={setDeleteTarget}
+                setIsUpdate={setIsUpdate}
               />
             </div>
             <ReplyListInput

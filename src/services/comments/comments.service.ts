@@ -18,7 +18,7 @@ export const commentApi = {
 
   postComment: async (shortsId: number, data: CommentRequest) => {
     const response = api.post(`/api/v1/shorts/${shortsId}/comments`, data)
-    revalidatePath(`/shorts/${2}/comments`)
+    revalidatePath(`/shorts/${shortsId}/comments`)
     return response
   },
 
@@ -30,6 +30,12 @@ export const commentApi = {
 
   deleteComment: async (commentId: number) => {
     const response = api.delete(`/api/v1/comments/${commentId}`)
+
+    return response
+  },
+
+  reportComment: async (id: number) => {
+    const response = api.post(`/api/v1/comments/${id}/reports`)
 
     return response
   },
