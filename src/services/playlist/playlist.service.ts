@@ -42,7 +42,7 @@ export const playlistApi = {
     page?: number,
     size?: number,
     sort?: string,
-  ): Promise<ApiResponse<PageResponse<PlaylistItems[]>>> => {
+  ): Promise<ApiResponse<PlaylistInfo>> => {
     const params = new URLSearchParams()
 
     if (page !== undefined) params.set('page', String(page))
@@ -51,13 +51,13 @@ export const playlistApi = {
 
     const query = params.toString()
 
-    const response = await api.get<ApiResponse<PageResponse<PlaylistItems[]>>>(
+    const response = await api.get<ApiResponse<PlaylistInfo>>(
       `/api/v1/playlists/${playlistId}${query ? `?${query}` : ''}`,
       {
         cache: 'no-store',
       },
     )
-
+    console.log(response)
     return response
   },
 

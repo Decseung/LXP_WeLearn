@@ -1,10 +1,13 @@
 import { api } from '@/lib/utils/apiUtils'
 import { ApiResponse } from '@/types/api/api'
-import { ShortsRecommendationPage } from '@/types/shorts/shorts'
+import { PageResponse, ShortsBase, ShortsRecommendationPage } from '@/types/shorts/shorts'
 
 export const shortsApi = {
-  shortsDetailList: async ({ page = 0, size = 20 }) => {
-    const response = await api.get('/api/v1/shorts', {
+  shortsDetailList: async ({
+    page = 0,
+    size = 20,
+  }): Promise<ApiResponse<PageResponse<ShortsBase[]>>> => {
+    const response = await api.get<ApiResponse<PageResponse<ShortsBase[]>>>('/api/v1/shorts', {
       cache: 'no-store',
       params: {
         page,

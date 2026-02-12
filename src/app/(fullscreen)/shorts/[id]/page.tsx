@@ -13,6 +13,7 @@ interface ShortDetailPageProps {
 interface ShortsData {
   shortsList: ShortsBase[]
   initialIndex: number
+  totalElement?: number
 }
 
 export default async function ShortformDetailPage({ params, searchParams }: ShortDetailPageProps) {
@@ -26,28 +27,27 @@ export default async function ShortformDetailPage({ params, searchParams }: Shor
 
   if (isPlaylist) {
     const res = await playlistApi.getPlaylistItem(Number(playlistId))
-
-    const playlistItems = res.data.content ?? []
+    const playlistItems = res.data.items ?? []
 
     const shortsList = mapPlaylistShortsToShortsBase(playlistItems)
 
     data = {
       shortsList,
       initialIndex: 0,
+      totalElement: res.data.shortsCount,
     }
   } else {
     const res = await getShortsDetailList(id)
-
     data = {
       shortsList: res?.shortsList ?? [],
       initialIndex: res?.initialIndex ?? 0,
+      totalElement: res?.totalElement,
     }
   }
 
   if (!data || data.shortsList.length === 0) {
     notFound()
   }
-
   return (
     <div className="relative h-dvh w-full md:h-full">
       <section
@@ -59,6 +59,7 @@ export default async function ShortformDetailPage({ params, searchParams }: Shor
           shortsList={data.shortsList}
           initialIndex={data.initialIndex}
           isPlaylist={isPlaylist}
+          totalElements={data.totalElement}
         />
       </section>
     </div>

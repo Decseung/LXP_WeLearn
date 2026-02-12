@@ -20,6 +20,7 @@ interface ShortsContainerProps {
   initialIndex: number
   isPlaylist: boolean
   playlistId: string | string[] | undefined
+  totalElements?: number
 }
 
 type SlideDirection = 'up' | 'down' | null
@@ -29,6 +30,7 @@ export default function ShortsContainer({
   initialIndex,
   isPlaylist,
   playlistId,
+  totalElements,
 }: ShortsContainerProps) {
   const safeInitialIndex = getSafeIndex(initialIndex, shortsList.length)
   const [currentIndex, setCurrentIndex] = useState(safeInitialIndex)
@@ -41,8 +43,7 @@ export default function ShortsContainer({
   const router = useRouter()
   const currentShorts = list[currentIndex] ?? null
   const hasPrev = currentIndex > 0
-  const hasNext = currentIndex < shortsList.length - 1
-
+  const hasNext = currentIndex < list.length - 1
   // 현재 숏폼이 바뀔 때 URL 동기화 (/shorts/:shortsId)
   useEffect(() => {
     if (!currentShorts) return
@@ -55,6 +56,7 @@ export default function ShortsContainer({
   // // 무한 스크롤
   const fetchMore = useCallback(async () => {
     if (isFetching) return
+    if (totalElements != null && list.length >= totalElements) return
 
     setIsFetching(true)
 
@@ -72,6 +74,7 @@ export default function ShortsContainer({
           setPage((prev) => prev + 1)
         }
       } else {
+        console.log('------------새 요청')
         const lastId = list[list.length - 1]?.shortsId
 
         const res = await clientApi.get<ApiResponse<PageResponse<ShortsBase[]>>>(
@@ -80,20 +83,25 @@ export default function ShortsContainer({
 
         if (res.data.content?.length) {
           setList((prev) => [...prev, ...res.data.content])
+          console.log(res.data.content)
         }
       }
     } finally {
+      console.log(list)
       setIsFetching(false)
     }
-  }, [list, isFetching, page, isPlaylist, playlistId])
+  }, [isFetching, page, isPlaylist, playlistId, totalElements, list.length])
 
   useEffect(() => {
-    const remain = list.length - currentIndex - 1
+    if (totalElements == null) return
 
-    if (remain <= 2) {
+    const remain = list.length - currentIndex - 1
+    const isLastPage = list.length >= totalElements
+
+    if (remain <= 2 && !isLastPage && !isFetching) {
       fetchMore()
     }
-  }, [currentIndex, list.length, fetchMore])
+  }, [currentIndex, list.length, totalElements, isFetching, fetchMore])
 
   /**
    * 이전/다음 숏폼으로 이동
