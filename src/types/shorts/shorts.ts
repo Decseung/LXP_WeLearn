@@ -122,6 +122,7 @@ export interface ShortsUploadStatus {
   videoUrl?: string
   thumbnailUrl?: string
   durationSec?: number
+  reviewComment?: string | null
   uploadedAt: string
   completedAt?: string
   errorMessage?: string | null
