@@ -43,13 +43,13 @@ export default function Playlist({ list, shortsId, handleActiveTab }: PlaylistPr
                 <Plus className="h-6 w-6 text-gray-600" />
               </div>
               <div className="relative h-20 w-18 shrink-0 overflow-hidden rounded-md bg-gray-100">
-                {item.items?.[0]?.shorts?.thumbnailUrl ? (
+                {item.thumbnailUrl ? (
                   <Image
-                    src={item.items[0].shorts.thumbnailUrl}
+                    src={item.thumbnailUrl}
                     alt={item.title}
                     fill
                     className="object-cover"
-                    sizes="48px"
+                    sizes="200px"
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center">

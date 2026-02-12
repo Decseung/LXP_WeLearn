@@ -9,6 +9,8 @@ import { patchReplyCommentAction } from './action'
 import { DeleteTarget } from './CommentsModalContainer'
 import EditCommentForm from './EditCommentForm'
 import { ReplyCommentsResponse } from '@/types/replies/replies'
+import Image from 'next/image'
+import { DEFAULT_IMAGES } from '@/constants/shortsImages'
 
 interface ReCommentProps {
   openReply: number | null
@@ -73,13 +75,19 @@ export default function ReComment({
                         {/* 프로필 */}
                         <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-200 text-gray-600">
                           {reply.writer.profileImageUrl ? (
-                            <img
+                            <Image
                               src={reply.writer.profileImageUrl}
                               alt={reply.writer.nickname}
                               className="h-8 w-8 rounded-full object-cover"
                             />
                           ) : (
-                            <User strokeWidth={1.5} size={20} className="text-gray-400" />
+                            <Image
+                              src={DEFAULT_IMAGES.AVATAR}
+                              alt="user-profile-image"
+                              fill
+                              className="rounded-full object-cover"
+                              unoptimized
+                            />
                           )}
                         </div>
 

@@ -1,10 +1,11 @@
+import { DEFAULT_IMAGES } from '@/constants/shortsImages'
 import { Play } from 'lucide-react'
 import Image from 'next/image'
 import { DEFAULT_IMAGES } from '@/constants/shortsImages';
 
 export interface PlaylistItemProps {
   id: number
-  thumbnailUrl: string
+  thumbnailUrl: string | null
   title: string
   description: string
   categoryName?: string

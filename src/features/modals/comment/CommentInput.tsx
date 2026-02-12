@@ -5,6 +5,8 @@ import { useActionState, useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { postCommentAction } from './action'
 import { useAuth } from '@/shared/store/auth/auth.store'
+import Image from 'next/image'
+import { DEFAULT_IMAGES } from '@/constants/shortsImages'
 
 interface CommentInputProps {
   shortsId: string
@@ -35,15 +37,21 @@ export default function CommentInput({ shortsId, setIsUpdate }: CommentInputProp
       <div className="flex items-center gap-3">
         {/* 프로필 아이콘 */}
         <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-200">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-200 text-gray-600">
+          <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-200 text-gray-600">
             {user?.profileUrl ? (
-              <img
+              <Image
                 src={user.profileUrl}
                 alt={user.nickName}
                 className="h-8 w-8 rounded-full object-cover"
               />
             ) : (
-              <User strokeWidth={1.5} size={20} className="text-gray-400" />
+              <Image
+                src={DEFAULT_IMAGES.AVATAR}
+                alt="user-profile-image"
+                fill
+                className="rounded-full object-cover"
+                unoptimized
+              />
             )}
           </div>
         </div>
