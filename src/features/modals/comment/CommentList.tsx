@@ -90,7 +90,6 @@ export default function CommentList({
     setOpenReplyInput(openReplyInput === id ? null : id)
     setOpenReply(id)
   }
-  console.log(comments)
 
   return (
     <>

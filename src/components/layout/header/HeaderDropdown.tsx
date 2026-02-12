@@ -37,8 +37,6 @@ export default function HeaderDropdown() {
     }
   }
 
-  console.log(auth?.profileUrl)
-
   return (
     <>
       {auth && isLogin ? (
