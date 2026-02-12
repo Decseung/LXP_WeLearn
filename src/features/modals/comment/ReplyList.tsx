@@ -125,6 +125,7 @@ export default function ReComment({
                         setDeleteTarget={setDeleteTarget}
                         id={reply.replyId}
                         parentId={commentId}
+                        setIsReplyUpdate={setIsReplyUpdate}
                         mode="reply"
                       />
                     </div>

@@ -18,6 +18,7 @@ import { restrictToVerticalAxis, restrictToParentElement } from '@dnd-kit/modifi
 import { CSS } from '@dnd-kit/utilities'
 import { useRouter } from 'next/navigation'
 import { clientApi } from '@/lib/utils/clientApiUtils'
+import { DEFAULT_IMAGES } from '@/constants/shortsImages'
 
 interface PlaylistCardProps {
   playlistId: number
@@ -151,7 +152,7 @@ function SortablePlaylistItem({
       {/* 썸네일 */}
       <div className="relative h-48 w-28 shrink-0 overflow-hidden rounded-lg bg-gray-200 sm:w-36">
         <Image
-          src={short.shorts.thumbnailUrl}
+          src={short.shorts.thumbnailUrl ?? DEFAULT_IMAGES.AVATAR}
           alt={short.shorts.title}
           fill
           className="object-cover"
