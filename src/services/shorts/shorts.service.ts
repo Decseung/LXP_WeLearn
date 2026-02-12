@@ -1,10 +1,6 @@
 import { api } from '@/lib/utils/apiUtils'
 import { ApiResponse } from '@/types/api/api'
-<<<<<<< feature/#317
 import { PageResponse, ShortsBase, ShortsRecommendationPage } from '@/types/shorts/shorts'
-=======
-import { PageResponse, ShortsBase } from '@/types/shorts/shorts'
->>>>>>> develop
 
 export const shortsApi = {
   shortsDetailList: async ({
@@ -29,7 +25,6 @@ export const shortsApi = {
     return response
   },
 
-<<<<<<< feature/#317
   shortsRecommendation: async (
     shortsId: number,
     offset?: number,
@@ -50,7 +45,9 @@ export const shortsApi = {
       },
     )
 
-=======
+    return response
+  },
+
   getShortPopular: async ({ page = 0, size = 10 }) => {
     const response = await api.get<ApiResponse<PageResponse<ShortsBase[]>>>(
       '/api/v1/shorts/popular',
@@ -63,7 +60,6 @@ export const shortsApi = {
       },
     )
     // console.log('인기 숏츠 목록 조회 결과:', response.data)
->>>>>>> develop
     return response
   },
 }
