@@ -23,6 +23,7 @@ interface CommentDropdownMenuProps {
   reply?: ReplyCommentsResponse
   setEditTarget: React.Dispatch<React.SetStateAction<EditTarget>>
   setDeleteTarget: React.Dispatch<React.SetStateAction<DeleteTarget>>
+  setIsUpdate: React.Dispatch<React.SetStateAction<number>>
 }
 
 /**
@@ -38,6 +39,7 @@ export default function CommentDropDownMenu({
   reply,
   setEditTarget,
   setDeleteTarget,
+  setIsUpdate,
 }: CommentDropdownMenuProps) {
   // 작성자 본인인지 여부
   const isMine = mode === 'reply' ? reply?.isMine : comment?.isMine
@@ -45,9 +47,9 @@ export default function CommentDropDownMenu({
   const targetId = mode === 'reply' ? reply?.replyId : comment?.commentId
   const handleReport = async (id: number) => {
     const res = await clientApi.post<ActionState>(`/api/v1/comments/${id}/reports`)
-    console.log(res)
     if (res.success === true && res.data) {
       toast.success('댓글을 신고하였습니다.')
+      setIsUpdate((prev) => prev + 1)
     }
     if (res.success === false && res.message) {
       toast.error('댓글 신고 중 오류가 발생하였습니다.')
