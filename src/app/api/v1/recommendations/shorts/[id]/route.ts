@@ -1,12 +1,14 @@
 import { shortsApi } from '@/services/shorts/shorts.service'
 import { NextRequest, NextResponse } from 'next/server'
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
-  const { id } = params
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+
   const searchParams = request.nextUrl.searchParams
   const offset = searchParams.get('offset')
   const limit = searchParams.get('limit')
   const lastShortsId = searchParams.get('lastShortsId')
+
   try {
     const response = await shortsApi.shortsRecommendation(
       Number(id),

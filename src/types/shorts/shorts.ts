@@ -42,15 +42,15 @@ export interface ShortsBase {
   userNickname: string
   userProfileUrl: string | null
   status: ShortsStatus
-  visibility?: ShortsVisibility
+  visibility: ShortsVisibility
 
-  isLiked?: boolean
+  isLiked: boolean
   likeCount: number
   viewCount: number
-  commentCount?: number
+  commentCount: number
 
   createdAt: string
-  updatedAt?: string
+  updatedAt: string
 }
 
 /**
