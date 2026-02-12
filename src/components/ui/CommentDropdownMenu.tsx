@@ -11,6 +11,9 @@ import { DeleteTarget } from '@/features/modals/comment/CommentsModalContainer'
 import { EditTarget } from '@/features/modals/comment/CommentList'
 import { CommentsResponse } from '@/types/comments/comments'
 import { ReplyCommentsResponse } from '@/types/replies/replies'
+import { clientApi } from '@/lib/utils/clientApiUtils'
+import { ActionState } from '@/types/action/action'
+import { toast } from 'react-toastify'
 
 interface CommentDropdownMenuProps {
   id: number
@@ -38,6 +41,18 @@ export default function CommentDropDownMenu({
 }: CommentDropdownMenuProps) {
   // 작성자 본인인지 여부
   const isMine = mode === 'reply' ? reply?.isMine : comment?.isMine
+  const isReported = mode === 'reply' ? reply?.isReported : comment?.isReported
+  const targetId = mode === 'reply' ? reply?.replyId : comment?.commentId
+  const handleReport = async (id: number) => {
+    const res = await clientApi.post<ActionState>(`/api/v1/comments/${id}/reports`)
+    console.log(res)
+    if (res.success === true && res.data) {
+      toast.success('댓글을 신고하였습니다.')
+    }
+    if (res.success === false && res.message) {
+      toast.error('댓글 신고 중 오류가 발생하였습니다.')
+    }
+  }
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
@@ -74,7 +89,12 @@ export default function CommentDropDownMenu({
           </>
         ) : (
           // 신고
-          <DropdownMenuItem className="w-full cursor-pointer items-center" variant="destructive">
+          <DropdownMenuItem
+            className="w-full cursor-pointer items-center"
+            variant={isReported ? 'default' : 'destructive'}
+            disabled={isReported}
+            onClick={() => handleReport(Number(targetId))}
+          >
             <ShieldAlert size={16} />
             신고
           </DropdownMenuItem>

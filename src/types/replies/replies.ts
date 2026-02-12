@@ -7,6 +7,7 @@ export interface ReplyCommentsResponse {
   createdAt: string
   writer: Omit<CommentUserInfo, 'email'>
   isMine: boolean
+  isReported: boolean
 }
 
 export interface ReplyCommentRequest {

@@ -73,7 +73,7 @@ export default function ReComment({
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex flex-1 gap-3">
                         {/* 프로필 */}
-                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-200 text-gray-600">
+                        <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-200 text-gray-600">
                           {reply.writer.profileImageUrl ? (
                             <Image
                               src={reply.writer.profileImageUrl}
