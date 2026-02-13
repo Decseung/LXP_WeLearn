@@ -14,6 +14,7 @@ import { clientApi } from '@/lib/utils/clientApiUtils'
 import { ApiResponse } from '@/types/api/api'
 import { PlaylistItems } from '@/types/playlist/playlist'
 import { mapPlaylistShortsToShortsBase } from '@/lib/utils/playlistToShorts'
+import { toast } from 'react-toastify'
 
 interface ShortsContainerProps {
   shortsList: ShortsBase[]
@@ -184,7 +185,9 @@ export default function ShortsContainer({
     )
 
     try {
-      await clientApi.post(`/api/v1/shorts/${shortsId}/likes`)
+      const res = await clientApi.post(`/api/v1/shorts/${shortsId}/likes`, { shortsId: shortsId })
+      console.log(res)
+      toast.success('좋아요 성공하였습니다.')
     } catch {
       setList((prev) =>
         prev.map((short) =>

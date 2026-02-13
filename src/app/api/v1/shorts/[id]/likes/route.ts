@@ -8,7 +8,6 @@ export async function POST(request: Request) {
     const shortsId = body.shortsId
 
     const response = await likeApi.like(shortsId)
-
     revalidatePath(`/shorts/${shortsId}`)
 
     return NextResponse.json({
